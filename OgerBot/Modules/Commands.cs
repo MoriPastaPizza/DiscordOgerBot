@@ -111,6 +111,7 @@ namespace DiscordOgerBotWeb.Modules
         }
 
         [Command("gnoggt")]
+        [Summary("*Ich will das der ausgnoggt wird*")]
         public async Task SendAusgnoggt()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/genoggt.ogg", embed: Controller.OgerBot.GetStandartSoundEmbed());
