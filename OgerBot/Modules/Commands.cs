@@ -159,6 +159,7 @@ namespace DiscordOgerBotWeb.Modules
         }
 
         [Command("schmorn")]
+        [Summary("*Der ist übel*")]
         public async Task SendSchmorn()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/Schmorn_wie_Viecher.mp3", embed: Controller.OgerBot.GetStandartSoundEmbed());
@@ -195,7 +196,7 @@ namespace DiscordOgerBotWeb.Modules
         }
 
         [Command("qual")]
-        [Summary("*Der ist brutal*")]
+        [Summary("*Der ist übel*")]
         public async Task SendQual()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/qual.ogg", embed: Controller.OgerBot.GetStandartSoundEmbed());
