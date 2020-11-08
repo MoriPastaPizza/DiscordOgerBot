@@ -388,5 +388,11 @@ namespace DiscordOgerBotWeb.Modules
         {
             await Context.Channel.SendFileAsync(_soundPath + "/schnauf.ogg", embed: Controller.OgerBot.GetStandartSoundEmbed());
         }
+
+        [Command("russland")]
+        public async Task SendRussland()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/russland.ogg", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
     }
 }
