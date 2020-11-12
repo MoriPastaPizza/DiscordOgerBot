@@ -394,5 +394,19 @@ namespace DiscordOgerBotWeb.Modules
         {
             await Context.Channel.SendFileAsync(_soundPath + "/russland.ogg", embed: Controller.OgerBot.GetStandartSoundEmbed());
         }
+
+        [Command("igel")]
+        [Alias("eagle")]
+        public async Task SendIgel()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/igelhalb.mp3", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
+
+        [Command("igelkreis")]
+        [Alias("eagle cries", "eagle kreis", "igel kreis")]
+        public async Task SendIgelKreis()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/igel.mp3", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
     }
 }
