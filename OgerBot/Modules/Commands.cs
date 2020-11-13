@@ -428,5 +428,11 @@ namespace DiscordOgerBotWeb.Modules
         {
             await Context.Channel.SendFileAsync(_soundPath + "/aggst.mp3", embed: Controller.OgerBot.GetStandartSoundEmbed());
         }
+
+        [Command("schlaganfall")]
+        public async Task SendSchlaganfall()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/schlaganfall.mp3", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
     }
 }
