@@ -83,7 +83,7 @@ namespace DiscordOgerBotWeb.Controller
                 .WithDescription(
                     "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
                     "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/kHkpemTS)")
+                    "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
 
                 .WithFooter(footer =>
                     footer.Text =
@@ -116,7 +116,7 @@ namespace DiscordOgerBotWeb.Controller
                 .AddField("Links",
                     "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
                     "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/kHkpemTS)")
+                    "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
 
                 .WithDescription(translatedMessage)
                 .WithAuthor(originalMessage.Author)
