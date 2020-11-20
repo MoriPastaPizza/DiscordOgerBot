@@ -463,6 +463,7 @@ namespace DiscordOgerBotWeb.Modules
         }
 
         [Command("alexa")]
+        [Summary("ein zufälliges Alexa Video")]
         public async Task SendAlexa()
         {
             var number = new Random().Next(1, 7);
