@@ -70,7 +70,10 @@ namespace DiscordOgerBotWeb.Modules
         {
             var random = new Random();
             var commands = Controller.OgerBot.CommandService.Commands.ToList();
-            commands = commands.OrderBy(m => m.Name).ToList();
+            commands = commands
+                .Where(m => m.Name != "asia")
+                .OrderBy(m => m.Name)
+                .ToList();
 
             var commandList = commands.Select(command => $"**{command.Aliases.Aggregate((i, j) => i + " " + j)}** {command.Summary}").ToList();
             var fieldString = commandList.Aggregate((i, j) => i + " | " + j).ToString();
@@ -440,6 +443,12 @@ namespace DiscordOgerBotWeb.Modules
         public async Task SendSchlaganfall()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/schlaganfall.mp3", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
+
+        [Command("asia")]
+        public async Task SendAsia()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/asia.mp3", embed: Controller.OgerBot.GetStandartSoundEmbed());
         }
 
         [Command("derjeniche")]
