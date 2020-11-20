@@ -13,6 +13,11 @@ namespace DiscordOgerBotWeb.Modules
         private readonly string _soundPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../OgerBot/sounds"));
 
+
+        private readonly string _videoPath = Path.GetFullPath(
+            Path.Combine(AppContext.BaseDirectory, "../OgerBot/videos"));
+
+
         [Command("help")]
         [Alias("hilfe")]
         public async Task SendHelp()
@@ -65,6 +70,8 @@ namespace DiscordOgerBotWeb.Modules
         {
             var random = new Random();
             var commands = Controller.OgerBot.CommandService.Commands.ToList();
+            commands = commands.OrderBy(m => m.Name).ToList();
+
             var commandList = commands.Select(command => $"**{command.Aliases.Aggregate((i, j) => i + " " + j)}** {command.Summary}").ToList();
             var fieldString = commandList.Aggregate((i, j) => i + " | " + j).ToString();
 
@@ -433,6 +440,34 @@ namespace DiscordOgerBotWeb.Modules
         public async Task SendSchlaganfall()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/schlaganfall.mp3", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
+
+        [Command("derjeniche")]
+        [Alias("derjenige")]
+        public async Task SendDerjenice()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/derjeniche.ogg", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
+
+        [Command("kindergarten")]
+        public async Task SendKinderGarten()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/kindergarten.mp4", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
+
+        [Command("asylanten")]
+        [Alias("asylant")]
+        public async Task SendAsylanten()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/asylanten.mp4", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
+
+        [Command("alexa")]
+        public async Task SendAlexa()
+        {
+            var number = new Random().Next(1, 7);
+
+            await Context.Channel.SendFileAsync(_videoPath + $"/alexa{number}.mp4", embed: Controller.OgerBot.GetStandartSoundEmbed());
         }
     }
 }
