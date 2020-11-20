@@ -472,6 +472,7 @@ namespace DiscordOgerBotWeb.Modules
         }
 
         [Command("alexa")]
+        [Alias("Alegser", "Aleggser", "Aleggsa", "Alegsa")]
         [Summary("ein zufälliges Alexa Video")]
         public async Task SendAlexa()
         {
