@@ -195,20 +195,21 @@ namespace DiscordOgerBotWeb.Controller
                     if (result.IsSuccess)
                     {
                         _logger.LogInformation($"Command executed! {Environment.NewLine}" +
-                                        $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
-                                        $"Command: {message.Content} {Environment.NewLine}" +
-                                        $"Command Link: {message.GetJumpUrl()}");
+                                               $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
+                                               $"Command: {message.Content} {Environment.NewLine}" +
+                                               $"Command Link: {message.GetJumpUrl()}");
                     }
                     else
                     {
                         _logger.LogWarning($"Command could not be executed! {Environment.NewLine}" +
-                                    $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
-                                    $"Command: {message.Content} {Environment.NewLine}" +
-                                    $"Command Link: {message.GetJumpUrl()} {Environment.NewLine}" +
-                                    $"Error Reason: {result.ErrorReason} {Environment.NewLine}" +
-                                    $"Error: {result.Error}");
+                                           $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
+                                           $"Command: {message.Content} {Environment.NewLine}" +
+                                           $"Command Link: {message.GetJumpUrl()} {Environment.NewLine}" +
+                                           $"Error Reason: {result.ErrorReason} {Environment.NewLine}" +
+                                           $"Error: {result.Error}");
                     }
                 }
+                else await CheckIfMeddlWasRecieved(message);
             }
             catch (Exception ex)
             {
@@ -248,10 +249,30 @@ namespace DiscordOgerBotWeb.Controller
                                            $"Error: {result.Error}");
                     }
                 }
+                else await CheckIfMeddlWasRecieved(message);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in recieving message!");
+            }
+        }
+
+        private static async Task CheckIfMeddlWasRecieved(IMessage message)
+        {
+            if (message.Content.Contains("meddl", StringComparison.OrdinalIgnoreCase) && message.Content.Length <= 10)
+            {
+                if (message.Content.Contains("meddl off", StringComparison.OrdinalIgnoreCase))
+                {
+                    await message.Channel.SendMessageAsync($"{message.Author.Mention} Meddl off du Kaschber 🤘");
+                }
+                else if (message.Content.Contains("meddlmoin", StringComparison.OrdinalIgnoreCase))
+                {
+                    await message.Channel.SendMessageAsync($"{message.Author.Mention} Meddlmoin du Kaschber 🤘");
+                }
+                else
+                {
+                    await message.Channel.SendMessageAsync($"{message.Author.Mention} Meddl🤘");
+                }
             }
         }
 
