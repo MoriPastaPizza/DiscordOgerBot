@@ -502,5 +502,12 @@ namespace DiscordOgerBotWeb.Modules
             await Context.Channel.SendFileAsync(_videoPath + $"/mallah{number}.mp4", embed: Controller.OgerBot.GetStandartSoundEmbed());
         }
 
+        [Command("freiflug")]
+        [Alias("freiflüge")]
+        public async Task SendFreiflug()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/freiflug.mp3", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
+
     }
 }
