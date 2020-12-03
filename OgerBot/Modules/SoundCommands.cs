@@ -402,7 +402,7 @@ namespace DiscordOgerBotWeb.Modules
         [Alias("Truthahn")]
         public async Task SendHand()
         {
-            await Context.Channel.SendFileAsync(_soundPath + "/TrutogerImage.jpg", embed: Controller.OgerBot.GetStandartSoundEmbed());
+            await Context.Channel.SendFileAsync(_soundPath + "/TrutogerImage.jpg");
             await Context.Channel.SendFileAsync(_soundPath + "/Trutoger.mp3", embed: Controller.OgerBot.GetStandartSoundEmbed());
         }
 
