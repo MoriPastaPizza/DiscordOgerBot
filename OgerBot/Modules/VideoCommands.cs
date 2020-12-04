@@ -87,5 +87,18 @@ namespace DiscordOgerBotWeb.Modules
         {
             await Context.Channel.SendFileAsync(_videoPath + "/sohn.mp4", embed: Controller.OgerBot.GetStandartSoundEmbed());
         }
+
+        [Command("xbuddn")]
+        public async Task SendXBuddn()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/xbuddn.mp4", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
+
+        [Command("nixmehr")]
+        [Alias("morgen")]
+        public async Task SendNixMehr()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/MorgenIsNixMehr.mp4", embed: Controller.OgerBot.GetStandartSoundEmbed());
+        }
     }
 }
