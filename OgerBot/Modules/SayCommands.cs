@@ -11,16 +11,16 @@ namespace DiscordOgerBotWeb.Modules
     public class SayCommands : ModuleBase<SocketCommandContext>
     {
         [Command("say")]
-        public async Task SendCommand()
+        public async Task SendCommand([Remainder]string message)
         {
             if(!(Context.User is SocketGuildUser user)) return;
             if (!user.GuildPermissions.KickMembers)
             {
-                await Context.Channel.SendMessageAsync($"{user.Mention} Auf dich hör ich ned du Spaggn!!");
+                await Context.Channel.SendMessageAsync($"{user.Mention} Auf dich hör ich ned du Spaggn, ich hab Mussig an!!");
             }
 
             await Context.Message.DeleteAsync();
-            await Context.Channel.SendMessageAsync(Context.Message.Content);
+            await Context.Channel.SendMessageAsync(message);
         }
     }
 }
