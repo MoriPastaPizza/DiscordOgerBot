@@ -17,6 +17,7 @@ namespace DiscordOgerBotWeb.Modules
             if (!user.GuildPermissions.KickMembers)
             {
                 await Context.Channel.SendMessageAsync($"{user.Mention} Auf dich hör ich ned du Spaggn, ich hab Mussig an!!");
+                return;
             }
 
             await Context.Message.DeleteAsync();
