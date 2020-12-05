@@ -74,7 +74,7 @@ namespace DiscordOgerBotWeb.Controller
             }
         }
 
-        public static Embed GetStandartSoundEmbed()
+        public static Embed GetStandardSoundEmbed()
         {
             var random = new Random();
             var embedBuilder = new EmbedBuilder();
