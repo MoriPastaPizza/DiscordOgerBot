@@ -209,6 +209,15 @@ namespace DiscordOgerBotWeb.Controller
                                            $"Error: {result.Error}");
                     }
                 }
+
+                else if (message.Content.Contains("Valar morghulis", StringComparison.OrdinalIgnoreCase))
+                {
+                    if(!(message.Author is SocketGuildUser author)) return;
+                    var role = context.Guild.GetRole(784512104459272253);
+                    await author.AddRoleAsync(role);
+                    await author.SendMessageAsync("Valar dohaeris");
+                }
+
                 else await CheckIfMeddlWasRecieved(message);
             }
             catch (Exception ex)
