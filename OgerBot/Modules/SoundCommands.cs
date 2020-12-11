@@ -418,5 +418,17 @@ namespace DiscordOgerBotWeb.Modules
             await Context.Channel.SendFileAsync(_soundPath + "/gumba.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
+        [Command("englisch")]
+        public async Task SendEnglisch()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/englischlord.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("findus")]
+        public async Task SendAffenNecherFindus()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/findus.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
     }
 }

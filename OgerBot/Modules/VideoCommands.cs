@@ -100,5 +100,12 @@ namespace DiscordOgerBotWeb.Modules
         {
             await Context.Channel.SendFileAsync(_videoPath + "/MorgenIsNixMehr.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("wiggst")]
+        [Alias("wichst", "wixt", "wixxt", "wigst")]
+        public async Task SendWiggstIhrNet()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/wiggstIhrNed.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
