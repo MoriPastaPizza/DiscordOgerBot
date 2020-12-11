@@ -27,5 +27,12 @@ namespace DiscordOgerBotWeb.Modules
             var rand = new Random();
             await Context.Channel.SendFileAsync(_imagePath + $"/sportLord{rand.Next(1, 6)}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("buddern")]
+        [Alias("brot", "butter", "kochen")]
+        public async Task SendBuddern()
+        {
+            await Context.Channel.SendFileAsync(_imagePath + "/buddern.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
