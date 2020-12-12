@@ -198,7 +198,8 @@ namespace DiscordOgerBotWeb.Controller
 
                         if (result.Error == CommandError.UnknownCommand)
                         {
-                            await message.Channel.SendMessageAsync($"{message.Author.Mention} Das Kommando kenn ich net. Und ich hab nen hohen IQ in Kommandos!");
+                            await message.Channel.SendMessageAsync($"{message.Author.Mention} Das Kommando kenn ich net. Und ich hab nen hohen IQ in Kommandos! {Environment.NewLine}" +
+                                                                   "Schau doch mal hier nach: og commands");
                         }
 
                         _logger.LogWarning($"Command could not be executed! {Environment.NewLine}" +
