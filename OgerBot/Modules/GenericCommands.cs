@@ -145,6 +145,7 @@ namespace DiscordOgerBotWeb.Modules
             if (module == null) return;
 
             var commands = module.Commands
+                .Where(m => m.Name != "oof")
                 .OrderBy(m => m.Name)
                 .ToList();
 
