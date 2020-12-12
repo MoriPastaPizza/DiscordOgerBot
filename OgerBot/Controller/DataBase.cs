@@ -35,14 +35,14 @@ namespace DiscordOgerBotWeb.Controller
         {
             try
             {
-                var user = await Context.DiscordUsers.FindAsync(userId);
+                var user = await Context.DiscordUsers.FindAsync(userId.ToString());
 
                 if (user == null) return null;
                 if (guildId == null) return user;
 
-                if (!user.ActiveGuildsId.Contains((ulong) guildId))
+                if (!user.ActiveGuildsId.Contains(guildId.ToString()))
                 {
-                    user.ActiveGuildsId.Add((ulong) guildId);
+                    user.ActiveGuildsId.Add(guildId.ToString());
                 }
 
                 Context.DiscordUsers.Update(user);
@@ -97,22 +97,16 @@ namespace DiscordOgerBotWeb.Controller
 
             try
             {
-                await Context.DiscordUsers.AddAsync(new DiscordUser
+                await Context.DiscordUsers.AddRangeAsync(new DiscordUser
                 {
-                    Id = user.Id,
+                    Id = user.Id.ToString(),
                     Name = user.Username,
-                    ActiveGuildsId = new List<ulong>(),
+                    ActiveGuildsId = new List<string>{ commandContext.Guild.Id.ToString()},
                     TimesBotUsed = 0,
                     TimeSpendWorking = new TimeSpan()
                 });
 
 
-                await Context.SaveChangesAsync();
-
-                var userDb = await Context.DiscordUsers.FindAsync(user.Id);
-                userDb.ActiveGuildsId.Add(commandContext.Guild.Id);
-
-                Context.DiscordUsers.Update(userDb);
                 await Context.SaveChangesAsync();
 
                 Logger.LogInformation($"Created new User! {Environment.NewLine}" +

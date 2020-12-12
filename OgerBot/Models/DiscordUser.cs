@@ -7,9 +7,9 @@ namespace DiscordOgerBotWeb.Models
     public class DiscordUser
     {
         [Required]
-        public ulong Id { get; set; }
+        public string Id { get; set; }
 
-        public List<ulong> ActiveGuildsId { get; set; }
+        public List<string> ActiveGuildsId { get; set; }
 
         public string Name { get; set; }
 
