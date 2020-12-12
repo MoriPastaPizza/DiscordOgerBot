@@ -15,7 +15,14 @@ namespace DiscordOgerBotWeb.Database
             context.Database.EnsureCreated();
             context.SaveChanges();
 
-            if(context.DiscordUsers.Any(m => m.Id == 1234565)) return;
+            context.Add(new DiscordUser
+            {
+                Id = 1234565231,
+                Name = "heeyyy!"
+            });
+
+
+            if (context.DiscordUsers.Any(m => m.Id == 1234565)) return;
 
             context.Add(new DiscordUser
             {

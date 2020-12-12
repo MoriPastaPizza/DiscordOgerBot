@@ -10,8 +10,8 @@ namespace DiscordOgerBotWeb.Database
     public class OgerBotDataBaseContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql($"Host={Environment.GetEnvironmentVariable("DATABASE_HOST")};Database={Environment.GetEnvironmentVariable("DATABASE_NAME")};" +
-                                        $"Username={Environment.GetEnvironmentVariable("DATABASE_USERNAME")};Password={Environment.GetEnvironmentVariable("DATABASE_PASSWORD")}");
+            => optionsBuilder.UseNpgsql($"Host={Globals.DataBaseConnection.Host};Database={Globals.DataBaseConnection.Name};" +
+                                        $"Username={Globals.DataBaseConnection.UserName};Password={Globals.DataBaseConnection.Password}");
 
 
         public DbSet<DiscordUser> DiscordUsers { get; set; }
