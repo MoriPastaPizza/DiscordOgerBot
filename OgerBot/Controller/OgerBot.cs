@@ -260,6 +260,16 @@ namespace DiscordOgerBotWeb.Controller
                     }
                     else
                     {
+                        if (result.ErrorReason.Contains("50013"))
+                        {
+                            await message.Author.SendMessageAsync(
+                                "Meddl du Kaschber! Du hast gerade versucht mich zu benutzen, aber ich kann leider nicht antworten 😔" +
+                                Environment.NewLine +
+                                "Gib mir in dem Channel doch bitte die Rechte, oder frag die Server Admins/Mods" +
+                                Environment.NewLine +
+                                "Am besten macht Ihr gleiche eine Bot-Rolle für alle euere Bots. Meddl off 🤘");
+                        }
+
                         _logger.LogWarning($"Command could not be executed! {Environment.NewLine}" +
                                            $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
                                            $"Command: {message.Content} {Environment.NewLine}" +

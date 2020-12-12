@@ -64,10 +64,12 @@ namespace DiscordOgerBotWeb.Modules
         [Alias("command", "kommando", "kommandos")]
         public async Task SendCommands()
         {
-            var random = new Random();
-            var commands = Controller.OgerBot.CommandService.Commands.ToList();
-            commands = commands
-                .Where(m => m.Name != "asia")
+            var module = Controller.OgerBot.CommandService.Modules
+                .FirstOrDefault(m => m.Name == nameof(GenericCommands));
+
+            if (module == null) return;
+
+            var commands = module.Commands
                 .OrderBy(m => m.Name)
                 .ToList();
 
@@ -78,7 +80,7 @@ namespace DiscordOgerBotWeb.Modules
 
             var embedBuilder = new EmbedBuilder
             {
-                Title = "GenericCommands"
+                Title = "Commands"
             };
 
             embedBuilder
@@ -90,7 +92,7 @@ namespace DiscordOgerBotWeb.Modules
                 .WithAuthor(Context.Client.CurrentUser)
                 .WithFooter(footer =>
                     footer.Text =
-                        Controller.OgerBot.FooterDictionary[random.Next(Controller.OgerBot.FooterDictionary.Count)])
+                        Controller.OgerBot.FooterDictionary[_rand.Next(Controller.OgerBot.FooterDictionary.Count)])
                 .WithColor(Color.Red)
                 .WithCurrentTimestamp();
 
@@ -118,6 +120,86 @@ namespace DiscordOgerBotWeb.Modules
             var embedBuilder = new EmbedBuilder
             {
                 Title = "Sound Commands"
+            };
+
+            embedBuilder
+                .WithDescription(fieldString)
+                .AddField("Links",
+                    "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
+                    "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
+                    "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
+                .WithAuthor(Context.Client.CurrentUser)
+                .WithFooter(footer =>
+                    footer.Text =
+                        Controller.OgerBot.FooterDictionary[_rand.Next(Controller.OgerBot.FooterDictionary.Count)])
+                .WithColor(Color.Red)
+                .WithCurrentTimestamp();
+
+            await Context.Channel.SendMessageAsync(embed: embedBuilder.Build());
+
+        }
+
+        [Command("videos")]
+        [Alias("fideos")]
+        public async Task SendVideos()
+        {
+            var module = Controller.OgerBot.CommandService.Modules
+                .FirstOrDefault(m => m.Name == nameof(VideoCommands));
+
+            if (module == null) return;
+
+            var commands = module.Commands
+                .OrderBy(m => m.Name)
+                .ToList();
+
+            var commandList = commands
+                .Select(command => $"**{command.Aliases.Aggregate((i, j) => i + " " + j)}** {command.Summary}")
+                .ToList();
+            var fieldString = commandList.Aggregate((i, j) => i + " | " + j).ToString();
+
+            var embedBuilder = new EmbedBuilder
+            {
+                Title = "Video Commands"
+            };
+
+            embedBuilder
+                .WithDescription(fieldString)
+                .AddField("Links",
+                    "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
+                    "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
+                    "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
+                .WithAuthor(Context.Client.CurrentUser)
+                .WithFooter(footer =>
+                    footer.Text =
+                        Controller.OgerBot.FooterDictionary[_rand.Next(Controller.OgerBot.FooterDictionary.Count)])
+                .WithColor(Color.Red)
+                .WithCurrentTimestamp();
+
+            await Context.Channel.SendMessageAsync(embed: embedBuilder.Build());
+
+        }
+
+        [Command("bilder")]
+        [Alias("images")]
+        public async Task SendImages()
+        {
+            var module = Controller.OgerBot.CommandService.Modules
+                .FirstOrDefault(m => m.Name == nameof(ImageCommands));
+
+            if (module == null) return;
+
+            var commands = module.Commands
+                .OrderBy(m => m.Name)
+                .ToList();
+
+            var commandList = commands
+                .Select(command => $"**{command.Aliases.Aggregate((i, j) => i + " " + j)}** {command.Summary}")
+                .ToList();
+            var fieldString = commandList.Aggregate((i, j) => i + " | " + j).ToString();
+
+            var embedBuilder = new EmbedBuilder
+            {
+                Title = "Image Commands"
             };
 
             embedBuilder
