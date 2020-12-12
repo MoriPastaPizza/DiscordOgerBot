@@ -92,6 +92,29 @@ namespace DiscordOgerBotWeb.Controller
             }
         }
 
+        public static async Task<uint> GetTimesBotUsed(IUser user, SocketCommandContext commandContext)
+        {
+            try
+            {
+                var userDataBase = await GetDiscordUserFromId(user.Id, commandContext.Guild.Id);
+                if (userDataBase == null)
+                {
+                    await CreateUser(user, commandContext);
+                    userDataBase = await GetDiscordUserFromId(user.Id, commandContext.Guild.Id);
+                }
+
+                return userDataBase.TimesBotUsed;
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Could not get the Bot Used Count {Environment.NewLine}" +
+                                    $"User: {user.Username} {Environment.NewLine}" +
+                                    $"Guild: {commandContext.Guild.Name}");
+                return 0;
+            }
+        }
+
         public static async Task CreateUser(IUser user, SocketCommandContext commandContext)
         {
 
