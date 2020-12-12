@@ -48,7 +48,7 @@ namespace DiscordOgerBotWeb
                 endpoints.MapRazorPages();
             });
 
-            //SeedData.Initialize();
+            SeedData.Initialize();
         }
     }
 }
