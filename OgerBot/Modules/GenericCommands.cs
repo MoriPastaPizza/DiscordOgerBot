@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -10,10 +9,9 @@ namespace DiscordOgerBotWeb.Modules
     public class GenericCommands : ModuleBase<SocketCommandContext>
     {
 
-        private Random _rand = new Random();
+        private readonly Random _rand = new Random();
 
         [Command("help")]
-        [Alias("hilfe")]
         public async Task SendHelp()
         {
 
@@ -61,7 +59,6 @@ namespace DiscordOgerBotWeb.Modules
         }
 
         [Command("commands")]
-        [Alias("command", "kommando", "kommandos")]
         public async Task SendCommands()
         {
             var module = Controller.OgerBot.CommandService.Modules
@@ -140,7 +137,6 @@ namespace DiscordOgerBotWeb.Modules
         }
 
         [Command("videos")]
-        [Alias("fideos")]
         public async Task SendVideos()
         {
             var module = Controller.OgerBot.CommandService.Modules
@@ -179,8 +175,7 @@ namespace DiscordOgerBotWeb.Modules
 
         }
 
-        [Command("bilder")]
-        [Alias("images")]
+        [Command("images")]
         public async Task SendImages()
         {
             var module = Controller.OgerBot.CommandService.Modules
