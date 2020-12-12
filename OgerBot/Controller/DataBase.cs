@@ -16,6 +16,19 @@ namespace DiscordOgerBotWeb.Controller
         }).CreateLogger("Database Logger");
 
 
+        public static void StartupDataBase()
+        {
+            try
+            {
+                using var context = new OgerBotDataBaseContext();
+                context.Database.EnsureCreated();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex,"Could not Start/Create Database!");
+            }
+        }
+
         public static async Task IncreaseInteractionCount(IUser user, SocketCommandContext commandContext)
         {
             try

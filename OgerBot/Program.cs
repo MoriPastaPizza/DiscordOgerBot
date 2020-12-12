@@ -11,6 +11,7 @@ namespace DiscordOgerBotWeb
         public static void Main(string[] args)
         {
             LoadDatabaseConfig();
+            DataBase.StartupDataBase();
             OgerBot.StartBot().GetAwaiter().GetResult();
             StayAlive.StartHeartBeat();
             CreateHostBuilder(args).Build().Run();
