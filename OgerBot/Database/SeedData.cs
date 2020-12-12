@@ -12,8 +12,8 @@ namespace DiscordOgerBotWeb.Database
         {
             using var context = new OgerBotDataBaseContext();
 
-            context.Database.EnsureCreated();
-            context.SaveChanges();
+            //context.Database.EnsureCreated();
+            //context.SaveChanges();
 
             if(context.DiscordUsers.Any(m => m.Id == 1234565)) return;
 
