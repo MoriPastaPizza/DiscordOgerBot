@@ -45,7 +45,7 @@ namespace DiscordOgerBotWeb.Controller
                     user.ActiveGuildsId.Add((ulong) guildId);
                 }
 
-                Context.Update(user);
+                Context.DiscordUsers.Update(user);
                 await Context.SaveChangesAsync();
                 return user;
             }
@@ -101,12 +101,18 @@ namespace DiscordOgerBotWeb.Controller
                 {
                     Id = user.Id,
                     Name = user.Username,
-                    ActiveGuildsId = new List<ulong> {commandContext.Guild.Id},
+                    ActiveGuildsId = new List<ulong>(),
                     TimesBotUsed = 0,
                     TimeSpendWorking = new TimeSpan()
                 });
 
 
+                await Context.SaveChangesAsync();
+
+                var userDb = await Context.DiscordUsers.FindAsync(user.Id);
+                userDb.ActiveGuildsId.Add(commandContext.Guild.Id);
+
+                Context.DiscordUsers.Update(userDb);
                 await Context.SaveChangesAsync();
 
                 Logger.LogInformation($"Created new User! {Environment.NewLine}" +
