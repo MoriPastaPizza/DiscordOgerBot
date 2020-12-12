@@ -61,7 +61,7 @@ namespace DiscordOgerBotWeb.Modules
         }
 
         [Command("commands")]
-        [Alias("command", "kommando", "kommandos", "sounds")]
+        [Alias("command", "kommando", "kommandos")]
         public async Task SendCommands()
         {
             var random = new Random();
