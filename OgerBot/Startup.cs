@@ -1,3 +1,4 @@
+using DiscordOgerBotWeb.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +47,8 @@ namespace DiscordOgerBotWeb
             {
                 endpoints.MapRazorPages();
             });
+
+            SeedData.Initialize();
         }
     }
 }
