@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DiscordOgerBotWeb.Models
 {
@@ -12,5 +9,9 @@ namespace DiscordOgerBotWeb.Models
         public ulong Id { get; set; }
 
         public string Name { get; set; }
+
+        public uint TimesBotUsed { get; set; }
+
+        public TimeSpan TimeSpendWorking { get; set; }
     }
 }

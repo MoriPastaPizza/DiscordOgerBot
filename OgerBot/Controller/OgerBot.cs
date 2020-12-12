@@ -74,26 +74,6 @@ namespace DiscordOgerBotWeb.Controller
             }
         }
 
-        public static Embed GetStandardSoundEmbed()
-        {
-            var random = new Random();
-            var embedBuilder = new EmbedBuilder();
-
-            embedBuilder
-                .WithDescription(
-                    "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
-                    "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
-
-                .WithFooter(footer =>
-                    footer.Text =
-                        FooterDictionary[random.Next(FooterDictionary.Count)])
-                .WithColor(Color.DarkPurple)
-                .WithCurrentTimestamp();
-
-            return embedBuilder.Build();
-        }
-
         private static async Task ReactionAdded(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
         {
             try
@@ -103,6 +83,9 @@ namespace DiscordOgerBotWeb.Controller
 
                 var originalMessage = await message.GetOrDownloadAsync();
                 if (originalMessage.Author.IsBot) return;
+
+                var context = new SocketCommandContext(_client, originalMessage as SocketUserMessage);
+                var dataBaseTask = DataBase.IncreaseInteractionCount(_client.GetUser(reaction.UserId), context);
 
                 var translatedMessage = TranslateToOger(originalMessage);
 
@@ -139,6 +122,8 @@ namespace DiscordOgerBotWeb.Controller
                                        $"Translate Request from: with id: {reaction.UserId} {Environment.NewLine}" +
                                        $"Tranlated Message: {botReplyMessage.Content} {Environment.NewLine}" +
                                        $"Translated Message Link: {botReplyMessage.GetJumpUrl()}");
+
+                await dataBaseTask;
             }
             catch (Exception ex)
             {
@@ -189,10 +174,10 @@ namespace DiscordOgerBotWeb.Controller
 
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
                 {
-
                     var result = await CommandService.ExecuteAsync(context, argPos, _services);
                     if (result.IsSuccess)
                     {
+                        await DataBase.IncreaseInteractionCount(message.Author, context);
                         _logger.LogInformation($"Command executed! {Environment.NewLine}" +
                                                $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
                                                $"Command: {message.Content} {Environment.NewLine}" +
@@ -220,15 +205,11 @@ namespace DiscordOgerBotWeb.Controller
                     }
                 }
 
-                else if (message.Content.Contains("Valar morghulis", StringComparison.OrdinalIgnoreCase))
+                else
                 {
-                    if(!(message.Author is SocketGuildUser author)) return;
-                    var role = context.Guild.GetRole(784512104459272253);
-                    await author.AddRoleAsync(role);
-                    await author.SendMessageAsync("Valar dohaeris");
+                    await CheckIfMeddlWasRecieved(message);
+                    await CheckIfVallahWasRecieved(message, context);
                 }
-
-                else await CheckIfMeddlWasRecieved(message);
             }
             catch (Exception ex)
             {
@@ -253,6 +234,7 @@ namespace DiscordOgerBotWeb.Controller
 
                     if (result.IsSuccess)
                     {
+                        await DataBase.IncreaseInteractionCount(message.Author, context);
                         _logger.LogInformation($"Command executed! {Environment.NewLine}" +
                                                $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
                                                $"Command: {message.Content} {Environment.NewLine}" +
@@ -278,7 +260,12 @@ namespace DiscordOgerBotWeb.Controller
                                            $"Error: {result.Error}");
                     }
                 }
-                else await CheckIfMeddlWasRecieved(message);
+
+                else
+                {
+                    await CheckIfMeddlWasRecieved(message);
+                    await CheckIfVallahWasRecieved(message, context);
+                }
             }
             catch (Exception ex)
             {
@@ -305,6 +292,17 @@ namespace DiscordOgerBotWeb.Controller
             }
         }
 
+        private static async Task CheckIfVallahWasRecieved(IMessage message, SocketCommandContext context)
+        {
+            if (message.Content.Contains("Valar morghulis", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!(message.Author is SocketGuildUser author)) return;
+                var role = context.Guild.GetRole(784512104459272253);
+                await author.AddRoleAsync(role);
+                await author.SendMessageAsync("Valar dohaeris");
+            }
+        }
+
         private static string TranslateToOger(IMessage originalMessage)
         {
 
@@ -328,6 +326,26 @@ namespace DiscordOgerBotWeb.Controller
             }
 
             return newMessage;
+        }
+
+        public static Embed GetStandardSoundEmbed()
+        {
+            var random = new Random();
+            var embedBuilder = new EmbedBuilder();
+
+            embedBuilder
+                .WithDescription(
+                    "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
+                    "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
+                    "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
+
+                .WithFooter(footer =>
+                    footer.Text =
+                        FooterDictionary[random.Next(FooterDictionary.Count)])
+                .WithColor(Color.DarkPurple)
+                .WithCurrentTimestamp();
+
+            return embedBuilder.Build();
         }
 
         private static Dictionary<string, List<string>> ReadDictionaryFromFile(string path)
