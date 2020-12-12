@@ -204,11 +204,11 @@ namespace DiscordOgerBotWeb.Controller
                         if (result.ErrorReason.Contains("50013"))
                         {
                             await message.Author.SendMessageAsync(
-                                "Meddl du Kaschber! Du hast gerade versucht mich zu benutzen, aber ich kann leider nicht antworten :(" +
+                                "Meddl du Kaschber! Du hast gerade versucht mich zu benutzen, aber ich kann leider nicht antworten 😔" +
                                 Environment.NewLine +
                                 "Gib mir in dem Channel doch bitte die Rechte, oder frag die Server Admins/Mods" +
                                 Environment.NewLine +
-                                "Am besten Ihr macht gleiche eine Bot-Rolle für alle euere Bot. Meddl off 🤘");
+                                "Am besten macht Ihr gleiche eine Bot-Rolle für alle euere Bots. Meddl off 🤘");
                         }
 
                         _logger.LogWarning($"Command could not be executed! {Environment.NewLine}" +
