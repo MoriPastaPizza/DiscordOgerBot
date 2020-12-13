@@ -98,17 +98,14 @@ namespace DiscordOgerBotWeb.Controller
         {
             try
             {
-                var originalMessage = await message.GetOrDownloadAsync();
-                var context = new SocketCommandContext(_client, originalMessage as SocketUserMessage);
-
-                if (originalMessage.Author.IsBot) return;
-
-                //await DataBase.CreateUser(_client.GetUser(reaction.UserId), context);
 
                 if (reaction.Emote.Name != "OgerBot") return;
                 if (_repliedMessagesId.ContainsKey(message.Id)) return;
 
+                var originalMessage = await message.GetOrDownloadAsync();
+                if (originalMessage.Author.IsBot) return;
 
+                var context = new SocketCommandContext(_client, originalMessage as SocketUserMessage);
                 var dataBaseTask = DataBase.IncreaseInteractionCount(_client.GetUser(reaction.UserId), context);
 
                 var translatedMessage = TranslateToOger(originalMessage);
