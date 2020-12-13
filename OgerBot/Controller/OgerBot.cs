@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.Rest;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -75,17 +76,39 @@ namespace DiscordOgerBotWeb.Controller
             }
         }
 
+        public static async Task<IUser> GetUserFromId(ulong userId)
+        {
+            try
+            {
+                var user = _client.GetUser(userId);
+                if (user != null) return user;
+                using var restClient = new DiscordRestClient();
+                return await restClient.GetUserAsync(userId);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Could not Get user from ID {Environment.NewLine}" +
+                                     $"User: {userId} {Environment.NewLine}");
+                return null;
+            }
+        }
+
         private static async Task ReactionAdded(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
         {
             try
             {
+                var originalMessage = await message.GetOrDownloadAsync();
+                var context = new SocketCommandContext(_client, originalMessage as SocketUserMessage);
+
+                if (originalMessage.Author.IsBot) return;
+
+                await DataBase.CreateUser(_client.GetUser(reaction.UserId), context);
+
                 if (reaction.Emote.Name != "OgerBot") return;
                 if (_repliedMessagesId.ContainsKey(message.Id)) return;
 
-                var originalMessage = await message.GetOrDownloadAsync();
-                if (originalMessage.Author.IsBot) return;
 
-                var context = new SocketCommandContext(_client, originalMessage as SocketUserMessage);
                 var dataBaseTask = DataBase.IncreaseInteractionCount(_client.GetUser(reaction.UserId), context);
 
                 var translatedMessage = TranslateToOger(originalMessage);
@@ -173,6 +196,8 @@ namespace DiscordOgerBotWeb.Controller
                 var context = new SocketCommandContext(_client, message);
                 var argPos = 0;
 
+                await DataBase.CreateUser(message.Author, context);
+
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
                 {
                     var result = await CommandService.ExecuteAsync(context, argPos, _services);
@@ -233,6 +258,8 @@ namespace DiscordOgerBotWeb.Controller
 
                 var context = new SocketCommandContext(_client, message);
                 var argPos = 0;
+
+                await DataBase.CreateUser(message.Author, context);
 
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
                 {

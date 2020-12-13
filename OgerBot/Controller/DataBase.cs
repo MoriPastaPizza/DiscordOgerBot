@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -115,11 +117,61 @@ namespace DiscordOgerBotWeb.Controller
             }
         }
 
+        public static async Task<TimeSpan> GetTimeSpendWorking(IUser user, SocketCommandContext commandContext)
+        {
+            try
+            {
+                var userDataBase = await GetDiscordUserFromId(user.Id, commandContext.Guild.Id);
+                if (userDataBase == null)
+                {
+                    await CreateUser(user, commandContext);
+                    userDataBase = await GetDiscordUserFromId(user.Id, commandContext.Guild.Id);
+                }
+
+                return userDataBase.TimeSpendWorking;
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Could not get the Working Time {Environment.NewLine}" +
+                                    $"User: {user.Username} {Environment.NewLine}" +
+                                    $"Guild: {commandContext.Guild.Name}");
+                throw;
+            }
+        }
+
+        public static async Task IncreaseTimeSpendWorking(ulong userId, TimeSpan additionalTime)
+        {
+            try
+            {
+
+                var userDataBase = await GetDiscordUserFromId(userId);
+                if (userDataBase == null)
+                {
+                    return;
+                }
+
+                userDataBase.TimeSpendWorking += additionalTime;
+
+                Context.DiscordUsers.Update(userDataBase);
+                await Context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Could not Increase the working hours {Environment.NewLine}" +
+                                    $"User: {userId} {Environment.NewLine}");
+            }
+        }
+
         public static async Task CreateUser(IUser user, SocketCommandContext commandContext)
         {
 
             try
             {
+
+                if(await Context.DiscordUsers
+                    .AnyAsync(m => m.Id == user.Id.ToString())) return;
+
                 await Context.DiscordUsers.AddRangeAsync(new DiscordUser
                 {
                     Id = user.Id.ToString(),
