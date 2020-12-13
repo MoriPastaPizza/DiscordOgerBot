@@ -103,7 +103,7 @@ namespace DiscordOgerBotWeb.Controller
 
                 if (originalMessage.Author.IsBot) return;
 
-                await DataBase.CreateUser(_client.GetUser(reaction.UserId), context);
+                //await DataBase.CreateUser(_client.GetUser(reaction.UserId), context);
 
                 if (reaction.Emote.Name != "OgerBot") return;
                 if (_repliedMessagesId.ContainsKey(message.Id)) return;
