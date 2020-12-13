@@ -154,6 +154,8 @@ namespace DiscordOgerBotWeb.Controller
 
                 Context.DiscordUsers.Update(userDataBase);
                 await Context.SaveChangesAsync();
+
+                Logger.LogInformation($"Added time to user {userDataBase.Name}, Time: {additionalTime}");
             }
             catch (Exception ex)
             {
