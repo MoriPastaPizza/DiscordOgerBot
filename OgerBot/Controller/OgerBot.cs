@@ -64,12 +64,6 @@ namespace DiscordOgerBotWeb.Controller
                 _client.Ready += () =>
                 {
                     _logger.LogInformation("Bot Started!");
-
-                    Task.Factory.StartNew(async () =>
-                    {
-                        await _client.SetGameAsync("Schmeißt grad die Brügel Naus 👊", type: ActivityType.CustomStatus);
-                    });
-
                     return Task.CompletedTask;
                 };
             }
@@ -183,6 +177,7 @@ namespace DiscordOgerBotWeb.Controller
                     var result = await CommandService.ExecuteAsync(context, argPos, _services);
                     if (result.IsSuccess)
                     {
+                        await _client.SetGameAsync("Schmeißt grad die Brügel Naus 👊", type: ActivityType.CustomStatus);
                         await DataBase.IncreaseInteractionCount(message.Author, context);
                         _logger.LogInformation($"Command executed! {Environment.NewLine}" +
                                                $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
