@@ -189,6 +189,7 @@ namespace DiscordOgerBotWeb.Controller
                 var argPos = 0;
 
                 await DataBase.CreateUser(message.Author, context);
+                TimeManagement.Measure(message.Author.Id);
 
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
                 {
