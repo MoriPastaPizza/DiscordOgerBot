@@ -40,7 +40,7 @@ namespace DiscordOgerBotWeb.Controller
                 FooterDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
                     "../OgerBot/dict/dictionary_footer.json")))["footer"];
 
-                _client = new DiscordSocketClient(new DiscordSocketConfig {MessageCacheSize = 100});
+                _client = new DiscordSocketClient(new DiscordSocketConfig {MessageCacheSize = 1000});
                 CommandService = new CommandService();
                 _services = new ServiceCollection()
                     .AddSingleton(_client)
@@ -101,12 +101,9 @@ namespace DiscordOgerBotWeb.Controller
 
                 if (reaction.Emote.Name != "OgerBot") return;
                 if (_repliedMessagesId.ContainsKey(message.Id)) return;
-
                 var originalMessage = await message.GetOrDownloadAsync();
                 if (originalMessage.Author.IsBot) return;
 
-                var context = new SocketCommandContext(_client, originalMessage as SocketUserMessage);
-                var dataBaseTask = DataBase.IncreaseInteractionCount(_client.GetUser(reaction.UserId), context);
 
                 var translatedMessage = TranslateToOger(originalMessage);
 
@@ -143,8 +140,6 @@ namespace DiscordOgerBotWeb.Controller
                                        $"Translate Request from: with id: {reaction.UserId} {Environment.NewLine}" +
                                        $"Tranlated Message: {botReplyMessage.Content} {Environment.NewLine}" +
                                        $"Translated Message Link: {botReplyMessage.GetJumpUrl()}");
-
-                await dataBaseTask;
             }
             catch (Exception ex)
             {
