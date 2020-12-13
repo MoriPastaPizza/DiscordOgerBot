@@ -63,7 +63,7 @@ namespace DiscordOgerBotWeb.Controller
 
                 _client.Ready += () =>
                 {
-                    _client.SetGameAsync("Schmeißt grad die Brügel Naus 👊", type: ActivityType.CustomStatus);
+                    _client.SetGameAsync("Schmeißt grad die Brügel Naus 👊");
                     _logger.LogInformation("Bot Started!");
                     return Task.CompletedTask;
                 };
