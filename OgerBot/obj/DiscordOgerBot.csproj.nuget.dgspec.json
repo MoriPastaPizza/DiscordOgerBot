@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\DiscordOgerBot\\DiscordOgerBot.csproj": {}
+    "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\OgerBot\\DiscordOgerBot.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\DiscordOgerBot\\DiscordOgerBot.csproj": {
+    "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\OgerBot\\DiscordOgerBot.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\DiscordOgerBot\\DiscordOgerBot.csproj",
+        "projectUniqueName": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\OgerBot\\DiscordOgerBot.csproj",
         "projectName": "DiscordOgerBot",
-        "projectPath": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\DiscordOgerBot\\DiscordOgerBot.csproj",
+        "projectPath": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\OgerBot\\DiscordOgerBot.csproj",
         "packagesPath": "C:\\Users\\Moritz Schweighofer\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\DiscordOgerBot\\obj\\",
+        "outputPath": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\OgerBot\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Moritz Schweighofer\\AppData\\Roaming\\NuGet\\NuGet.Config",
