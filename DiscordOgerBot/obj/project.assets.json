@@ -2190,11 +2190,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\OgerBot\\DiscordOgerBot.csproj",
+      "projectUniqueName": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBot\\DiscordOgerBot\\DiscordOgerBot.csproj",
       "projectName": "DiscordOgerBot",
-      "projectPath": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\OgerBot\\DiscordOgerBot.csproj",
+      "projectPath": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBot\\DiscordOgerBot\\DiscordOgerBot.csproj",
       "packagesPath": "C:\\Users\\Moritz Schweighofer\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\OgerBot\\obj\\",
+      "outputPath": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBot\\DiscordOgerBot\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Moritz Schweighofer\\AppData\\Roaming\\NuGet\\NuGet.Config",

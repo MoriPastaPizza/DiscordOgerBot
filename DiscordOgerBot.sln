@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordOgerBot", "OgerBot\DiscordOgerBot.csproj", "{1AA019C2-75AE-4E06-A4EE-D74FFACFE686}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordOgerBot", "DiscordOgerBot\DiscordOgerBot.csproj", "{91332C4E-7B2A-499F-BBE6-CC244214FD82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1AA019C2-75AE-4E06-A4EE-D74FFACFE686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1AA019C2-75AE-4E06-A4EE-D74FFACFE686}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1AA019C2-75AE-4E06-A4EE-D74FFACFE686}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1AA019C2-75AE-4E06-A4EE-D74FFACFE686}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91332C4E-7B2A-499F-BBE6-CC244214FD82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91332C4E-7B2A-499F-BBE6-CC244214FD82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91332C4E-7B2A-499F-BBE6-CC244214FD82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91332C4E-7B2A-499F-BBE6-CC244214FD82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

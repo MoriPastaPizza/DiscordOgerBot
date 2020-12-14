@@ -29,7 +29,7 @@ namespace DiscordOgerBot.Controller
             try
             {
                 FooterDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                    "../OgerBot/dict/dictionary_footer.json")))["footer"];
+                    "../DiscordOgerBot/Dict/dictionary_footer.json")))["footer"];
 
                 _client = new DiscordSocketClient(new DiscordSocketConfig {MessageCacheSize = 1000});
                 CommandService = new CommandService();
@@ -38,7 +38,7 @@ namespace DiscordOgerBot.Controller
                     .AddSingleton(CommandService)
                     .BuildServiceProvider();
                 _translateDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                    "../OgerBot/dict/dictionary_default.json")));
+                    "../DiscordOgerBot/Dict/dictionary_default.json")));
                 _repliedMessagesId = new Dictionary<ulong, ulong>();
 
                 var token = Environment.GetEnvironmentVariable("BOTTOKEN");

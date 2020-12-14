@@ -8,7 +8,7 @@ namespace DiscordOgerBot.Modules
     public class VideoCommands : ModuleBase<SocketCommandContext>
     {
         private readonly string _videoPath = Path.GetFullPath(
-            Path.Combine(AppContext.BaseDirectory, "../OgerBot/videos"));
+            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
         [Command("kindergarten")]
         public async Task SendKinderGarten()

@@ -8,7 +8,7 @@ namespace DiscordOgerBot.Modules
     public class ImageCommands : ModuleBase<SocketCommandContext>
     {
         private readonly string _imagePath = Path.GetFullPath(
-            Path.Combine(AppContext.BaseDirectory, "../OgerBot/images"));
+            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Images"));
 
         [Command("nice")]
         [Alias("nais")]

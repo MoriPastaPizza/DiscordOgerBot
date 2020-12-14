@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mBiq2ZIjF+fufjguAZVA5TcwcPusTLZ12WOtZ44IixrKeO5mrkG2fT/V7okbEYMs5++GW4gUvIikcnXdtT5muQ==",
+  "dgSpecHash": "yEfLPl/xcGFNZ6t1uRMO/jo0i6ujFfn7YG1UZ7mf7dQaVt+Fah+3DvbseueUBdMpmnWZ9dTKGiMGAyj60mNCGA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBotWeb\\OgerBot\\DiscordOgerBot.csproj",
+  "projectFilePath": "C:\\Users\\Moritz Schweighofer\\source\\repos\\DiscordOgerBot\\DiscordOgerBot\\DiscordOgerBot.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Moritz Schweighofer\\.nuget\\packages\\discord.net\\2.2.0\\discord.net.2.2.0.nupkg.sha512",
     "C:\\Users\\Moritz Schweighofer\\.nuget\\packages\\discord.net.commands\\2.2.0\\discord.net.commands.2.2.0.nupkg.sha512",

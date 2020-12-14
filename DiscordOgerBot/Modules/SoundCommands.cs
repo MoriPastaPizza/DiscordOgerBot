@@ -8,7 +8,7 @@ namespace DiscordOgerBot.Modules
     public class SoundCommands : ModuleBase<SocketCommandContext>
     {
         private readonly string _soundPath = Path.GetFullPath(
-            Path.Combine(AppContext.BaseDirectory, "../OgerBot/sounds"));
+            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Sounds"));
 
         [Command("skrr")]
         [Alias("skör")]
