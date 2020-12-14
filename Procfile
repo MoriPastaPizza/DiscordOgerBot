@@ -1,1 +1,1 @@
-woker: cd $HOME/heroku_output && ./DiscordOgerBotWeb
+woker: cd $HOME/heroku_output && ./DiscordOgerBot
