@@ -32,5 +32,11 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_imagePath + "/buddern.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("allah")]
+        public async Task Sendallah()
+        {
+            await Context.Channel.SendFileAsync(_imagePath + "/allah.jpg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }

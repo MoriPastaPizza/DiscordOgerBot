@@ -123,5 +123,53 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_videoPath + "/begin.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("falta")]
+        [Alias("falter")]
+        public async Task SendFalta()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/falta.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("nein")]
+        [Alias("nö")]
+        public async Task SendNein()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/nein.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("neudral")]
+        [Alias("neutral")]
+        public async Task SendNeutral()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/neudral.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("pferdefotze")]
+        [Alias("liebe")]
+        public async Task SendLiebe()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/pferdefotze.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("wunschliste")]
+        [Alias("bettelliste")]
+        public async Task SendWunschliste()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/wunschliste.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("zahnlücke")]
+        [Alias("lachanfall")]
+        public async Task SendZahnlücke()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/zahnlücke.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("wurst")]
+        public async Task SendWurst()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/wurst.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
