@@ -206,18 +206,12 @@ namespace DiscordOgerBot.Controller
                                 "Am besten macht Ihr gleiche eine Bot-Rolle für alle euere Bots. Meddl off 🤘");
                         }
 
-                        if (result.Error == CommandError.UnknownCommand)
-                        {
-                            await message.Channel.SendMessageAsync($"{message.Author.Mention} Das Kommando kenn ich net. Und ich hab nen hohen IQ in Kommandos! {Environment.NewLine}" +
-                                                                   "Schau doch mal hier nach: og commands");
-                        }
-
                         Log.Warning($"Command could not be executed! {Environment.NewLine}" +
-                                       $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
-                                       $"Command: {message.Content} {Environment.NewLine}" +
-                                       $"Command Link: {message.GetJumpUrl()} {Environment.NewLine}" +
-                                       $"Error Reason: {result.ErrorReason} {Environment.NewLine}" +
-                                       $"Error: {result.Error}");
+                                    $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
+                                    $"Command: {message.Content} {Environment.NewLine}" +
+                                    $"Command Link: {message.GetJumpUrl()} {Environment.NewLine}" +
+                                    $"Error Reason: {result.ErrorReason} {Environment.NewLine}" +
+                                    $"Error: {result.Error}");
                     }
                 }
 
