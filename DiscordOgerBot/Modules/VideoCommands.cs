@@ -103,7 +103,9 @@ namespace DiscordOgerBot.Modules
         [Alias("wichst", "wixt", "wixxt", "wigst")]
         public async Task SendWiggstIhrNet()
         {
-            await Context.Channel.SendFileAsync(_videoPath + "/wiggstIhrNed.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            var number = new Random().Next(1, 3);
+
+            await Context.Channel.SendFileAsync(_videoPath + $"/wiggsne{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("oof")]
