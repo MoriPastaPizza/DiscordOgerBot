@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 
@@ -20,16 +21,23 @@ namespace DiscordOgerBot.Modules
         [Command("zeit")]
         public async Task GetTimeWorking()
         {
+            var rand = new Random();
             var commandContext = new SocketCommandContext(Context.Client, Context.Message);
             var timeSpendWorking = await Controller.DataBase.GetTimeSpendWorking(Context.User, commandContext);
 
             var embedBuilder = new EmbedBuilder();
 
             var embed = embedBuilder
-                .WithAuthor(Context.User)
                 .WithTitle($"Zeitkonto von: {Context.User.Username}")
-                .AddField($"Tage: {timeSpendWorking.Days} und {timeSpendWorking.Hours}:{timeSpendWorking.Minutes}",
+                .AddField($"{timeSpendWorking.Days} Tage, {timeSpendWorking.Hours} Stunden & {timeSpendWorking.Minutes} Minuten",
                     $"Gesamt Stunden: {timeSpendWorking.TotalHours}")
+
+                .WithFooter(footer =>
+                    footer.Text =
+                        Controller.OgerBot.FooterDictionary[rand.Next(Controller.OgerBot.FooterDictionary.Count)])
+                .WithColor(Color.Gold)
+                .WithCurrentTimestamp()
+                .WithAuthor(Context.User)
                 .Build();
 
             await Context.Channel.SendMessageAsync(embed: embed);
