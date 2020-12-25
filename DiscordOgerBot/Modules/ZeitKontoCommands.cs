@@ -40,6 +40,8 @@ namespace DiscordOgerBot.Modules
                         "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
                         "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
 
+                .AddField($"{Controller.OgerBot.GetRoleForTimeSpendWorking(timeSpendWorking).Name}", "aa")
+
                 .WithFooter(footer =>
                     footer.Text =
                         Controller.OgerBot.FooterDictionary[rand.Next(Controller.OgerBot.FooterDictionary.Count)])

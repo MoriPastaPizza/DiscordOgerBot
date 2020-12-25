@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -358,6 +359,16 @@ namespace DiscordOgerBot.Controller
                 .WithCurrentTimestamp();
 
             return embedBuilder.Build();
+        }
+
+        public static IRole GetRoleForTimeSpendWorking(TimeSpan timeSpendWorking)
+        {
+            var ranks = Globals.WorkingRanks.TimeForRanks;
+            var rankId = ranks.FirstOrDefault(rank => timeSpendWorking >= rank.Key).Value;
+            if (rankId == 0) return null;
+
+            var roles = _client.GetGuild(758745761566818314).Roles;
+            return roles.FirstOrDefault(m => m.Id == rankId);
         }
 
         private static Dictionary<string, List<string>> ReadDictionaryFromFile(string path)
