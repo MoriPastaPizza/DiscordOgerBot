@@ -47,7 +47,7 @@ namespace DiscordOgerBot.Modules
                     footer.Text =
                         Controller.OgerBot.FooterDictionary[rand.Next(Controller.OgerBot.FooterDictionary.Count)])
 
-                .WithImageUrl(_imagePath + "arbeitspulli.png")
+                .WithImageUrl("https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Images/arbeitspulli.png")
 
                 .WithColor(Color.Gold)
                 .WithCurrentTimestamp()
