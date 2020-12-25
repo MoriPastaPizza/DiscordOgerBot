@@ -28,9 +28,8 @@ namespace DiscordOgerBot.Modules
             var embedBuilder = new EmbedBuilder();
 
             var embed = embedBuilder
-                .WithTitle($"Zeitkonto von: {Context.User.Username}")
-                .AddField($"{timeSpendWorking.Days} Tage, {timeSpendWorking.Hours} Stunden & {timeSpendWorking.Minutes} Minuten",
-                    $"Gesamt Stunden: {timeSpendWorking.TotalHours}")
+                .WithTitle($"{Math.Round(timeSpendWorking.TotalHours, 2)} Stunden")
+                .WithDescription($"Das sind {timeSpendWorking.Days} Tage {timeSpendWorking.Hours} Stunden und {timeSpendWorking.Minutes} Minuten :O")
 
                 .WithFooter(footer =>
                     footer.Text =
