@@ -15,5 +15,14 @@ namespace DiscordOgerBot.Modules
             await Context.Channel.SendMessageAsync($"Du hast mich schon {timesUsed} mal benutzt!",
                 embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("zeit")]
+        public async Task GetTimeWorking()
+        {
+            var commandContext = new SocketCommandContext(Context.Client, Context.Message);
+            var timeSpendWorking = await Controller.DataBase.GetTimeSpendWorking(Context.User, commandContext);
+
+            await Context.Channel.SendMessageAsync(timeSpendWorking.ToString());
+        }
     }
 }
