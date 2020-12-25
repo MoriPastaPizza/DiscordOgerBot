@@ -9,9 +9,6 @@ namespace DiscordOgerBot.Modules
     public class ZeitKontoCommands : ModuleBase<SocketCommandContext>
     {
 
-        private readonly string _imagePath = Path.GetFullPath(
-            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Images"));
-
         [Command("used")]
         public async Task SendUsed()
         {
@@ -47,7 +44,7 @@ namespace DiscordOgerBot.Modules
                     footer.Text =
                         Controller.OgerBot.FooterDictionary[rand.Next(Controller.OgerBot.FooterDictionary.Count)])
 
-                .WithImageUrl("https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Images/arbeitspulli.png")
+                .WithThumbnailUrl("https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Images/arbeitspulli.png")
 
                 .WithColor(Color.Gold)
                 .WithCurrentTimestamp()
