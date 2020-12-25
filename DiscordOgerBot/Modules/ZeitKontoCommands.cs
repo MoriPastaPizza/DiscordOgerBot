@@ -22,7 +22,7 @@ namespace DiscordOgerBot.Modules
             var commandContext = new SocketCommandContext(Context.Client, Context.Message);
             var timeSpendWorking = await Controller.DataBase.GetTimeSpendWorking(Context.User, commandContext);
 
-            await Context.Channel.SendMessageAsync(timeSpendWorking.ToString());
+            await Context.Channel.SendMessageAsync($"Tage: {timeSpendWorking.Days}, Stunden: {timeSpendWorking.Hours}, Minuten: {timeSpendWorking.Minutes}");
         }
     }
 }
