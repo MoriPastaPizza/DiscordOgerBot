@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -7,6 +8,9 @@ namespace DiscordOgerBot.Modules
 {
     public class ZeitKontoCommands : ModuleBase<SocketCommandContext>
     {
+
+        private readonly string _imagePath = Path.GetFullPath(
+            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Images"));
 
         [Command("used")]
         public async Task SendUsed()
@@ -19,6 +23,7 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("zeit")]
+        [Alias("Zeitkonto")]
         public async Task GetTimeWorking()
         {
             var rand = new Random();
@@ -33,7 +38,7 @@ namespace DiscordOgerBot.Modules
                                  $"gezählt wird auf jedem Discord-Server wo ich aktiv bin!")
 
                 .AddField(
-                    "",
+                    "Info",
                     "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
                         "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
                         "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
@@ -41,6 +46,9 @@ namespace DiscordOgerBot.Modules
                 .WithFooter(footer =>
                     footer.Text =
                         Controller.OgerBot.FooterDictionary[rand.Next(Controller.OgerBot.FooterDictionary.Count)])
+
+                .WithImageUrl(_imagePath + "arbeitspulli.png")
+
                 .WithColor(Color.Gold)
                 .WithCurrentTimestamp()
                 .WithAuthor(Context.User)
