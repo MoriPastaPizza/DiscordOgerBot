@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 
 namespace DiscordOgerBot.Modules
@@ -22,7 +23,16 @@ namespace DiscordOgerBot.Modules
             var commandContext = new SocketCommandContext(Context.Client, Context.Message);
             var timeSpendWorking = await Controller.DataBase.GetTimeSpendWorking(Context.User, commandContext);
 
-            await Context.Channel.SendMessageAsync($"Tage: {timeSpendWorking.Days}, Stunden: {timeSpendWorking.Hours}, Minuten: {timeSpendWorking.Minutes}");
+            var embedBuilder = new EmbedBuilder();
+
+            var embed = embedBuilder
+                .WithAuthor(Context.User)
+                .WithTitle($"Zeitkonto von: {Context.User.Username}")
+                .AddField($"Tage: {timeSpendWorking.Days} und {timeSpendWorking.Hours}:{timeSpendWorking.Minutes}",
+                    $"Gesamt Stunden: {timeSpendWorking.TotalHours}")
+                .Build();
+
+            await Context.Channel.SendMessageAsync(embed: embed);
         }
     }
 }
