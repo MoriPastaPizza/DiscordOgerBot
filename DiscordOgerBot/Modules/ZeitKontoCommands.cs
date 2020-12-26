@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -27,6 +28,8 @@ namespace DiscordOgerBot.Modules
             var commandContext = new SocketCommandContext(Context.Client, Context.Message);
             var timeSpendWorking = await Controller.DataBase.GetTimeSpendWorking(Context.User, commandContext);
             var (currentRole, nextRole, timeTillRole) = Controller.OgerBot.GetRoleForTimeSpendWorking(timeSpendWorking);
+            var currentRoleLogoString = Globals.WorkingRanks.TimeForRanks
+                .FirstOrDefault(m => m.RankId == currentRole.Id).ImageUrl;
 
             var embedBuilder = new EmbedBuilder();
 
@@ -44,7 +47,7 @@ namespace DiscordOgerBot.Modules
                         "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
 
 
-                .WithThumbnailUrl("https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Images/arbeitspulli.png")
+                .WithThumbnailUrl(currentRoleLogoString)
 
                 .WithFooter(footer =>
                     footer.Text =
