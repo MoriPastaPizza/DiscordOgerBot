@@ -397,7 +397,7 @@ namespace DiscordOgerBot.Controller
                 Log.Information($"User: {user.Nickname} should have role {roleUserShouldHave.Name}");
 
                 if (user.Id != 386989432148066306) continue;
-                //await user.AddRoleAsync(roleUserShouldHave);
+                await user.AddRoleAsync(roleUserShouldHave);
             }
         }
 
