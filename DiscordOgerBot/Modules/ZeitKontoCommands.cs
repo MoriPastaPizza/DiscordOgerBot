@@ -26,13 +26,16 @@ namespace DiscordOgerBot.Modules
             var rand = new Random();
             var commandContext = new SocketCommandContext(Context.Client, Context.Message);
             var timeSpendWorking = await Controller.DataBase.GetTimeSpendWorking(Context.User, commandContext);
+            var (currentRole, nextRole, timeTillRole) = Controller.OgerBot.GetRoleForTimeSpendWorking(timeSpendWorking);
 
             var embedBuilder = new EmbedBuilder();
 
             var embed = embedBuilder
-                .WithTitle($"{Math.Round(timeSpendWorking.TotalHours, 2)} Stunden")
+                .WithTitle($"{Math.Round(timeSpendWorking.TotalHours, 2)} Stunden ({currentRole.Name})")
                 .WithDescription($"Das sind {timeSpendWorking.Days} Tage {timeSpendWorking.Hours} Stunden und {timeSpendWorking.Minutes} Minuten, die du schon auf Discord gearbeitet hast. {Environment.NewLine}" +
                                  $"gezählt wird auf jedem Discord-Server wo ich aktiv bin!")
+
+                .AddField($"Dein nächster Rang: {nextRole.Name}", $"in: {timeTillRole}")
 
                 .AddField(
                     "Info",
@@ -40,15 +43,13 @@ namespace DiscordOgerBot.Modules
                         "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
                         "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
 
-                .AddField($"{Controller.OgerBot.GetRoleForTimeSpendWorking(timeSpendWorking).Name}", "aa")
+
+                .WithThumbnailUrl("https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Images/arbeitspulli.png")
 
                 .WithFooter(footer =>
                     footer.Text =
                         Controller.OgerBot.FooterDictionary[rand.Next(Controller.OgerBot.FooterDictionary.Count)])
-
-                .WithThumbnailUrl("https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Images/arbeitspulli.png")
-
-                .WithColor(Color.Gold)
+                .WithColor(currentRole.Color)
                 .WithCurrentTimestamp()
                 .WithAuthor(Context.User)
                 .Build();

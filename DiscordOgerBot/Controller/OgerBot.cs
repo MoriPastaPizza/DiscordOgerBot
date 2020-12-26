@@ -361,14 +361,20 @@ namespace DiscordOgerBot.Controller
             return embedBuilder.Build();
         }
 
-        public static IRole GetRoleForTimeSpendWorking(TimeSpan timeSpendWorking)
+        public static (IRole, IRole, TimeSpan) GetRoleForTimeSpendWorking(TimeSpan timeSpendWorking)
         {
-            var ranks = Globals.WorkingRanks.TimeForRanks;
-            var rankId = ranks.FirstOrDefault(rank => timeSpendWorking >= rank.Key).Value;
-            if (rankId == 0) return null;
-
             var roles = _client.GetGuild(758745761566818314).Roles;
-            return roles.FirstOrDefault(m => m.Id == rankId);
+            var ranks = Globals.WorkingRanks.TimeForRanks;
+
+            var currentRank = ranks.FirstOrDefault(rank => timeSpendWorking >= rank.Time);
+            var nextRank = ranks.Find(m => m.Rank == currentRank.Rank + 1);
+
+            var currentRole = roles.FirstOrDefault(m => m.Id == currentRank.RankId);
+            var nextRole = roles.FirstOrDefault(m => m.Id == nextRank.RankId);
+
+            var timeTilNextRole = nextRank.Time - timeSpendWorking;
+
+            return (currentRole, nextRole, timeTilNextRole);
         }
 
         private static Dictionary<string, List<string>> ReadDictionaryFromFile(string path)
