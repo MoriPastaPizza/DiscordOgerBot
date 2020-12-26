@@ -377,6 +377,23 @@ namespace DiscordOgerBot.Controller
             return (currentRole, nextRole, timeTilNextRole);
         }
 
+        public static async Task SetRoleForTimeSpendWorking(TimeSpan timeSpendWorking, ulong userId)
+        {
+            var roles = _client.GetGuild(758745761566818314).Roles;
+            var ranks = Globals.WorkingRanks.TimeForRanks;
+
+            var currentRank = ranks.FirstOrDefault(rank => timeSpendWorking >= rank.Time);
+            var currentRole = roles.FirstOrDefault(m => m.Id == currentRank.RankId);
+
+            var user = _client.GetUser(userId) as SocketGuildUser;
+            var server = _client.GetGuild(758745761566818314);
+
+            if(user.Id != 386989432148066306) return;
+
+            await user.AddRoleAsync(currentRole);
+
+        }
+
         private static Dictionary<string, List<string>> ReadDictionaryFromFile(string path)
         {
             using var r = new StreamReader(path);
