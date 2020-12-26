@@ -396,6 +396,11 @@ namespace DiscordOgerBot.Controller
 
                 Log.Information($"User: {user.Nickname} should have role {roleUserShouldHave.Name}");
 
+                foreach (var role in user.Roles)
+                {
+                    if (ranks.Any(m => m.RankId == role.Id)) await user.RemoveRoleAsync(role);
+                }
+
                 if (user.Id != 386989432148066306) continue;
                 await user.AddRoleAsync(roleUserShouldHave);
             }
