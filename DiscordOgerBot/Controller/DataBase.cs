@@ -53,16 +53,16 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task IncreaseInteractionCount(IUser user, SocketCommandContext commandContext)
+        public static async Task IncreaseInteractionCount(IUser user, ulong guildId)
         {
             try
             {
 
-                var userDataBase = await GetDiscordUserFromId(user.Id, commandContext.Guild.Id);
+                var userDataBase = await GetDiscordUserFromId(user.Id, guildId);
                 if (userDataBase == null)
                 {
-                    await CreateUser(user, commandContext);
-                    userDataBase = await GetDiscordUserFromId(user.Id, commandContext.Guild.Id);
+                    await CreateUser(user, guildId);
+                    userDataBase = await GetDiscordUserFromId(user.Id, guildId);
                 }
 
                 if (userDataBase == null)
@@ -70,7 +70,7 @@ namespace DiscordOgerBot.Controller
                     Log.Warning($"User not Found! {Environment.NewLine}" +
                                        $"Id: {user.Id} {Environment.NewLine}" +
                                        $"Name: {user.Username} {Environment.NewLine}" +
-                                       $"Guild: {commandContext.Guild.Name}");
+                                       $"Guild: {guildId}");
                     return;
                 }
 
@@ -83,19 +83,19 @@ namespace DiscordOgerBot.Controller
             {
                 Log.Error(ex, $"Could not Increase User Interaction Count {Environment.NewLine}" +
                                  $"User: {user.Username} {Environment.NewLine}" +
-                                 $"Guild: {commandContext.Guild.Name}");
+                                 $"Guild: {guildId}");
             }
         }
 
-        public static async Task<uint> GetTimesBotUsed(IUser user, SocketCommandContext commandContext)
+        public static async Task<uint> GetTimesBotUsed(IUser user, ulong guildId)
         {
             try
             {
-                var userDataBase = await GetDiscordUserFromId(user.Id, commandContext.Guild.Id);
+                var userDataBase = await GetDiscordUserFromId(user.Id, guildId);
                 if (userDataBase == null)
                 {
-                    await CreateUser(user, commandContext);
-                    userDataBase = await GetDiscordUserFromId(user.Id, commandContext.Guild.Id);
+                    await CreateUser(user, guildId);
+                    userDataBase = await GetDiscordUserFromId(user.Id, guildId);
                 }
 
                 return userDataBase.TimesBotUsed;
@@ -105,20 +105,20 @@ namespace DiscordOgerBot.Controller
             {
                 Log.Error(ex, $"Could not get the Bot Used Count {Environment.NewLine}" +
                                  $"User: {user.Username} {Environment.NewLine}" +
-                                 $"Guild: {commandContext.Guild.Name}");
+                                 $"Guild: {guildId}");
                 return 0;
             }
         }
 
-        public static async Task<TimeSpan> GetTimeSpendWorking(IUser user, SocketCommandContext commandContext)
+        public static async Task<TimeSpan> GetTimeSpendWorking(IUser user, ulong guildId)
         {
             try
             {
-                var userDataBase = await GetDiscordUserFromId(user.Id, commandContext.Guild.Id);
+                var userDataBase = await GetDiscordUserFromId(user.Id, guildId);
                 if (userDataBase == null)
                 {
-                    await CreateUser(user, commandContext);
-                    userDataBase = await GetDiscordUserFromId(user.Id, commandContext.Guild.Id);
+                    await CreateUser(user, guildId);
+                    userDataBase = await GetDiscordUserFromId(user.Id, guildId);
                 }
 
                 return userDataBase.TimeSpendWorking;
@@ -128,7 +128,7 @@ namespace DiscordOgerBot.Controller
             {
                 Log.Error(ex, $"Could not get the Working Time {Environment.NewLine}" +
                                  $"User: {user.Username} {Environment.NewLine}" +
-                                 $"Guild: {commandContext.Guild.Name}");
+                                 $"Guild: {guildId}");
                 throw;
             }
         }
@@ -159,7 +159,7 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task CreateUser(IUser user, SocketCommandContext commandContext)
+        public static async Task CreateUser(IUser user, ulong guildId)
         {
 
             try
@@ -172,7 +172,7 @@ namespace DiscordOgerBot.Controller
                 {
                     Id = user.Id.ToString(),
                     Name = user.Username,
-                    ActiveGuildsId = new List<string>{ commandContext.Guild.Id.ToString()},
+                    ActiveGuildsId = new List<string>{ guildId.ToString()},
                     TimesBotUsed = 0,
                     TimeSpendWorking = new TimeSpan()
                 });
@@ -182,13 +182,13 @@ namespace DiscordOgerBot.Controller
 
                 Log.Information($"Created new User! {Environment.NewLine}" +
                                    $"User: {user.Username} {Environment.NewLine}" +
-                                   $"Guild: {commandContext.Guild.Name}");
+                                   $"Guild: {guildId}");
             }
             catch (Exception ex)
             {
                 Log.Error(ex, $"Could not create User in DB {Environment.NewLine}" +
                                  $"User: {user.Username} {Environment.NewLine}" +
-                                 $"Guild: {commandContext.Guild.Name}");
+                                 $"Guild: {guildId}");
             }
         }
     }

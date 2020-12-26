@@ -14,7 +14,7 @@ namespace DiscordOgerBot.Modules
         public async Task SendUsed()
         {
             var commandContext = new SocketCommandContext(Context.Client, Context.Message);
-            var timesUsed = await Controller.DataBase.GetTimesBotUsed(Context.User, commandContext);
+            var timesUsed = await Controller.DataBase.GetTimesBotUsed(Context.User, commandContext.Guild.Id);
 
             await Context.Channel.SendMessageAsync($"Du hast mich schon {timesUsed} mal benutzt!",
                 embed: Controller.OgerBot.GetStandardSoundEmbed());
@@ -26,7 +26,7 @@ namespace DiscordOgerBot.Modules
         {
             var rand = new Random();
             var commandContext = new SocketCommandContext(Context.Client, Context.Message);
-            var timeSpendWorking = await Controller.DataBase.GetTimeSpendWorking(Context.User, commandContext);
+            var timeSpendWorking = await Controller.DataBase.GetTimeSpendWorking(Context.User, commandContext.Guild.Id);
             var (currentRole, nextRole, timeTillRole) = Controller.OgerBot.GetRoleForTimeSpendWorking(timeSpendWorking);
             var currentRoleLogoString = Globals.WorkingRanks.TimeForRanks
                 .FirstOrDefault(m => m.RankId == currentRole.Id).ImageUrl;

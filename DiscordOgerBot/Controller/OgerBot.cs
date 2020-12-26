@@ -59,6 +59,7 @@ namespace DiscordOgerBot.Controller
                 await _client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
                 Log.Information("Bot Started!");
 
+                await CheckUsers();
                 await Task.Delay(-1);
 
             }
@@ -180,7 +181,7 @@ namespace DiscordOgerBot.Controller
                 var context = new SocketCommandContext(_client, message);
                 var argPos = 0;
 
-                await DataBase.CreateUser(message.Author, context);
+                await DataBase.CreateUser(message.Author, context.Guild.Id);
                 TimeManagement.Measure(message.Author.Id);
 
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
@@ -188,7 +189,7 @@ namespace DiscordOgerBot.Controller
                     var result = await CommandService.ExecuteAsync(context, argPos, _services);
                     if (result.IsSuccess)
                     {
-                        await DataBase.IncreaseInteractionCount(message.Author, context);
+                        await DataBase.IncreaseInteractionCount(message.Author, context.Guild.Id);
                         Log.Information($"Command executed! {Environment.NewLine}" +
                                            $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
                                            $"Command: {message.Content} {Environment.NewLine}" +
@@ -238,7 +239,7 @@ namespace DiscordOgerBot.Controller
                 var context = new SocketCommandContext(_client, message);
                 var argPos = 0;
 
-                await DataBase.CreateUser(message.Author, context);
+                await DataBase.CreateUser(message.Author, context.Guild.Id);
 
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
                 {
@@ -247,7 +248,7 @@ namespace DiscordOgerBot.Controller
 
                     if (result.IsSuccess)
                     {
-                        await DataBase.IncreaseInteractionCount(message.Author, context);
+                        await DataBase.IncreaseInteractionCount(message.Author, context.Guild.Id);
                         Log.Information($"Command executed! {Environment.NewLine}" +
                                            $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
                                            $"Command: {message.Content} {Environment.NewLine}" +
@@ -377,21 +378,28 @@ namespace DiscordOgerBot.Controller
             return (currentRole, nextRole, timeTilNextRole);
         }
 
-        public static async Task SetRoleForTimeSpendWorking(TimeSpan timeSpendWorking, ulong userId)
+        private static async Task CheckUsers()
         {
-            var roles = _client.GetGuild(758745761566818314).Roles;
-            var ranks = Globals.WorkingRanks.TimeForRanks;
-
-            var currentRank = ranks.FirstOrDefault(rank => timeSpendWorking >= rank.Time);
-            var currentRole = roles.FirstOrDefault(m => m.Id == currentRank.RankId);
-
-            var user = _client.GetUser(userId) as SocketGuildUser;
             var server = _client.GetGuild(758745761566818314);
+            var roles = server.Roles;
+            var ranks = Globals.WorkingRanks.TimeForRanks;
+            await server.DownloadUsersAsync();
 
-            if(user.Id != 386989432148066306) return;
+            foreach (var user in server.Users)
+            {
+                var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
+                if (timeFromDb == new TimeSpan()) continue;
+                var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
+                var roleUserShouldHave = roles.FirstOrDefault(m => m.Id == rankUserShouldHave.RankId);
+                if(roleUserShouldHave == null) continue;
 
-            await user.AddRoleAsync(currentRole);
+                if(user.Roles.Any(m => m.Id == roleUserShouldHave.Id)) continue;
 
+                Log.Information($"User: {user.Nickname} should have role {roleUserShouldHave.Name}");
+
+                if(user.Id != 386989432148066306) continue;
+                //await user.AddRoleAsync(roleUserShouldHave);
+            }
         }
 
         private static Dictionary<string, List<string>> ReadDictionaryFromFile(string path)
