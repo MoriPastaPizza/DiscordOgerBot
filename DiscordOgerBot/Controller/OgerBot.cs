@@ -387,6 +387,7 @@ namespace DiscordOgerBot.Controller
 
             foreach (var user in server.Users)
             {
+                if(user == null) continue;
                 var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
                 if (timeFromDb == new TimeSpan()) continue;
                 var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
