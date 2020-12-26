@@ -186,6 +186,7 @@ namespace DiscordOgerBot.Controller
                 var argPos = 0;
 
                 await DataBase.CreateUser(message.Author, context.Guild.Id);
+                await CheckUser(message.Author as SocketGuildUser);
                 TimeManagement.Measure(message.Author.Id);
 
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
@@ -381,6 +382,31 @@ namespace DiscordOgerBot.Controller
 
             return (currentRole, nextRole, timeTilNextRole);
         }
+
+        public static async Task CheckUser(SocketGuildUser user)
+        {
+            var server = _client.GetGuild(758745761566818314);
+            var roles = server.Roles;
+            var ranks = Globals.WorkingRanks.TimeForRanks;
+
+            if (user == null) return;
+            var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
+            if (timeFromDb == new TimeSpan()) return;
+            var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
+            var roleUserShouldHave = roles.FirstOrDefault(m => m.Id == rankUserShouldHave.RankId);
+            if (roleUserShouldHave == null) return;
+
+            if (user.Roles.Any(m => m.Id == roleUserShouldHave.Id)) return;
+
+            //Log.Information($"User: {user.Username} should have role {roleUserShouldHave.Name}");
+
+            foreach (var role in user.Roles)
+            {
+                if (ranks.Any(m => m.RankId == role.Id)) await user.RemoveRoleAsync(role);
+            }
+
+            await user.AddRoleAsync(roleUserShouldHave);
+            }
 
         public static async Task CheckUsers()
         {
