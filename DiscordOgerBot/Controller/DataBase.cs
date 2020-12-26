@@ -148,7 +148,7 @@ namespace DiscordOgerBot.Controller
 
                 Context.DiscordUsers.Update(userDataBase);
                 await Context.SaveChangesAsync();
-                await OgerBot.SetRoleForTimeSpendWorking(userDataBase.TimeSpendWorking, userId);
+                //await OgerBot.SetRoleForTimeSpendWorking(userDataBase.TimeSpendWorking, userId);
 
                 Log.Information($"Added time to user {userDataBase.Name}, Time: {additionalTime}");
             }
