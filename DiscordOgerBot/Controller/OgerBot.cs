@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -24,6 +25,7 @@ namespace DiscordOgerBot.Controller
         private static IServiceProvider _services;
         private static Dictionary<ulong, ulong> _repliedMessagesId;
         private static Dictionary<string, List<string>> _translateDictionary;
+        private static CancellationTokenSource _cancellationTokenCheckUsers;
 
         public static async Task StartBot()
         {
@@ -58,6 +60,9 @@ namespace DiscordOgerBot.Controller
 
                 await _client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
                 Log.Information("Bot Started!");
+
+                _cancellationTokenCheckUsers = new CancellationTokenSource();
+                new Task(CheckUsersTask, _cancellationTokenCheckUsers.Token, TaskCreationOptions.LongRunning).Start();
 
                 await Task.Delay(-1);
 
@@ -396,6 +401,7 @@ namespace DiscordOgerBot.Controller
 
                 Log.Information($"User: {user.Nickname} should have role {roleUserShouldHave.Name}");
 
+
                 foreach (var role in user.Roles)
                 {
                     if (ranks.Any(m => m.RankId == role.Id)) await user.RemoveRoleAsync(role);
@@ -403,6 +409,16 @@ namespace DiscordOgerBot.Controller
 
                 if (user.Id != 386989432148066306) continue;
                 await user.AddRoleAsync(roleUserShouldHave);
+            }
+        }
+
+        private static async void CheckUsersTask()
+        {
+            while (!_cancellationTokenCheckUsers.Token.IsCancellationRequested)
+            {
+                _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(5));
+
+                await CheckUsers();
             }
         }
 

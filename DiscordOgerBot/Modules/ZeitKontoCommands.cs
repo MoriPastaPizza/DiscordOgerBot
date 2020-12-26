@@ -12,6 +12,7 @@ namespace DiscordOgerBot.Modules
     {
 
         [Command("checkusers")]
+        [RequireUserPermission(GuildPermission.BanMembers)]
         public async Task CheckUsersCommand()
         {
             await Controller.OgerBot.CheckUsers();
