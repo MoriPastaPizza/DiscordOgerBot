@@ -10,6 +10,12 @@ namespace DiscordOgerBot.Modules
     public class ZeitKontoCommands : ModuleBase<SocketCommandContext>
     {
 
+        [Command("checkusers")]
+        public async Task CheckUsersCommand()
+        {
+            await Controller.OgerBot.CheckUsers();
+        }
+
         [Command("used")]
         public async Task SendUsed()
         {

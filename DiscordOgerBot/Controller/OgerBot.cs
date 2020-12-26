@@ -59,7 +59,6 @@ namespace DiscordOgerBot.Controller
                 await _client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
                 Log.Information("Bot Started!");
 
-                await CheckUsers();
                 await Task.Delay(-1);
 
             }
@@ -378,7 +377,7 @@ namespace DiscordOgerBot.Controller
             return (currentRole, nextRole, timeTilNextRole);
         }
 
-        private static async Task CheckUsers()
+        public static async Task CheckUsers()
         {
             var server = _client.GetGuild(758745761566818314);
             var roles = server.Roles;
