@@ -399,7 +399,7 @@ namespace DiscordOgerBot.Controller
 
                 if (user.Roles.Any(m => m.Id == roleUserShouldHave.Id)) continue;
 
-                Log.Information($"User: {user.Nickname} should have role {roleUserShouldHave.Name}");
+                Log.Information($"User: {user.Username} should have role {roleUserShouldHave.Name}");
 
 
                 foreach (var role in user.Roles)
