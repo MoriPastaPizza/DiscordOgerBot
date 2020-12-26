@@ -382,7 +382,6 @@ namespace DiscordOgerBot.Controller
             var server = _client.GetGuild(758745761566818314);
             var roles = server.Roles;
             var ranks = Globals.WorkingRanks.TimeForRanks;
-            await server.DownloadUsersAsync();
 
             if(user == null) return;
             var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
