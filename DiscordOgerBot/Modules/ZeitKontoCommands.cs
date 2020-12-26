@@ -14,7 +14,7 @@ namespace DiscordOgerBot.Modules
         [Command("checkusers")]
         public async Task CheckUsersCommand()
         {
-            await Controller.OgerBot.CheckUser(Context.User as SocketGuildUser);
+            await Controller.OgerBot.CheckUsers();
         }
 
         [Command("used")]
