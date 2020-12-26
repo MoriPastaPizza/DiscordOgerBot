@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 
 namespace DiscordOgerBot.Modules
 {
@@ -13,7 +14,7 @@ namespace DiscordOgerBot.Modules
         [Command("checkusers")]
         public async Task CheckUsersCommand()
         {
-            await Controller.OgerBot.CheckUsers();
+            await Controller.OgerBot.CheckUser(Context.User as SocketGuildUser);
         }
 
         [Command("used")]

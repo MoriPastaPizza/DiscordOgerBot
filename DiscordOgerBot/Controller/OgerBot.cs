@@ -377,29 +377,26 @@ namespace DiscordOgerBot.Controller
             return (currentRole, nextRole, timeTilNextRole);
         }
 
-        public static async Task CheckUsers()
+        public static async Task CheckUser(SocketGuildUser user)
         {
             var server = _client.GetGuild(758745761566818314);
             var roles = server.Roles;
             var ranks = Globals.WorkingRanks.TimeForRanks;
             await server.DownloadUsersAsync();
 
-            foreach (var user in server.Users)
-            {
-                if(user == null) continue;
-                var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
-                if (timeFromDb == new TimeSpan()) continue;
-                var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
-                var roleUserShouldHave = roles.FirstOrDefault(m => m.Id == rankUserShouldHave.RankId);
-                if(roleUserShouldHave == null) continue;
+            if(user == null) return;
+            var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
+            if (timeFromDb == new TimeSpan()) return;
+            var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
+            var roleUserShouldHave = roles.FirstOrDefault(m => m.Id == rankUserShouldHave.RankId);
+            if(roleUserShouldHave == null) return;
 
-                if(user.Roles.Any(m => m.Id == roleUserShouldHave.Id)) continue;
+            if(user.Roles.Any(m => m.Id == roleUserShouldHave.Id)) return;
 
-                Log.Information($"User: {user.Nickname} should have role {roleUserShouldHave.Name}");
+            Log.Information($"User: {user.Nickname} should have role {roleUserShouldHave.Name}");
 
-                if(user.Id != 386989432148066306) continue;
-                //await user.AddRoleAsync(roleUserShouldHave);
-            }
+            if(user.Id != 386989432148066306) return;
+            //await user.AddRoleAsync(roleUserShouldHave);
         }
 
         private static Dictionary<string, List<string>> ReadDictionaryFromFile(string path)
