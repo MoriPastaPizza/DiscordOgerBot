@@ -383,34 +383,43 @@ namespace DiscordOgerBot.Controller
             return (currentRole, nextRole, timeTilNextRole);
         }
 
-        public static async Task CheckUser(SocketGuildUser user)
+        private static async Task CheckUser(SocketGuildUser user)
         {
-            var server = _client.GetGuild(758745761566818314);
-            var roles = server.Roles;
-            var ranks = Globals.WorkingRanks.TimeForRanks;
-
-            if (user == null) return;
-            var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
-            if (timeFromDb == new TimeSpan()) return;
-            var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
-            var roleUserShouldHave = roles.FirstOrDefault(m => m.Id == rankUserShouldHave.RankId);
-            if (roleUserShouldHave == null) return;
-
-            if (user.Roles.Any(m => m.Id == roleUserShouldHave.Id)) return;
-
-            //Log.Information($"User: {user.Username} should have role {roleUserShouldHave.Name}");
-
-            foreach (var role in user.Roles)
+            try
             {
-                if (ranks.Any(m => m.RankId == role.Id)) await user.RemoveRoleAsync(role);
-            }
+                var server = _client.GetGuild(758745761566818314);
+                if (server == null) return;
+                var roles = server.Roles;
+                var ranks = Globals.WorkingRanks.TimeForRanks;
 
-            await user.AddRoleAsync(roleUserShouldHave);
+                if (user == null) return;
+                var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
+                if (timeFromDb == new TimeSpan()) return;
+                var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
+                var roleUserShouldHave = roles.FirstOrDefault(m => m.Id == rankUserShouldHave.RankId);
+                if (roleUserShouldHave == null) return;
+
+                if (user.Roles.Any(m => m.Id == roleUserShouldHave.Id)) return;
+
+                //Log.Information($"User: {user.Username} should have role {roleUserShouldHave.Name}");
+
+                foreach (var role in user.Roles)
+                {
+                    if (ranks.Any(m => m.RankId == role.Id)) await user.RemoveRoleAsync(role);
+                }
+
+                await user.AddRoleAsync(roleUserShouldHave);
             }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "In checkUser");
+            }
+        }
 
         public static async Task CheckUsers()
         {
             var server = _client.GetGuild(758745761566818314);
+            if(server == null) return;
             var roles = server.Roles;
             var ranks = Globals.WorkingRanks.TimeForRanks;
 
