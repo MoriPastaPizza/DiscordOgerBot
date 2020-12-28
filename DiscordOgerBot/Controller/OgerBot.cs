@@ -64,8 +64,6 @@ namespace DiscordOgerBot.Controller
                 _cancellationTokenCheckUsers = new CancellationTokenSource();
                 new Task(CheckUsersTask, _cancellationTokenCheckUsers.Token, TaskCreationOptions.LongRunning).Start();
 
-                await DataBase.DecreaseTimeSpendWorking(386989432148066306, TimeSpan.FromDays(16));
-
                 await Task.Delay(-1);
 
             }
