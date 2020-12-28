@@ -39,6 +39,8 @@ namespace DiscordOgerBot.Modules
             var currentRoleLogoString = Globals.WorkingRanks.TimeForRanks
                 .FirstOrDefault(m => m.RankId == currentRole.Id).ImageUrl;
 
+            var nextRoleName = nextRole.Name ?? "Max.Rank";
+
             var embedBuilder = new EmbedBuilder();
 
             var embed = embedBuilder
@@ -46,7 +48,7 @@ namespace DiscordOgerBot.Modules
                 .WithDescription($"Das sind {timeSpendWorking.Days} Tage {timeSpendWorking.Hours} Stunden und {timeSpendWorking.Minutes} Minuten, die du schon auf Discord gearbeitet hast. {Environment.NewLine}" +
                                  $"gezählt wird auf jedem Discord-Server wo ich aktiv bin!")
 
-                .AddField($"Dein nächster Rang: {nextRole.Name}", $"in {Math.Round(timeTillRole.TotalHours, 2)} Sunden!")
+                .AddField($"Dein nächster Rang: {nextRoleName}", $"in {Math.Round(timeTillRole.TotalHours, 2)} Sunden!")
 
                 .AddField(
                     "Info",
