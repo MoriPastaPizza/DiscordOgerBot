@@ -39,7 +39,7 @@ namespace DiscordOgerBot.Modules
             var currentRoleLogoString = Globals.WorkingRanks.TimeForRanks
                 .FirstOrDefault(m => m.RankId == currentRole.Id).ImageUrl;
 
-            var nextRoleName = nextRole.Name ?? "Max.Rank";
+            var nextRoleName = nextRole == null ? "Max. Level" : nextRole.Name;
 
             var embedBuilder = new EmbedBuilder();
 
