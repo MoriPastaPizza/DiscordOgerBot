@@ -148,7 +148,6 @@ namespace DiscordOgerBot.Controller
 
                 Context.DiscordUsers.Update(userDataBase);
                 await Context.SaveChangesAsync();
-                //await OgerBot.SetRoleForTimeSpendWorking(userDataBase.TimeSpendWorking, userId);
 
                 Log.Information($"Added time to user {userDataBase.Name}, Time: {additionalTime}");
             }
@@ -156,6 +155,31 @@ namespace DiscordOgerBot.Controller
             {
                 Log.Error(ex, $"Could not Increase the working hours {Environment.NewLine}" +
                                  $"User: {userId} {Environment.NewLine}");
+            }
+        }
+
+        public static async Task DecreaseTimeSpendWorking(ulong userId, TimeSpan additionalTime)
+        {
+            try
+            {
+
+                var userDataBase = await GetDiscordUserFromId(userId);
+                if (userDataBase == null)
+                {
+                    return;
+                }
+
+                userDataBase.TimeSpendWorking -= additionalTime;
+
+                Context.DiscordUsers.Update(userDataBase);
+                await Context.SaveChangesAsync();
+
+                Log.Information($"Added time to user {userDataBase.Name}, Time: {additionalTime}");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Could not Increase the working hours {Environment.NewLine}" +
+                              $"User: {userId} {Environment.NewLine}");
             }
         }
 
