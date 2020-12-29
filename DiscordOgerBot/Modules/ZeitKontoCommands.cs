@@ -48,7 +48,7 @@ namespace DiscordOgerBot.Modules
                 .WithDescription($"Das sind {timeSpendWorking.Days} Tage {timeSpendWorking.Hours} Stunden und {timeSpendWorking.Minutes} Minuten, die du schon auf Discord gearbeitet hast. {Environment.NewLine}" +
                                  $"gezählt wird auf jedem Discord-Server wo ich aktiv bin!")
 
-                .AddField($"Dein nächster Rang: {nextRoleName}", $"in {Math.Round(timeTillRole.TotalHours, 2)} Sunden!")
+                .AddField($"Dein nächster Rang: {nextRoleName}", $"in {Math.Round(timeTillRole.TotalHours, 1)} Stunden!")
 
                 .AddField(
                     "Info",
