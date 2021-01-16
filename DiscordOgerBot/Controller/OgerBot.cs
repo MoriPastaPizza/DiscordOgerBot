@@ -186,8 +186,12 @@ namespace DiscordOgerBot.Controller
                 var argPos = 0;
 
                 await DataBase.CreateUser(message.Author, context.Guild.Id);
-                await CheckUser(message.Author as SocketGuildUser);
-                TimeManagement.Measure(message.Author.Id);
+
+                if (context.Guild.Id == 758745761566818314)
+                {
+                    await CheckUser(message.Author as SocketGuildUser);
+                    TimeManagement.Measure(message.Author.Id);
+                }
 
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
                 {
