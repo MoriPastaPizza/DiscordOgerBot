@@ -34,7 +34,7 @@ namespace DiscordOgerBot.Modules
         {
             if (Context.Channel.Id != 802167112268775454)
             {
-                await ReplyAsync("Zeit bitte nur noch bei der <#stempeluhr🕔>");
+                await ReplyAsync("Zeit bitte nur noch bei der <#802167112268775454>");
             }
 
             var rand = new Random();
