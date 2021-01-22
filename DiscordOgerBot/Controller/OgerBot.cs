@@ -391,6 +391,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
+                if(user.Id == 386989432148066306) return;
                 var server = _client.GetGuild(758745761566818314);
                 if (server == null) return;
                 var roles = server.Roles;
@@ -430,6 +431,7 @@ namespace DiscordOgerBot.Controller
             foreach (var user in server.Users)
             {
                 if (user == null) continue;
+                if(user.Id == 386989432148066306) continue;
                 var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
                 if (timeFromDb == new TimeSpan()) continue;
                 var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
