@@ -186,5 +186,12 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_videoPath + "/nüsseab.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("pulverisiert")]
+        [Alias("These")]
+        public async Task SendPulver()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/pulverisiert.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
