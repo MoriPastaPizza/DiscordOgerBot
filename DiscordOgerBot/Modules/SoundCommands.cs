@@ -428,5 +428,11 @@ namespace DiscordOgerBot.Modules
             await Context.Channel.SendFileAsync(_soundPath + "/findus.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
+        [Command("respekt")]
+        public async Task SendRedetMitRespekt()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/reded_mid_repekt.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
     }
 }
