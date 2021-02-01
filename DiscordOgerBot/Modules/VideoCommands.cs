@@ -193,5 +193,12 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_videoPath + "/pulverisiert.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("bisexuell")]
+        [Alias("biseggsuel")]
+        public async Task SendBisex()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/biseggsuell.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
