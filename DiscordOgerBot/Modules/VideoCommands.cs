@@ -207,5 +207,41 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_videoPath + "/AlleDieseScheiße.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("packtaus")]
+        public async Task SendPacktAus()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/packtnaus.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("50er")]
+        public async Task Send50Er()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/50er.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("paarmal")]
+        public async Task SendPaarMal()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/aboarmal.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("laufen")]
+        public async Task SendLaufen()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/laufenimmerso.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("neger")]
+        public async Task SendNeger()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/neger.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("20cent")]
+        public async Task Send20Cent()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/20cent.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
