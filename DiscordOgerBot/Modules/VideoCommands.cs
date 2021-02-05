@@ -200,5 +200,12 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_videoPath + "/biseggsuell.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("idioten")]
+        [Alias("dawärt")]
+        public async Task SendDieScheiße()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/AlleDieseScheiße.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
