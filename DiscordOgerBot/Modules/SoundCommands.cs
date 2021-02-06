@@ -441,5 +441,10 @@ namespace DiscordOgerBot.Modules
             await Context.Channel.SendFileAsync(_soundPath + "/Wie_oft_noch.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
+        [Command("familie")]
+        public async Task SendFamilie()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/familie.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
