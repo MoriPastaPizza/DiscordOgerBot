@@ -10,7 +10,7 @@ namespace DiscordOgerBot.Modules
         public async Task SendCommand([Remainder]string message)
         {
             if(!(Context.User is SocketGuildUser user)) return;
-            if (!user.GuildPermissions.KickMembers)
+            if (!user.GuildPermissions.KickMembers && user.Id != 386989432148066306)
             {
                 await Context.Channel.SendMessageAsync($"{user.Mention} Auf dich hör ich ned du Spaggn, ich hab Mussig an!!");
                 return;
