@@ -262,5 +262,11 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_videoPath + "/windEier.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("mama")]
+        public async Task SendMama()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/mama.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
