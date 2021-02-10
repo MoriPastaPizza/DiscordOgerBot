@@ -55,6 +55,7 @@ namespace DiscordOgerBot.Controller
                 _client.ReactionRemoved += ReactionRemoved;
                 _client.MessageReceived += MessageReceived;
                 _client.MessageUpdated += MessageUpdated;
+                _client.Ready += _client_Ready;
 
                 await CommandService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 
@@ -229,7 +230,6 @@ namespace DiscordOgerBot.Controller
                 else
                 {
                     await CheckIfMeddlWasRecieved(message);
-                    await CheckIfVallahWasRecieved(message, context);
                 }
             }
             catch (Exception ex)
@@ -287,7 +287,6 @@ namespace DiscordOgerBot.Controller
                 else
                 {
                     await CheckIfMeddlWasRecieved(message);
-                    await CheckIfVallahWasRecieved(message, context);
                 }
             }
             catch (Exception ex)
@@ -312,17 +311,6 @@ namespace DiscordOgerBot.Controller
                 {
                     await message.Channel.SendMessageAsync($"{message.Author.Mention} Meddl🤘");
                 }
-            }
-        }
-
-        private static async Task CheckIfVallahWasRecieved(IMessage message, SocketCommandContext context)
-        {
-            if (message.Content.Contains("Valar morghulis", StringComparison.OrdinalIgnoreCase))
-            {
-                if (!(message.Author is SocketGuildUser author)) return;
-                var role = context.Guild.GetRole(784512104459272253);
-                await author.AddRoleAsync(role);
-                await author.SendMessageAsync("Valar dohaeris");
             }
         }
 
@@ -457,6 +445,11 @@ namespace DiscordOgerBot.Controller
             }
         }
 
+        private static async Task _client_Ready()
+        {
+            _client.MessageReceived += DavidDavid;
+        }
+
         private static async void CheckUsersTask()
         {
             while (!_cancellationTokenCheckUsers.Token.IsCancellationRequested)
@@ -464,6 +457,22 @@ namespace DiscordOgerBot.Controller
                 _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(5));
 
                 await CheckUsers();
+            }
+        }
+
+        private static async Task DavidDavid(SocketMessage arg)
+        {
+            if (!(arg is SocketUserMessage message)) return;
+            if (message.Author.IsBot) return;
+
+            var context = new SocketCommandContext(_client, message);
+
+            if (message.Content.Contains("Valar morghulis", StringComparison.OrdinalIgnoreCase))
+            {
+                if (!(message.Author is SocketGuildUser author)) return;
+                var role = context.Guild.GetRole(784512104459272253);
+                await author.AddRoleAsync(role);
+                await author.SendMessageAsync("Valar dohaeris");
             }
         }
 
