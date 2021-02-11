@@ -446,5 +446,12 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_soundPath + "/familie.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("rainwinver")]
+        [Alias("schanzenroads")]
+        public async Task SendCountryRoads()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/Schanzen-Roads_by_Rain_Winver.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
