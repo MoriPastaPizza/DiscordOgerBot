@@ -60,7 +60,7 @@ namespace DiscordOgerBot.Modules
                     "Info",
                     "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
                         "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                        "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
+                        "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
 
 
                 .WithThumbnailUrl(currentRoleLogoString)

@@ -38,14 +38,14 @@ namespace DiscordOgerBot.Modules
                     "Das kannst du ganz einfach [hier](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) machen!")
 
                 .AddField("Weitere Hilfe",
-                    "Sollte ich mal nicht richtig funktionieren, komm ins [DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa) oder wende dich bitte an meinen Erbauer:" +
+                    "Sollte ich mal nicht richtig funktionieren, komm ins [DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3) oder wende dich bitte an meinen Erbauer:" +
                     Environment.NewLine +
                     "[Discord](https://discordapp.com/users/386989432148066306) | [Reddit](https://www.reddit.com/user/MoriPastaPizza)")
 
                 .AddField("Links",
                     "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
                     "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
+                    "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
 
                 .WithAuthor(Context.Client.CurrentUser)
                 .WithFooter(footer =>
@@ -85,7 +85,7 @@ namespace DiscordOgerBot.Modules
                 .AddField("Links",
                     "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
                     "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
+                    "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
                 .WithAuthor(Context.Client.CurrentUser)
                 .WithFooter(footer =>
                     footer.Text =
@@ -124,7 +124,7 @@ namespace DiscordOgerBot.Modules
                 .AddField("Links",
                     "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
                     "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
+                    "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
                 .WithAuthor(Context.Client.CurrentUser)
                 .WithFooter(footer =>
                     footer.Text =
@@ -164,7 +164,7 @@ namespace DiscordOgerBot.Modules
                 .AddField("Links",
                     "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
                     "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
+                    "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
                 .WithAuthor(Context.Client.CurrentUser)
                 .WithFooter(footer =>
                     footer.Text =
@@ -203,7 +203,7 @@ namespace DiscordOgerBot.Modules
                 .AddField("Links",
                     "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
                     "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/MmWQ5pCsHa)")
+                    "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
                 .WithAuthor(Context.Client.CurrentUser)
                 .WithFooter(footer =>
                     footer.Text =
