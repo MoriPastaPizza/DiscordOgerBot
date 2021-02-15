@@ -358,7 +358,7 @@ namespace DiscordOgerBot.Modules
         [Command("asia")]
         public async Task SendAsia()
         {
-            await Context.Channel.SendFileAsync(_soundPath + "/asia.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            await Context.Channel.SendFileAsync(_soundPath + "/1337.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("derjeniche")]
