@@ -300,5 +300,11 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_videoPath + "/bannhammer.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("aufn")]
+        public async Task SendAufn()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/aufn.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
