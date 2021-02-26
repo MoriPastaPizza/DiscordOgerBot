@@ -466,5 +466,11 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_soundPath + "/mei_hard_will_go_under.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("ohnedich")]
+        public async Task SendOhneDich()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/hallelujah.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
