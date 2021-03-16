@@ -7,7 +7,7 @@ namespace DiscordOgerBot.Database
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql($"Host={Globals.DataBaseConnection.Host};Database={Globals.DataBaseConnection.Name};" +
-                                        $"Username={Globals.DataBaseConnection.UserName};Password={Globals.DataBaseConnection.Password}; SSL Mode=Require");
+                                        $"Username={Globals.DataBaseConnection.UserName};Password={Globals.DataBaseConnection.Password}; SSL Mode=Require; Trust Server Certificate=true;");
 
 
         public DbSet<DiscordUser> DiscordUsers { get; set; }
