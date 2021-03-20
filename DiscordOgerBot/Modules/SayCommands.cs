@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
@@ -16,8 +17,16 @@ namespace DiscordOgerBot.Modules
                 return;
             }
 
-            await Context.Message.DeleteAsync();
-            await Context.Channel.SendMessageAsync(message);
+            if (Context.Message.ReferencedMessage != null)
+            {
+                await Context.Message.ReferencedMessage.ReplyAsync(message);
+                await Context.Message.DeleteAsync();
+            }
+            else
+            {
+                await Context.Message.DeleteAsync();
+                await Context.Channel.SendMessageAsync(message);
+            }
         }
     }
 }
