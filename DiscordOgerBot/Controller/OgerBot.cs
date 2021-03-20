@@ -21,9 +21,12 @@ namespace DiscordOgerBot.Controller
         public static CommandService CommandService { get; private set; }
         public static List<string> FooterDictionary { get; private set; }
 
+        private static List<string> OragleList { get; set; }
+
         private static DiscordSocketClient _client;
         private static IServiceProvider _services;
         private static Dictionary<ulong, ulong> _repliedMessagesId;
+        private static Dictionary<ulong, ulong> _oragleMessegesId;
         private static Dictionary<string, List<string>> _translateDictionary;
         private static CancellationTokenSource _cancellationTokenCheckUsers;
 
@@ -34,6 +37,9 @@ namespace DiscordOgerBot.Controller
                 FooterDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
                     "../DiscordOgerBot/Dict/dictionary_footer.json")))["footer"];
 
+                OragleList = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
+                    "../DiscordOgerBot/Dict/dictionary_Oragle.json")))["oragle"];
+
                 _client = new DiscordSocketClient(new DiscordSocketConfig {MessageCacheSize = 1000});
                 CommandService = new CommandService();
                 _services = new ServiceCollection()
@@ -43,6 +49,7 @@ namespace DiscordOgerBot.Controller
                 _translateDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
                     "../DiscordOgerBot/Dict/dictionary_default.json")));
                 _repliedMessagesId = new Dictionary<ulong, ulong>();
+                _oragleMessegesId = new Dictionary<ulong, ulong>();
 
                 var token = Environment.GetEnvironmentVariable("BOTTOKEN");
 
@@ -96,8 +103,28 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
+                switch (reaction.Emote.Name)
+                {
+                    case "OgerBot":
+                        await Translate(message, channel, reaction);
+                        break;
+                    case "OgerBotOragle":
+                        await OgerOragle(message, channel);
+                        break;
+                    default:
+                        return;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Bot could not reply!");
+            }
+        }
 
-                if (reaction.Emote.Name != "OgerBot") return;
+        private static async Task Translate(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        {
+            try
+            {
                 if (_repliedMessagesId.ContainsKey(message.Id)) return;
                 var originalMessage = await message.GetOrDownloadAsync();
                 if (originalMessage.Author.IsBot) return;
@@ -141,7 +168,28 @@ namespace DiscordOgerBot.Controller
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Bot could not reply!");
+                Log.Error(ex, nameof(Translate));
+            }
+        }
+
+        private static async Task OgerOragle(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel)
+        {
+            try
+            {
+                if (_oragleMessegesId.ContainsKey(message.Id)) return;
+                var originalMessage = await message.GetOrDownloadAsync();
+                if (originalMessage.Author.IsBot) return;
+
+                var rand = new Random();
+
+                var reply = OragleList[rand.Next(OragleList.Count)];
+                var botMessage = await originalMessage.ReplyAsync(reply);
+
+                _oragleMessegesId.Add(originalMessage.Id, botMessage.Id);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(OgerOragle));
             }
         }
 
