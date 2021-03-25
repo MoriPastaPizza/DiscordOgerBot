@@ -318,5 +318,14 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_videoPath + "/marie.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("honey")]
+        [Alias("hannie", "hanni", "hanny", "hani")]
+        public async Task SendHoney()
+        {
+            var number = new Random().Next(1, 4);
+
+            await Context.Channel.SendFileAsync(_videoPath + $"/Honey{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
