@@ -427,7 +427,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                if(user.Id == 386989432148066306) return;
+                if(user.Id == 386989432148066306 || user.Id == 218373955658973195) return;
                 var server = _client.GetGuild(758745761566818314);
                 if (server == null) return;
                 var roles = server.Roles;
