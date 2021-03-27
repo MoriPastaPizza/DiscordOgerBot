@@ -468,7 +468,7 @@ namespace DiscordOgerBot.Controller
                 try
                 {
                     if (user == null) continue;
-                    if (user.Id == 386989432148066306) continue;
+                    if (user.Id == 386989432148066306 || user.Id == 218373955658973195) continue;
                     var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
                     if (timeFromDb == new TimeSpan()) continue;
                     var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
