@@ -133,7 +133,7 @@ namespace DiscordOgerBot.Controller
             {
                 if (CurrentQuiz.QuizState != QuizState.Running) return;
                 if (channel.Id != QuizChannel.Id) return;
-                if (reaction.Emote.Name != "white_check_mark") return;
+                if (reaction.Emote.Name != "✅") return;
                 if (!(OgerBot.Client.GetUser(reaction.UserId) is SocketGuildUser reactionUser)) return;
                 if (reactionUser.Roles.All(m => m.Id != 826886898114363432)) return;
 
@@ -160,7 +160,7 @@ namespace DiscordOgerBot.Controller
             {
                 if (CurrentQuiz.QuizState != QuizState.Running) return;
                 if (channel.Id != QuizChannel.Id) return;
-                if (reaction.Emote.Name != "white_check_mark") return;
+                if (reaction.Emote.Name != "✅") return;
                 if (!(OgerBot.Client.GetUser(reaction.UserId) is SocketGuildUser reactionUser)) return;
                 if (reactionUser.Roles.All(m => m.Id != 826886898114363432)) return;
 
