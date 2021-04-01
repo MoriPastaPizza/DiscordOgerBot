@@ -86,6 +86,8 @@ namespace DiscordOgerBot.Controller
                 }
 
                 await QuizChannel.SendMessageAsync(message);
+
+                CurrentQuiz.QuizState = QuizState.NotRunning;
             }
             catch (Exception ex)
             {
