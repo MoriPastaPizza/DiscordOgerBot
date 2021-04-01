@@ -24,7 +24,7 @@ namespace DiscordOgerBot.Controller
             {
                 QuizChannel = channel;
                 PrepMessage = await QuizChannel.SendMessageAsync(
-                    "Macht euch bereit ein Quiz beginnt bald! Wenn ihr mitspielen wollt reagiert auf diese Nachricht mit <:RainerSchlau:759174717155311627>");
+                    "<@827310534352175135> Macht euch bereit ein Quiz beginnt bald! Wenn ihr mitspielen wollt reagiert auf diese Nachricht mit <:RainerSchlau:759174717155311627>");
 
                 OgerBot.Client.ReactionAdded += ReactionAddedPrep;
                 CurrentQuiz.QuizState = QuizState.PrepPhase;
