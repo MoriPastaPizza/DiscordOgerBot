@@ -80,7 +80,7 @@ namespace DiscordOgerBot.Controller
                     var i = 1;
                     foreach (var quizUser in listSort)
                     {
-                        message += $"{i}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints}";
+                        message += $"{i}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} Punkten! {Environment.NewLine}";
                         i++;
                     }
                 }
@@ -104,7 +104,7 @@ namespace DiscordOgerBot.Controller
                 if (message.Id != PrepMessage.Id) return;
                 if (reaction.Emote.Name != "RainerSchlau") return;
 
-                var user = OgerBot.Client.GetUser(reaction.UserId);
+                var user = await channel.GetUserAsync(reaction.UserId);
 
                 var pointsTotal = await DataBase.GetQuizPointsTotal(user.Id);
                 var winsTotal = await DataBase.GetTimesQuizWonTotal(user.Id);
@@ -134,7 +134,7 @@ namespace DiscordOgerBot.Controller
                 if (CurrentQuiz.QuizState != QuizState.Running) return;
                 if (channel.Id != QuizChannel.Id) return;
                 if (reaction.Emote.Name != "✅") return;
-                if (!(OgerBot.Client.GetUser(reaction.UserId) is SocketGuildUser reactionUser)) return;
+                if (!(await channel.GetUserAsync(reaction.UserId) is SocketGuildUser reactionUser)) return;
                 if (reactionUser.Roles.All(m => m.Id != 826886898114363432)) return;
 
                 var messageDownload= await message.GetOrDownloadAsync();
@@ -161,7 +161,7 @@ namespace DiscordOgerBot.Controller
                 if (CurrentQuiz.QuizState != QuizState.Running) return;
                 if (channel.Id != QuizChannel.Id) return;
                 if (reaction.Emote.Name != "✅") return;
-                if (!(OgerBot.Client.GetUser(reaction.UserId) is SocketGuildUser reactionUser)) return;
+                if (!(await channel.GetUserAsync(reaction.UserId) is SocketGuildUser reactionUser)) return;
                 if (reactionUser.Roles.All(m => m.Id != 826886898114363432)) return;
 
                 var messageDownload = await message.GetOrDownloadAsync();
