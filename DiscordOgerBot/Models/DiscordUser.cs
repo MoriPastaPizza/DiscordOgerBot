@@ -15,4 +15,9 @@ namespace DiscordOgerBot.Models
         public int QuizWonTotal { get; set; }
         public int QuizPointsTotal { get; set; }
     }
+
+    public class QuizUser : DiscordUser
+    {
+        public int CurrentQuizPoints { get; set; }
+    }
 }

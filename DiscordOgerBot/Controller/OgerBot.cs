@@ -20,10 +20,9 @@ namespace DiscordOgerBot.Controller
     {
         public static CommandService CommandService { get; private set; }
         public static List<string> FooterDictionary { get; private set; }
+        public static DiscordSocketClient Client { get; set; }
 
-        private static List<string> OragleList { get; set; }
-
-        private static DiscordSocketClient _client;
+        private static List<string> _oragleList;
         private static IServiceProvider _services;
         private static Dictionary<ulong, ulong> _repliedMessagesId;
         private static Dictionary<ulong, ulong> _oragleMessegesId;
@@ -37,13 +36,13 @@ namespace DiscordOgerBot.Controller
                 FooterDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
                     "../DiscordOgerBot/Dict/dictionary_footer.json")))["footer"];
 
-                OragleList = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
+                _oragleList = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
                     "../DiscordOgerBot/Dict/dictionary_Oragle.json")))["oragle"];
 
-                _client = new DiscordSocketClient(new DiscordSocketConfig {MessageCacheSize = 1000});
+                Client = new DiscordSocketClient(new DiscordSocketConfig {MessageCacheSize = 1000});
                 CommandService = new CommandService();
                 _services = new ServiceCollection()
-                    .AddSingleton(_client)
+                    .AddSingleton(Client)
                     .AddSingleton(CommandService)
                     .BuildServiceProvider();
                 _translateDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
@@ -53,20 +52,20 @@ namespace DiscordOgerBot.Controller
 
                 var token = Environment.GetEnvironmentVariable("BOTTOKEN");
 
-                _client.Log += DiscordClientLogs;
+                Client.Log += DiscordClientLogs;
 
-                await _client.LoginAsync(TokenType.Bot, token);
-                await _client.StartAsync();
+                await Client.LoginAsync(TokenType.Bot, token);
+                await Client.StartAsync();
 
-                _client.ReactionAdded += ReactionAdded;
-                _client.ReactionRemoved += ReactionRemoved;
-                _client.MessageReceived += MessageReceived;
-                _client.MessageUpdated += MessageUpdated;
-                _client.Ready += _client_Ready;
+                Client.ReactionAdded += ReactionAdded;
+                Client.ReactionRemoved += ReactionRemoved;
+                Client.MessageReceived += MessageReceived;
+                Client.MessageUpdated += MessageUpdated;
+                Client.Ready += _client_Ready;
 
                 await CommandService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 
-                await _client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
+                await Client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
                 Log.Information("Bot Started!");
 
                 _cancellationTokenCheckUsers = new CancellationTokenSource();
@@ -85,7 +84,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var user = _client.GetUser(userId);
+                var user = Client.GetUser(userId);
                 if (user != null) return user;
                 using var restClient = new DiscordRestClient();
                 return await restClient.GetUserAsync(userId);
@@ -182,7 +181,7 @@ namespace DiscordOgerBot.Controller
 
                 var rand = new Random();
 
-                var reply = OragleList[rand.Next(OragleList.Count)];
+                var reply = _oragleList[rand.Next(_oragleList.Count)];
                 var botMessage = await originalMessage.ReplyAsync(reply);
 
                 _oragleMessegesId.Add(originalMessage.Id, botMessage.Id);
@@ -231,7 +230,7 @@ namespace DiscordOgerBot.Controller
                 if (!(arg is SocketUserMessage message)) return;
                 if (message.Author.IsBot) return;
 
-                var context = new SocketCommandContext(_client, message);
+                var context = new SocketCommandContext(Client, message);
                 var argPos = 0;
 
                 await DataBase.CreateUser(message.Author, context.Guild.Id);
@@ -293,7 +292,7 @@ namespace DiscordOgerBot.Controller
                 if (!(arg2 is SocketUserMessage message)) return;
                 if (message.Author.IsBot) return;
 
-                var context = new SocketCommandContext(_client, message);
+                var context = new SocketCommandContext(Client, message);
                 var argPos = 0;
 
                 await DataBase.CreateUser(message.Author, context.Guild.Id);
@@ -409,7 +408,7 @@ namespace DiscordOgerBot.Controller
 
         public static (IRole, IRole, TimeSpan) GetRoleForTimeSpendWorking(TimeSpan timeSpendWorking)
         {
-            var roles = _client.GetGuild(758745761566818314).Roles;
+            var roles = Client.GetGuild(758745761566818314).Roles;
             var ranks = Globals.WorkingRanks.TimeForRanks;
 
             var currentRank = ranks.FirstOrDefault(rank => timeSpendWorking >= rank.Time);
@@ -428,7 +427,7 @@ namespace DiscordOgerBot.Controller
             try
             {
                 if(user.Id == 386989432148066306 || user.Id == 218373955658973195) return;
-                var server = _client.GetGuild(758745761566818314);
+                var server = Client.GetGuild(758745761566818314);
                 if (server == null) return;
                 var roles = server.Roles;
                 var ranks = Globals.WorkingRanks.TimeForRanks;
@@ -458,7 +457,7 @@ namespace DiscordOgerBot.Controller
 
         public static async Task CheckUsers()
         {
-            var server = _client.GetGuild(758745761566818314);
+            var server = Client.GetGuild(758745761566818314);
             if(server == null) return;
             var roles = server.Roles;
             var ranks = Globals.WorkingRanks.TimeForRanks;
@@ -495,7 +494,7 @@ namespace DiscordOgerBot.Controller
 
         private static async Task _client_Ready()
         {
-            _client.MessageReceived += DavidDavid;
+            Client.MessageReceived += DavidDavid;
         }
 
         private static async void CheckUsersTask()
@@ -513,7 +512,7 @@ namespace DiscordOgerBot.Controller
             if (!(arg is SocketUserMessage message)) return;
             if (message.Author.IsBot) return;
 
-            var context = new SocketCommandContext(_client, message);
+            var context = new SocketCommandContext(Client, message);
 
             if (message.Content.Contains("Valar morghulis", StringComparison.OrdinalIgnoreCase))
             {

@@ -161,6 +161,82 @@ namespace DiscordOgerBot.Controller
             }
         }
 
+        public static async Task IncreaseQuizPointsTotal(ulong userId, int pointsToAdd)
+        {
+            try
+            {
+
+                var userDataBase = await GetDiscordUserFromId(userId);
+                if (userDataBase == null)
+                {
+                    return;
+                }
+
+                userDataBase.QuizPointsTotal += pointsToAdd;
+
+                Context.DiscordUsers.Update(userDataBase);
+                await Context.SaveChangesAsync();
+
+                Log.Information($"Added Total Point to user {userDataBase.Name}");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(IncreaseQuizPointsTotal));
+            }
+        }
+
+        public static async Task IncreaseQuizWonTotal(ulong userId)
+        {
+            try
+            {
+
+                var userDataBase = await GetDiscordUserFromId(userId);
+                if (userDataBase == null)
+                {
+                    return;
+                }
+
+                userDataBase.QuizWonTotal++;
+
+                Context.DiscordUsers.Update(userDataBase);
+                await Context.SaveChangesAsync();
+
+                Log.Information($"Added Total Wins to user {userDataBase.Name}");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(IncreaseQuizWonTotal));
+            }
+        }
+
+        public static async Task<int> GetTimesQuizWonTotal(ulong userId)
+        {
+            try
+            {
+                var userDataBase = await GetDiscordUserFromId(userId);
+                return userDataBase?.QuizWonTotal ?? 0;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetTimesQuizWonTotal));
+                return 0;
+            }
+        }
+
+        public static async Task<int> GetQuizPointsTotal(ulong userId)
+        {
+            try
+            {
+                var userDataBase = await GetDiscordUserFromId(userId);
+                return userDataBase?.QuizPointsTotal ?? 0;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetQuizPointsTotal));
+                return 0;
+            }
+        }
+
         public static async Task DecreaseTimeSpendWorking(ulong userId, TimeSpan additionalTime)
         {
             try
