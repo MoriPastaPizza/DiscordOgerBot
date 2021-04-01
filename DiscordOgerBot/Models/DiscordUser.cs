@@ -6,15 +6,13 @@ namespace DiscordOgerBot.Models
 {
     public class DiscordUser
     {
-        [Required]
+        [Required, Key]
         public string Id { get; set; }
-
         public List<string> ActiveGuildsId { get; set; }
-
         public string Name { get; set; }
-
         public uint TimesBotUsed { get; set; }
-
         public TimeSpan TimeSpendWorking { get; set; }
+        public int QuizWonTotal { get; set; }
+        public int QuizPointsTotal { get; set; }
     }
 }

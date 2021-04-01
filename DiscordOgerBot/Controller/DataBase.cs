@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using DiscordOgerBot.Database;
 using DiscordOgerBot.Models;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Serilog;
 
 namespace DiscordOgerBot.Controller
@@ -18,7 +21,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                Context.Database.EnsureCreated();
+                Context.Database.Migrate();
             }
             catch (Exception ex)
             {
@@ -189,8 +192,7 @@ namespace DiscordOgerBot.Controller
             try
             {
 
-                if(await Context.DiscordUsers
-                    .AnyAsync(m => m.Id == user.Id.ToString())) return;
+                if(await AsyncEnumerable.AnyAsync(Context.DiscordUsers, m => m.Id == user.Id.ToString())) return;
 
                 await Context.DiscordUsers.AddRangeAsync(new DiscordUser
                 {
