@@ -143,6 +143,49 @@ namespace DiscordOgerBot.Modules
             await Context.Message.ReplyAsync("Quiz abgebrochen! Keine Punkte werden gezählt!");
         }
 
+        [Command("help")]
+        public async Task SendHelp()
+        {
+            var rand = new Random();
+            var embed = new EmbedBuilder
+            {
+                Title = "❓Quiz Hilfe❓"
+            };
+            var buildEmbed = embed
+
+                .WithDescription($"Der Quizmaster kann ein Quiz vorbereiten, starten & stoppen. {Environment.NewLine}" +
+                                 $"Wärend der Vorbereitsungsphase können sich Spieler für die Quizrunde eintragen. {Environment.NewLine}" +
+                                 $"Wärend der Spielphase kann der Quizmaster mit dem ✅ Emote richtige Antworten markieren und werten lassen. {Environment.NewLine}" +
+                                 $"Wird das ✅ Emote vom Quizmaster entfernt wird die Antwort nicht gezählt. {Environment.NewLine}" +
+                                 $"Nachdem der Quizmaster das Spiel beended hat werden die Punkte & Plätze der Spieler angezeigt {Environment.NewLine}" +
+                                 $"Spieler bekommen je nach Platz Quiz-Punkte auf ihr Konto guteschrieben, dies führt zu einem Global Ranking")
+
+                .AddField("Commands für jeden",
+                    $"**og quiz rank** Zeigt deinen global Rang an, falls du einen hast {Environment.NewLine}" +
+                    $"**og quiz points** Zeigt den Punktestand des aktuellen Quizes an")
+
+
+                .AddField("Commands für Quizmaster",
+                    $"**og quiz prep** Bereitet ein neues Spiel vor {Environment.NewLine}" +
+                    $"**og quiz start** Startet das vorbereitete Quiz {Environment.NewLine}" +
+                    $"**og quiz stop** Stop das aktuelle Quiz und wertet die Punkte aus {Environment.NewLine}" +
+                    $"**og quiz abort** Stop das aktuelle Quiz **Punkte werden nicht gewertet**")
+
+                .AddField("Links", "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
+                                   "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
+                                   "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
+
+                .WithAuthor(Context.Client.CurrentUser)
+                .WithFooter(footer =>
+                    footer.Text =
+                        OgerBot.FooterDictionary[rand.Next(OgerBot.FooterDictionary.Count)])
+                .WithColor(Color.Red)
+                .WithCurrentTimestamp()
+                .Build();
+
+            await Context.Channel.SendMessageAsync(embed: buildEmbed);
+        }
+
         [Command("reset")]
         [RequireOwner]
         public async Task ResetPoints()
