@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -114,7 +115,10 @@ namespace DiscordOgerBot.Modules
 
             var rank = 1 + allUsers.TakeWhile(user => user.Id != currentUser.Id).Count();
 
-            await Context.Message.ReplyAsync($"Du bist derzeit auf Platz {rank}! Mit {currentUser.QuizPointsTotal} Punkt/en und {currentUser.QuizWonTotal} Gewonnenen Quiz/ze!");
+            var pointsString = currentUser.QuizPointsTotal == 1 ? "Punkt" : "Punkte";
+            var quizString = currentUser.QuizWonTotal == 1 ? "gewonnenem Quiz" : "gewonnene Quizze";
+
+            await Context.Message.ReplyAsync($"Du bist derzeit auf **Platz {rank}!** {Environment.NewLine} Mit {currentUser.QuizPointsTotal} {pointsString} und {currentUser.QuizWonTotal} {quizString}!");
         }
 
         [Command("abort")]

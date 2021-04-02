@@ -60,12 +60,15 @@ namespace DiscordOgerBot.Controller
                 {
                     foreach (var quizUser in CurrentQuiz.CurrentQuizUsers)
                     {
+                        var quizString = quizUser.QuizWonTotal == 1 ? "gewonnenem Quiz" : "gewonnene Quizze";
+                        var pointsString = quizUser.QuizPointsTotal == 1 ? "Quiz-Punkt" : "Quiz-Punkte";
+
                         message +=
-                            $"<@{quizUser.Id}> Mit {quizUser.QuizWonTotal} gewonnenen Quiz/ze und {quizUser.QuizPointsTotal} Quiz-Punkt/e!{Environment.NewLine}";
+                            $"<@{quizUser.Id}> Mit {quizUser.QuizWonTotal} {quizString} und {quizUser.QuizPointsTotal} {pointsString}!{Environment.NewLine}";
                     }
                 }
 
-                message += $"{Environment.NewLine}Und dem guden: <@{CurrentQuiz.CurrentQuizMaster.Id}> als Quizmaster!";
+                message += $"{Environment.NewLine}Und <@{CurrentQuiz.CurrentQuizMaster.Id}> als Quizmaster!";
 
                 await CurrentQuiz.CurrentQuizChannel.SendMessageAsync(message);
 
@@ -103,11 +106,16 @@ namespace DiscordOgerBot.Controller
 
                         var points = (maxPointsFlattend - rank) < 0 ? 0 : (maxPointsFlattend - rank);
                         DataBase.IncreaseQuizPointsTotal(ulong.Parse(quizUser.Id), points);
-
                         if (rank == 0)
                             DataBase.IncreaseQuizWonTotal(ulong.Parse(quizUser.Id));
 
-                        message += $"{rank + 1}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} Punkt/en! Und bekommt somit {points} Quiz-Punkt/e => {DataBase.GetQuizPointsTotal(ulong.Parse(quizUser.Id))} Punkt/e {Environment.NewLine}";
+                        var pointsUserTotal = DataBase.GetQuizPointsTotal(ulong.Parse(quizUser.Id));
+
+                        var pointsString = quizUser.CurrentQuizPoints == 1 ? "Punkt" : "Punkten";
+                        var pointsGivenString = points == 1 ? "Quiz-Punkt" : "Quiz-Punkte";
+                        var pointsTotalString = pointsUserTotal == 1 ? "Punkt" : "Punkte";
+
+                        message += $"{rank + 1}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} {pointsString}! Und bekommt somit {points} {pointsGivenString} => {pointsUserTotal} {pointsTotalString} {Environment.NewLine}";
 
                         pointsLastUser = quizUser.CurrentQuizPoints;
                         rank++;
@@ -171,7 +179,8 @@ namespace DiscordOgerBot.Controller
                             rank--;
                         }
 
-                        message += $"{rank}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} Punkt/en! {Environment.NewLine}";
+                        var pointsString = quizUser.CurrentQuizPoints == 1 ? "Punkt" : "Punkten";
+                        message += $"{rank}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} {pointsString}! {Environment.NewLine}";
 
                         pointsLastUser = quizUser.CurrentQuizPoints;
                         rank++;
