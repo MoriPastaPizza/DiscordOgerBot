@@ -25,11 +25,11 @@ namespace DiscordOgerBot.Controller
             {
                 QuizChannel = channel;
                 PrepMessage = await QuizChannel.SendMessageAsync(
-                    "<@827310534352175135> Macht euch bereit ein Quiz beginnt bald! Wenn ihr mitspielen wollt reagiert auf diese Nachricht mit <:RainerSchlau:759174717155311627>");
+                    "<@&827310534352175135> Macht euch bereit ein Quiz beginnt bald! Wenn ihr mitspielen wollt reagiert auf diese Nachricht mit <:RainerSchlau:759174717155311627>");
 
                 OgerBot.Client.ReactionAdded += ReactionAddedPrep;
                 CurrentQuiz.QuizState = QuizState.PrepPhase;
-                await OgerBot.Client.SetGameAsync("Bereitet ein Quiz vor", type: ActivityType.CustomStatus);
+                await OgerBot.Client.SetGameAsync("wer beim Quiz dabei ist", type: ActivityType.Watching);
             }
             catch (Exception ex)
             {
@@ -59,6 +59,7 @@ namespace DiscordOgerBot.Controller
 
                 OgerBot.Client.ReactionAdded += ReactionAddedRunning;
                 OgerBot.Client.ReactionRemoved += ReactionRemovedRunning;
+                await OgerBot.Client.SetGameAsync("ein Quiz", type: ActivityType.Playing);
             }
             catch (Exception ex)
             {
@@ -90,6 +91,7 @@ namespace DiscordOgerBot.Controller
                 await QuizChannel.SendMessageAsync(message);
 
                 CurrentQuiz.QuizState = QuizState.NotRunning;
+                await OgerBot.Client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
             }
             catch (Exception ex)
             {
