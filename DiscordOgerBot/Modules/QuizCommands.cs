@@ -115,7 +115,7 @@ namespace DiscordOgerBot.Modules
 
             var rank = 1 + allUsers.TakeWhile(user => user.Id != currentUser.Id).Count();
 
-            var pointsString = currentUser.QuizPointsTotal == 1 ? "Punkt" : "Punkte";
+            var pointsString = currentUser.QuizPointsTotal == 1 ? "Punkt" : "Punkten";
             var quizString = currentUser.QuizWonTotal == 1 ? "gewonnenem Quiz" : "gewonnene Quizze";
 
             await Context.Message.ReplyAsync($"Du bist derzeit auf **Platz {rank}!** {Environment.NewLine} Mit {currentUser.QuizPointsTotal} {pointsString} und {currentUser.QuizWonTotal} {quizString}!");
