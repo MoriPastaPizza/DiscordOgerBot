@@ -19,11 +19,21 @@ namespace DiscordOgerBot.Controller
         private static ISocketMessageChannel QuizChannel { get; set; }
         private static object ListLock { get; set; } = new();
 
-        internal static async Task PrepareQuiz(ISocketMessageChannel channel)
+        internal static async Task PrepareQuiz(ISocketMessageChannel channel, IUser quizMaster)
         {
             try
             {
                 QuizChannel = channel;
+                lock (ListLock)
+                {
+                    CurrentQuiz.CurrentQuizUsers = new List<QuizUser>();
+                    CurrentQuiz.CurrentQuizMaster = new DiscordUser
+                    {
+                        Id = quizMaster.Id.ToString(),
+                        Name = quizMaster.Username,
+                    };
+                }
+
                 PrepMessage = await QuizChannel.SendMessageAsync(
                     "<@&827310534352175135> Macht euch bereit ein Quiz beginnt bald! Wenn ihr mitspielen wollt reagiert auf diese Nachricht mit <:RainerSchlau:759174717155311627>");
 
@@ -54,6 +64,8 @@ namespace DiscordOgerBot.Controller
                             $"<@{quizUser.Id}> Mit {quizUser.QuizWonTotal} gewonnen Quizes und {quizUser.QuizPointsTotal} Quizpunkten!{Environment.NewLine}";
                     }
                 }
+
+                message += $"Und dem guden: <@{CurrentQuiz.CurrentQuizMaster.Id}> als Quizmaster!";
 
                 await QuizChannel.SendMessageAsync(message);
 
@@ -86,6 +98,9 @@ namespace DiscordOgerBot.Controller
                         message += $"{i}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} Punkten! {Environment.NewLine}";
                         i++;
                     }
+
+                    CurrentQuiz.CurrentQuizUsers = new List<QuizUser>();
+                    CurrentQuiz.CurrentQuizMaster = new DiscordUser();
                 }
 
                 await QuizChannel.SendMessageAsync(message);

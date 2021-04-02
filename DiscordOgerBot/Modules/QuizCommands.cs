@@ -31,7 +31,7 @@ namespace DiscordOgerBot.Modules
                 return;
             }
 
-            await QuizController.PrepareQuiz(Context.Channel);
+            await QuizController.PrepareQuiz(Context.Channel, user);
 
         }
 
