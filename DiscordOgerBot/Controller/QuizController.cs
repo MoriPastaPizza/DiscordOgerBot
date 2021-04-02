@@ -59,7 +59,7 @@ namespace DiscordOgerBot.Controller
                     foreach (var quizUser in CurrentQuiz.CurrentQuizUsers)
                     {
                         message +=
-                            $"<@{quizUser.Id}> Mit {quizUser.QuizWonTotal} gewonnen Quizes und {quizUser.QuizPointsTotal} Quizpunkten!{Environment.NewLine}";
+                            $"<@{quizUser.Id}> Mit {quizUser.QuizWonTotal} gewonnen Quizes und {quizUser.QuizPointsTotal} Quiz-Punkte!{Environment.NewLine}";
                     }
                 }
 
@@ -86,14 +86,22 @@ namespace DiscordOgerBot.Controller
                 CurrentQuiz.QuizState = QuizState.EndPhase;
 
                 var message = $"**Das Quiz ist beendet** {Environment.NewLine}{Environment.NewLine}Hier der Punktestand!:" + Environment.NewLine;
+                const int maxPoints = 7;
                 lock (ListLock)
                 {
                     var listSort = CurrentQuiz.CurrentQuizUsers.OrderByDescending(m => m.CurrentQuizPoints).ToList();
+                    var pointCount = CurrentQuiz.CurrentQuizUsers.Count > maxPoints ? maxPoints : CurrentQuiz.CurrentQuizUsers.Count;
 
                     var i = 1;
                     foreach (var quizUser in listSort)
                     {
-                        message += $"{i}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} Punkten! {Environment.NewLine}";
+                        var points = (pointCount - i) < 0 ? 0 : (pointCount - i);
+                        DataBase.IncreaseQuizPointsTotal(ulong.Parse(quizUser.Id), points);
+
+                        if (i == 1)
+                            DataBase.IncreaseQuizWonTotal(ulong.Parse(quizUser.Id));
+
+                        message += $"{i}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} Punkten! Und bekommt somit {points} Quiz-Punkte => {DataBase.GetQuizPointsTotal(ulong.Parse(quizUser.Id))} Punkte {Environment.NewLine}";
                         i++;
                     }
 

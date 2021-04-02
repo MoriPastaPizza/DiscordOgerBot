@@ -122,6 +122,7 @@ namespace DiscordOgerBot.Modules
         public async Task ResetPoints()
         {
             DataBase.ResetQuizDatabase();
+            await Context.Message.ReplyAsync("Quiz Datenbank gelöscht!");
         }
     }
 }
