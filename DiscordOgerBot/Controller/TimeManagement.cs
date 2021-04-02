@@ -11,34 +11,30 @@ namespace DiscordOgerBot.Controller
     {
         private static readonly Dictionary<ulong, ActiveUserStruct> ActiveUsers = new Dictionary<ulong, ActiveUserStruct>();
         private static readonly TimeSpan CoolOfTime = TimeSpan.FromMinutes(1);
-        private static readonly object UserLock = new();
 
 
         public static void Measure(ulong userId)
         {
             try
             {
-                lock (UserLock)
+                if (ActiveUsers.TryGetValue(userId, out var activeUserStruct))
                 {
-                    if (ActiveUsers.TryGetValue(userId, out var activeUserStruct))
+                    activeUserStruct.CancellationTokenSource.Cancel();
+                }
+                else
+                {
+                    var newActiveUserStruct = new ActiveUserStruct
                     {
-                        activeUserStruct.CancellationTokenSource.Cancel();
-                    }
-                    else
+                        ActiveTime = new TimeSpan(),
+                        CancellationTokenSource = new CancellationTokenSource()
+                    };
+
+                    ActiveUsers.Add(userId, newActiveUserStruct);
+
+                    Task.Factory.StartNew(() =>
                     {
-                        var newActiveUserStruct = new ActiveUserStruct
-                        {
-                            ActiveTime = new TimeSpan(),
-                            CancellationTokenSource = new CancellationTokenSource()
-                        };
-
-                        ActiveUsers.Add(userId, newActiveUserStruct);
-
-                        Task.Factory.StartNew(() =>
-                        {
-                            MeasureActiveTime(userId, newActiveUserStruct.CancellationTokenSource.Token);
-                        }, newActiveUserStruct.CancellationTokenSource.Token);
-                    }
+                        MeasureActiveTime(userId, newActiveUserStruct.CancellationTokenSource.Token);
+                    }, newActiveUserStruct.CancellationTokenSource.Token);
                 }
             }
             catch (Exception ex)
@@ -54,34 +50,31 @@ namespace DiscordOgerBot.Controller
                 var stopWatch = new Stopwatch();
                 stopWatch.Start();
 
-                lock (UserLock)
+                if (cancellationToken.WaitHandle.WaitOne(CoolOfTime))
                 {
-                    if (cancellationToken.WaitHandle.WaitOne(CoolOfTime))
-                    {
-                        stopWatch.Stop();
-                        var user = ActiveUsers[userId];
-                        user.ActiveTime += stopWatch.Elapsed;
+                    stopWatch.Stop();
+                    var user = ActiveUsers[userId];
+                    user.ActiveTime += stopWatch.Elapsed;
 
-                        user.CancellationTokenSource.Dispose();
-                        user.CancellationTokenSource = new CancellationTokenSource();
+                    user.CancellationTokenSource.Dispose();
+                    user.CancellationTokenSource = new CancellationTokenSource();
 
-                        ActiveUsers[userId] = user;
+                    ActiveUsers[userId] = user;
 
-                        Task.Factory.StartNew(() => { MeasureActiveTime(userId, user.CancellationTokenSource.Token); },
-                            user.CancellationTokenSource.Token);
-                    }
-                    else
-                    {
-                        stopWatch.Stop();
-                        var user = ActiveUsers[userId];
-                        user.ActiveTime += stopWatch.Elapsed;
+                    Task.Factory.StartNew(() => { MeasureActiveTime(userId, user.CancellationTokenSource.Token); },
+                        user.CancellationTokenSource.Token);
+                }
+                else
+                {
+                    stopWatch.Stop();
+                    var user = ActiveUsers[userId];
+                    user.ActiveTime += stopWatch.Elapsed;
 
-                        Task.Factory.StartNew(() => DataBase.IncreaseTimeSpendWorking(userId, user.ActiveTime), cancellationToken);
+                    Task.Factory.StartNew(() => DataBase.IncreaseTimeSpendWorking(userId, user.ActiveTime), cancellationToken);
 
-                        ActiveUsers.Remove(userId);
-                        user.CancellationTokenSource.Cancel();
-                        user.CancellationTokenSource.Dispose();
-                    }
+                    ActiveUsers.Remove(userId);
+                    user.CancellationTokenSource.Cancel();
+                    user.CancellationTokenSource.Dispose();
                 }
             }
             catch (Exception ex)
