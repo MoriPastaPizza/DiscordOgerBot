@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Rest;
@@ -16,14 +15,13 @@ namespace DiscordOgerBot.Controller
     {
 
         private static RestUserMessage PrepMessage { get; set; }
-        private static ISocketMessageChannel QuizChannel { get; set; }
-        private static object ListLock { get; set; } = new();
+        private static object ListLock { get; } = new();
 
         internal static async Task PrepareQuiz(ISocketMessageChannel channel, IUser quizMaster)
         {
             try
             {
-                QuizChannel = channel;
+                CurrentQuiz.CurrentQuizChannel = channel;
                 lock (ListLock)
                 {
                     CurrentQuiz.CurrentQuizUsers = new List<QuizUser>();
@@ -34,7 +32,7 @@ namespace DiscordOgerBot.Controller
                     };
                 }
 
-                PrepMessage = await QuizChannel.SendMessageAsync(
+                PrepMessage = await CurrentQuiz.CurrentQuizChannel.SendMessageAsync(
                     $"<@&827310534352175135> **Macht euch bereit ein Quiz beginnt bald!** {Environment.NewLine} Wenn ihr mitspielen wollt reagiert auf diese Nachricht mit <:RainerSchlau:759174717155311627>");
 
                 OgerBot.Client.ReactionAdded += ReactionAddedPrep;
@@ -54,7 +52,7 @@ namespace DiscordOgerBot.Controller
                 OgerBot.Client.ReactionAdded -= ReactionAddedPrep;
                 CurrentQuiz.QuizState = QuizState.Running;
 
-                var message = $"**Das Quiz startet!** {Environment.NewLine} Und dabei isch:" + Environment.NewLine;
+                var message = $"**Das Quiz startet!** {Environment.NewLine}{Environment.NewLine} Und dabei isch:" + Environment.NewLine;
 
                 lock (ListLock)
                 {
@@ -67,7 +65,7 @@ namespace DiscordOgerBot.Controller
 
                 message += $"{Environment.NewLine}Und dem guden: <@{CurrentQuiz.CurrentQuizMaster.Id}> als Quizmaster!";
 
-                await QuizChannel.SendMessageAsync(message);
+                await CurrentQuiz.CurrentQuizChannel.SendMessageAsync(message);
 
                 OgerBot.Client.ReactionAdded += ReactionAddedRunning;
                 OgerBot.Client.ReactionRemoved += ReactionRemovedRunning;
@@ -87,7 +85,7 @@ namespace DiscordOgerBot.Controller
                 OgerBot.Client.ReactionAdded -= ReactionRemovedRunning;
                 CurrentQuiz.QuizState = QuizState.EndPhase;
 
-                var message = $"**Das Quiz ist beendet** {Environment.NewLine}Hier der Punktestand!:" + Environment.NewLine;
+                var message = $"**Das Quiz ist beendet** {Environment.NewLine}{Environment.NewLine}Hier der Punktestand!:" + Environment.NewLine;
                 lock (ListLock)
                 {
                     var listSort = CurrentQuiz.CurrentQuizUsers.OrderByDescending(m => m.CurrentQuizPoints).ToList();
@@ -103,7 +101,7 @@ namespace DiscordOgerBot.Controller
                     CurrentQuiz.CurrentQuizMaster = new DiscordUser();
                 }
 
-                await QuizChannel.SendMessageAsync(message);
+                await CurrentQuiz.CurrentQuizChannel.SendMessageAsync(message);
 
                 CurrentQuiz.QuizState = QuizState.NotRunning;
                 await OgerBot.Client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
@@ -114,12 +112,35 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task ReactionAddedPrep(Discord.Cacheable<Discord.IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        internal static async Task GetCurrentPoints()
+        {
+            try
+            {
+                var message = "Aktueller Punktestand:" + Environment.NewLine;
+                lock (ListLock)
+                {
+                    var listSort = CurrentQuiz.CurrentQuizUsers.OrderByDescending(m => m.CurrentQuizPoints).ToList();
+                    var i = 1;
+                    foreach (var quizUser in listSort)
+                    {
+                        message += $"{i}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} Punkten! {Environment.NewLine}";
+                        i++;
+                    }
+                }
+                await CurrentQuiz.CurrentQuizChannel.SendMessageAsync(message);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetCurrentPoints));
+            }
+        }
+
+        private static async Task ReactionAddedPrep(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
         {
             try
             {
                 if(CurrentQuiz.QuizState != QuizState.PrepPhase) return;
-                if (channel.Id != QuizChannel.Id) return;
+                if (channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
                 if (message.Id != PrepMessage.Id) return;
                 if (reaction.Emote.Name != "RainerSchlau") return;
 
@@ -146,12 +167,12 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task ReactionAddedRunning(Discord.Cacheable<Discord.IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        private static async Task ReactionAddedRunning(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
         {
             try
             {
                 if (CurrentQuiz.QuizState != QuizState.Running) return;
-                if (channel.Id != QuizChannel.Id) return;
+                if (channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
                 if (reaction.Emote.Name != "✅") return;
                 if (!(await channel.GetUserAsync(reaction.UserId) is SocketGuildUser reactionUser)) return;
                 if (reactionUser.Roles.All(m => m.Id != 826886898114363432)) return;
@@ -173,12 +194,12 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task ReactionRemovedRunning(Discord.Cacheable<Discord.IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        private static async Task ReactionRemovedRunning(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
         {
             try
             {
                 if (CurrentQuiz.QuizState != QuizState.Running) return;
-                if (channel.Id != QuizChannel.Id) return;
+                if (channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
                 if (reaction.Emote.Name != "✅") return;
                 if (!(await channel.GetUserAsync(reaction.UserId) is SocketGuildUser reactionUser)) return;
                 if (reactionUser.Roles.All(m => m.Id != 826886898114363432)) return;

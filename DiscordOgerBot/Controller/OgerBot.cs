@@ -39,34 +39,30 @@ namespace DiscordOgerBot.Controller
                 _oragleList = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
                     "../DiscordOgerBot/Dict/dictionary_Oragle.json")))["oragle"];
 
+                _translateDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
+                    "../DiscordOgerBot/Dict/dictionary_default.json")));
+
                 Client = new DiscordSocketClient(new DiscordSocketConfig {MessageCacheSize = 1000});
                 CommandService = new CommandService();
+
                 _services = new ServiceCollection()
                     .AddSingleton(Client)
                     .AddSingleton(CommandService)
                     .BuildServiceProvider();
-                _translateDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                    "../DiscordOgerBot/Dict/dictionary_default.json")));
                 _repliedMessagesId = new Dictionary<ulong, ulong>();
                 _oragleMessegesId = new Dictionary<ulong, ulong>();
 
-                var token = Environment.GetEnvironmentVariable("BOTTOKEN");
-
                 Client.Log += DiscordClientLogs;
-
-                await Client.LoginAsync(TokenType.Bot, token);
-                await Client.StartAsync();
-
                 Client.ReactionAdded += ReactionAdded;
                 Client.ReactionRemoved += ReactionRemoved;
                 Client.MessageReceived += MessageReceived;
                 Client.MessageUpdated += MessageUpdated;
                 Client.Ready += _client_Ready;
 
+                await Client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("BOTTOKEN"));
+                await Client.StartAsync();
                 await CommandService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-
                 await Client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
-                Log.Information("Bot Started!");
 
                 _cancellationTokenCheckUsers = new CancellationTokenSource();
                 new Task(CheckUsersTask, _cancellationTokenCheckUsers.Token, TaskCreationOptions.LongRunning).Start();
@@ -492,9 +488,10 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task _client_Ready()
+        private static Task _client_Ready()
         {
-            Client.MessageReceived += DavidDavid;
+            Log.Information("Bot Started!");
+            return Task.CompletedTask;
         }
 
         private static async void CheckUsersTask()
@@ -504,22 +501,6 @@ namespace DiscordOgerBot.Controller
                 _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(5));
 
                 await CheckUsers();
-            }
-        }
-
-        private static async Task DavidDavid(SocketMessage arg)
-        {
-            if (!(arg is SocketUserMessage message)) return;
-            if (message.Author.IsBot) return;
-
-            var context = new SocketCommandContext(Client, message);
-
-            if (message.Content.Contains("Valar morghulis", StringComparison.OrdinalIgnoreCase))
-            {
-                if (!(message.Author is SocketGuildUser author)) return;
-                var role = context.Guild.GetRole(784512104459272253);
-                await author.AddRoleAsync(role);
-                await author.SendMessageAsync("Valar dohaeris");
             }
         }
 

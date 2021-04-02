@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -73,6 +70,51 @@ namespace DiscordOgerBot.Modules
             }
 
             await QuizController.StopQuiz();
+        }
+
+        [Command("points")]
+        public async Task GetCurrentPoints()
+        {
+            if (!(Context.User is SocketGuildUser user)) return;
+            if(Context.Channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
+            if (CurrentQuiz.QuizState != QuizState.Running)
+            {
+                await Context.Message.ReplyAsync("Es läuft derzeit kein Quiz!");
+                return;
+            }
+
+            var quizUser = CurrentQuiz.CurrentQuizUsers.FirstOrDefault(m => m.Id == Context.User.Id.ToString());
+            var quizMaster = CurrentQuiz.CurrentQuizMaster;
+
+            if (quizUser == null && quizMaster.Id != Context.User.Id.ToString())
+            {
+                await Context.Message.ReplyAsync("Du spielst beim aktuellen Quiz nicht mit!");
+                return;
+            }
+
+            await QuizController.GetCurrentPoints();
+
+        }
+
+        [Command("rank")]
+        public async Task GetUserRank()
+        {
+            var allUsers = DataBase.GetAllUsers();
+            var currentUser = allUsers.FirstOrDefault(m => m.Id == Context.User.Id.ToString());
+            if (currentUser == null || currentUser.QuizPointsTotal < 1)
+            {
+                await Context.Message.ReplyAsync("Du hast noch keine Quizpunkte!");
+                return;
+            }
+
+            allUsers = allUsers
+                .Where(m => m.QuizPointsTotal > 0)
+                .OrderByDescending(m => m.QuizPointsTotal)
+                .ToList();
+
+            var rank = 1 + allUsers.TakeWhile(user => user.Id != currentUser.Id).Count();
+
+            await Context.Message.ReplyAsync($"Du bist derzeit auf Platz {rank}! Mit {currentUser.QuizPointsTotal} Punkten und {currentUser.QuizWonTotal} Gewonnen Quizes!");
         }
     }
 }

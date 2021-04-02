@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
-using Discord.Commands;
 using DiscordOgerBot.Database;
 using DiscordOgerBot.Models;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Serilog;
 
 namespace DiscordOgerBot.Controller
@@ -291,6 +288,19 @@ namespace DiscordOgerBot.Controller
                 Log.Error(ex, $"Could not create User in DB {Environment.NewLine}" +
                                  $"User: {user.Username} {Environment.NewLine}" +
                                  $"Guild: {guildId}");
+            }
+        }
+
+        internal static List<DiscordUser> GetAllUsers()
+        {
+            try
+            {
+                return Context.DiscordUsers.ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetAllUsers));
+                return new List<DiscordUser>();
             }
         }
     }
