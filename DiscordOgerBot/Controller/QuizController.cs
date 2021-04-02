@@ -32,10 +32,13 @@ namespace DiscordOgerBot.Controller
                     };
                 }
 
+                OgerBot.Client.ReactionAdded += ReactionAddedPrep;
+                OgerBot.Client.ReactionAdded += ReactionAddedRunning;
+                OgerBot.Client.ReactionRemoved += ReactionRemovedRunning;
+
                 PrepMessage = await CurrentQuiz.CurrentQuizChannel.SendMessageAsync(
                     $"<@&827310534352175135> **Macht euch bereit ein Quiz beginnt bald!** {Environment.NewLine} Wenn ihr mitspielen wollt reagiert auf diese Nachricht mit <:RainerSchlau:759174717155311627>");
 
-                OgerBot.Client.ReactionAdded += ReactionAddedPrep;
                 CurrentQuiz.QuizState = QuizState.PrepPhase;
                 await OgerBot.Client.SetGameAsync("wer beim Quiz dabei ist", type: ActivityType.Watching);
             }
@@ -49,7 +52,6 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                OgerBot.Client.ReactionAdded -= ReactionAddedPrep;
                 CurrentQuiz.QuizState = QuizState.Running;
 
                 var message = $"**Das Quiz startet!** {Environment.NewLine}{Environment.NewLine} Und dabei isch:" + Environment.NewLine;
@@ -59,7 +61,7 @@ namespace DiscordOgerBot.Controller
                     foreach (var quizUser in CurrentQuiz.CurrentQuizUsers)
                     {
                         message +=
-                            $"<@{quizUser.Id}> Mit {quizUser.QuizWonTotal} gewonnen Quizes und {quizUser.QuizPointsTotal} Quiz-Punkte!{Environment.NewLine}";
+                            $"<@{quizUser.Id}> Mit {quizUser.QuizWonTotal} gewonnenen Quiz/es und {quizUser.QuizPointsTotal} Quiz-Punkt/e!{Environment.NewLine}";
                     }
                 }
 
@@ -67,8 +69,7 @@ namespace DiscordOgerBot.Controller
 
                 await CurrentQuiz.CurrentQuizChannel.SendMessageAsync(message);
 
-                OgerBot.Client.ReactionAdded += ReactionAddedRunning;
-                OgerBot.Client.ReactionRemoved += ReactionRemovedRunning;
+
                 await OgerBot.Client.SetGameAsync("ein Quiz", type: ActivityType.Playing);
             }
             catch (Exception ex)
@@ -81,28 +82,35 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                OgerBot.Client.ReactionAdded -= ReactionAddedRunning;
-                OgerBot.Client.ReactionAdded -= ReactionRemovedRunning;
-                CurrentQuiz.QuizState = QuizState.EndPhase;
+                CurrentQuiz.QuizState = QuizState.NotRunning;
 
                 var message = $"**Das Quiz ist beendet** {Environment.NewLine}{Environment.NewLine}Hier der Endstand:" + Environment.NewLine;
                 const int maxPoints = 6;
                 lock (ListLock)
                 {
                     var listSort = CurrentQuiz.CurrentQuizUsers.OrderByDescending(m => m.CurrentQuizPoints).ToList();
-                    var pointCount = CurrentQuiz.CurrentQuizUsers.Count > maxPoints ? maxPoints : CurrentQuiz.CurrentQuizUsers.Count;
+                    var maxPointsFlattend = CurrentQuiz.CurrentQuizUsers.Count > maxPoints ? maxPoints : CurrentQuiz.CurrentQuizUsers.Count;
 
-                    var i = 1;
+                    var rank = 0;
+                    var pointsLastUser = -1;
                     foreach (var quizUser in listSort)
                     {
-                        var points = (pointCount - i + 1) < 0 ? 0 : (pointCount - i + 1);
+
+                        if (quizUser.CurrentQuizPoints == pointsLastUser)
+                        {
+                            rank--;
+                        }
+
+                        var points = (maxPointsFlattend - rank) < 0 ? 0 : (maxPointsFlattend - rank);
                         DataBase.IncreaseQuizPointsTotal(ulong.Parse(quizUser.Id), points);
 
-                        if (i == 1)
+                        if (rank == 0)
                             DataBase.IncreaseQuizWonTotal(ulong.Parse(quizUser.Id));
 
-                        message += $"{i}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} Punkten! Und bekommt somit {points} Quiz-Punkte => {DataBase.GetQuizPointsTotal(ulong.Parse(quizUser.Id))} Punkte {Environment.NewLine}";
-                        i++;
+                        message += $"{rank + 1}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} Punkt/en! Und bekommt somit {points} Quiz-Punkt/e => {DataBase.GetQuizPointsTotal(ulong.Parse(quizUser.Id))} Punkt/e {Environment.NewLine}";
+
+                        pointsLastUser = quizUser.CurrentQuizPoints;
+                        rank++;
                     }
 
                     CurrentQuiz.CurrentQuizUsers = new List<QuizUser>();
@@ -111,12 +119,38 @@ namespace DiscordOgerBot.Controller
 
                 await CurrentQuiz.CurrentQuizChannel.SendMessageAsync(message);
 
-                CurrentQuiz.QuizState = QuizState.NotRunning;
+                OgerBot.Client.ReactionAdded -= ReactionAddedPrep;
+                OgerBot.Client.ReactionAdded -= ReactionAddedRunning;
+                OgerBot.Client.ReactionRemoved -= ReactionRemovedRunning;
+
                 await OgerBot.Client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, nameof(StopQuiz));
+            }
+        }
+
+        internal static async Task AbortQuiz()
+        {
+            try
+            {
+                lock (ListLock)
+                {
+                    CurrentQuiz.CurrentQuizUsers = new List<QuizUser>();
+                    CurrentQuiz.CurrentQuizMaster = new DiscordUser();
+                    CurrentQuiz.QuizState = QuizState.NotRunning;
+                }
+
+                OgerBot.Client.ReactionAdded -= ReactionAddedPrep;
+                OgerBot.Client.ReactionAdded -= ReactionAddedRunning;
+                OgerBot.Client.ReactionRemoved -= ReactionRemovedRunning;
+
+                await OgerBot.Client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(AbortQuiz));
             }
         }
 
@@ -128,11 +162,19 @@ namespace DiscordOgerBot.Controller
                 lock (ListLock)
                 {
                     var listSort = CurrentQuiz.CurrentQuizUsers.OrderByDescending(m => m.CurrentQuizPoints).ToList();
-                    var i = 1;
+                    var rank = 1;
+                    var pointsLastUser = -1;
                     foreach (var quizUser in listSort)
                     {
-                        message += $"{i}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} Punkten! {Environment.NewLine}";
-                        i++;
+                        if (quizUser.CurrentQuizPoints == pointsLastUser)
+                        {
+                            rank--;
+                        }
+
+                        message += $"{rank}. <@{quizUser.Id}> mit {quizUser.CurrentQuizPoints} Punkt/en! {Environment.NewLine}";
+
+                        pointsLastUser = quizUser.CurrentQuizPoints;
+                        rank++;
                     }
                 }
                 await CurrentQuiz.CurrentQuizChannel.SendMessageAsync(message);

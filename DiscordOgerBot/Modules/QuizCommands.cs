@@ -114,7 +114,29 @@ namespace DiscordOgerBot.Modules
 
             var rank = 1 + allUsers.TakeWhile(user => user.Id != currentUser.Id).Count();
 
-            await Context.Message.ReplyAsync($"Du bist derzeit auf Platz {rank}! Mit {currentUser.QuizPointsTotal} Punkten und {currentUser.QuizWonTotal} Gewonnen Quizes!");
+            await Context.Message.ReplyAsync($"Du bist derzeit auf Platz {rank}! Mit {currentUser.QuizPointsTotal} Punkt/en und {currentUser.QuizWonTotal} Gewonnenen Quiz/es!");
+        }
+
+        [Command("abort")]
+        public async Task AbortQuiz()
+        {
+            if (!(Context.User is SocketGuildUser user)) return;
+
+            if (user.Roles.All(m => m.Id != 826886898114363432))
+            {
+                await Context.Message.ReplyAsync("Du bist nicht der Gwiss Masder du Spaggn!");
+                return;
+            }
+
+            if (CurrentQuiz.QuizState == QuizState.NotRunning)
+            {
+                await Context.Message.ReplyAsync("Es läuft derzeit kein Quiz!");
+                return;
+            }
+
+            await QuizController.AbortQuiz();
+
+            await Context.Message.ReplyAsync("Quiz abgebrochen! Keine Punkte werden gezählt!");
         }
 
         [Command("reset")]
