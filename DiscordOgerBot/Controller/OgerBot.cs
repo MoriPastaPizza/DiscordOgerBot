@@ -18,9 +18,9 @@ namespace DiscordOgerBot.Controller
 {
     internal static class OgerBot
     {
-        public static CommandService CommandService { get; private set; }
-        public static List<string> FooterDictionary { get; private set; }
-        public static DiscordSocketClient Client { get; set; }
+        internal static CommandService CommandService { get; private set; }
+        internal static List<string> FooterDictionary { get; private set; }
+        internal static DiscordSocketClient Client { get; private set; }
 
         private static List<string> _oragleList;
         private static IServiceProvider _services;
@@ -57,7 +57,7 @@ namespace DiscordOgerBot.Controller
                 Client.ReactionRemoved += ReactionRemoved;
                 Client.MessageReceived += MessageReceived;
                 Client.MessageUpdated += MessageUpdated;
-                Client.Ready += _client_Ready;
+                Client.Ready += ClientReady;
 
                 await Client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("BOTTOKEN"));
                 await Client.StartAsync();
@@ -229,7 +229,7 @@ namespace DiscordOgerBot.Controller
                 var context = new SocketCommandContext(Client, message);
                 var argPos = 0;
 
-                await DataBase.CreateUser(message.Author, context.Guild.Id);
+                DataBase.CreateUser(message.Author, context.Guild.Id);
 
                 if (context.Guild.Id == 758745761566818314)
                 {
@@ -242,7 +242,7 @@ namespace DiscordOgerBot.Controller
                     var result = await CommandService.ExecuteAsync(context, argPos, _services);
                     if (result.IsSuccess)
                     {
-                        await DataBase.IncreaseInteractionCount(message.Author, context.Guild.Id);
+                        DataBase.IncreaseInteractionCount(message.Author, context.Guild.Id);
                         Log.Information($"Command executed! {Environment.NewLine}" +
                                            $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
                                            $"Command: {message.Content} {Environment.NewLine}" +
@@ -291,7 +291,7 @@ namespace DiscordOgerBot.Controller
                 var context = new SocketCommandContext(Client, message);
                 var argPos = 0;
 
-                await DataBase.CreateUser(message.Author, context.Guild.Id);
+                DataBase.CreateUser(message.Author, context.Guild.Id);
 
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
                 {
@@ -300,7 +300,7 @@ namespace DiscordOgerBot.Controller
 
                     if (result.IsSuccess)
                     {
-                        await DataBase.IncreaseInteractionCount(message.Author, context.Guild.Id);
+                        DataBase.IncreaseInteractionCount(message.Author, context.Guild.Id);
                         Log.Information($"Command executed! {Environment.NewLine}" +
                                            $"Command from : {message.Author.Username}, with id: {message.Author.Id} {Environment.NewLine}" +
                                            $"Command: {message.Content} {Environment.NewLine}" +
@@ -428,7 +428,7 @@ namespace DiscordOgerBot.Controller
                 var roles = server.Roles;
                 var ranks = Globals.WorkingRanks.TimeForRanks;
 
-                var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
+                var timeFromDb = DataBase.GetTimeSpendWorking(user, server.Id);
                 if (timeFromDb == new TimeSpan()) return;
                 var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
                 var roleUserShouldHave = roles.FirstOrDefault(m => m.Id == rankUserShouldHave.RankId);
@@ -464,7 +464,7 @@ namespace DiscordOgerBot.Controller
                 {
                     if (user == null) continue;
                     if (user.Id == 386989432148066306 || user.Id == 218373955658973195) continue;
-                    var timeFromDb = await DataBase.GetTimeSpendWorking(user, server.Id);
+                    var timeFromDb = DataBase.GetTimeSpendWorking(user, server.Id);
                     if (timeFromDb == new TimeSpan()) continue;
                     var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
                     var roleUserShouldHave = roles.FirstOrDefault(m => m.Id == rankUserShouldHave.RankId);
@@ -488,7 +488,7 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static Task _client_Ready()
+        private static Task ClientReady()
         {
             Log.Information("Bot Started!");
             return Task.CompletedTask;

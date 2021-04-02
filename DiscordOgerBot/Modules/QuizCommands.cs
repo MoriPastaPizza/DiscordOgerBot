@@ -116,5 +116,12 @@ namespace DiscordOgerBot.Modules
 
             await Context.Message.ReplyAsync($"Du bist derzeit auf Platz {rank}! Mit {currentUser.QuizPointsTotal} Punkten und {currentUser.QuizWonTotal} Gewonnen Quizes!");
         }
+
+        [Command("reset")]
+        [RequireOwner]
+        public async Task ResetPoints()
+        {
+            DataBase.ResetQuizDatabase();
+        }
     }
 }

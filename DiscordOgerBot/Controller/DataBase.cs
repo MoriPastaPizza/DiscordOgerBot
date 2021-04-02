@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Discord;
 using DiscordOgerBot.Database;
 using DiscordOgerBot.Models;
@@ -18,7 +17,10 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                Context.Database.Migrate();
+                lock (Context)
+                {
+                    Context.Database.Migrate();
+                }
             }
             catch (Exception ex)
             {
@@ -26,23 +28,26 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task<DiscordUser> GetDiscordUserFromId(ulong userId, ulong? guildId = null)
+        private static DiscordUser GetDiscordUserFromId(ulong userId, ulong? guildId = null)
         {
             try
             {
-                var user = await Context.DiscordUsers.FindAsync(userId.ToString());
-
-                if (user == null) return null;
-                if (guildId == null) return user;
-
-                if (!user.ActiveGuildsId.Contains(guildId.ToString()))
+                lock (Context)
                 {
-                    user.ActiveGuildsId.Add(guildId.ToString());
-                }
+                    var user = Context.DiscordUsers.Find(userId.ToString());
 
-                Context.DiscordUsers.Update(user);
-                await Context.SaveChangesAsync();
-                return user;
+                    if (user == null) return null;
+                    if (guildId == null) return user;
+
+                    if (!user.ActiveGuildsId.Contains(guildId.ToString()))
+                    {
+                        user.ActiveGuildsId.Add(guildId.ToString());
+                    }
+
+                    Context.DiscordUsers.Update(user);
+                    Context.SaveChanges();
+                    return user;
+                }
             }
             catch (Exception ex)
             {
@@ -53,31 +58,34 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task IncreaseInteractionCount(IUser user, ulong guildId)
+        public static void IncreaseInteractionCount(IUser user, ulong guildId)
         {
             try
             {
 
-                var userDataBase = await GetDiscordUserFromId(user.Id, guildId);
+                var userDataBase = GetDiscordUserFromId(user.Id, guildId);
                 if (userDataBase == null)
                 {
-                    await CreateUser(user, guildId);
-                    userDataBase = await GetDiscordUserFromId(user.Id, guildId);
+                    CreateUser(user, guildId);
+                    userDataBase = GetDiscordUserFromId(user.Id, guildId);
                 }
 
                 if (userDataBase == null)
                 {
                     Log.Warning($"User not Found! {Environment.NewLine}" +
-                                       $"Id: {user.Id} {Environment.NewLine}" +
-                                       $"Name: {user.Username} {Environment.NewLine}" +
-                                       $"Guild: {guildId}");
+                                $"Id: {user.Id} {Environment.NewLine}" +
+                                $"Name: {user.Username} {Environment.NewLine}" +
+                                $"Guild: {guildId}");
                     return;
                 }
 
                 userDataBase.TimesBotUsed++;
 
-                Context.DiscordUsers.Update(userDataBase);
-                await Context.SaveChangesAsync();
+                lock (Context)
+                {
+                    Context.DiscordUsers.Update(userDataBase);
+                    Context.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
@@ -87,19 +95,17 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task<uint> GetTimesBotUsed(IUser user, ulong guildId)
+        public static uint GetTimesBotUsed(IUser user, ulong guildId)
         {
             try
             {
-                var userDataBase = await GetDiscordUserFromId(user.Id, guildId);
-                if (userDataBase == null)
-                {
-                    await CreateUser(user, guildId);
-                    userDataBase = await GetDiscordUserFromId(user.Id, guildId);
-                }
+
+                var userDataBase = GetDiscordUserFromId(user.Id, guildId);
+                if (userDataBase != null) return userDataBase.TimesBotUsed;
+                CreateUser(user, guildId);
+                userDataBase = GetDiscordUserFromId(user.Id, guildId);
 
                 return userDataBase.TimesBotUsed;
-
             }
             catch (Exception ex)
             {
@@ -110,19 +116,16 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task<TimeSpan> GetTimeSpendWorking(IUser user, ulong guildId)
+        public static TimeSpan GetTimeSpendWorking(IUser user, ulong guildId)
         {
             try
             {
-                var userDataBase = await GetDiscordUserFromId(user.Id, guildId);
-                if (userDataBase == null)
-                {
-                    await CreateUser(user, guildId);
-                    userDataBase = await GetDiscordUserFromId(user.Id, guildId);
-                }
+                var userDataBase = GetDiscordUserFromId(user.Id, guildId);
+                if (userDataBase != null) return userDataBase.TimeSpendWorking;
+                CreateUser(user, guildId);
+                userDataBase = GetDiscordUserFromId(user.Id, guildId);
 
                 return userDataBase.TimeSpendWorking;
-
             }
             catch (Exception ex)
             {
@@ -133,12 +136,11 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task IncreaseTimeSpendWorking(ulong userId, TimeSpan additionalTime)
+        public static void IncreaseTimeSpendWorking(ulong userId, TimeSpan additionalTime)
         {
             try
             {
-
-                var userDataBase = await GetDiscordUserFromId(userId);
+                var userDataBase = GetDiscordUserFromId(userId);
                 if (userDataBase == null)
                 {
                     return;
@@ -146,10 +148,15 @@ namespace DiscordOgerBot.Controller
 
                 userDataBase.TimeSpendWorking += additionalTime;
 
-                Context.DiscordUsers.Update(userDataBase);
-                await Context.SaveChangesAsync();
+                lock (Context)
+                {
+                    Context.DiscordUsers.Update(userDataBase);
+                    Context.SaveChanges();
+                }
+
 
                 Log.Information($"Added time to user {userDataBase.Name}, Time: {additionalTime}");
+
             }
             catch (Exception ex)
             {
@@ -158,12 +165,11 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task IncreaseQuizPointsTotal(ulong userId, int pointsToAdd)
+        public static void IncreaseQuizPointsTotal(ulong userId, int pointsToAdd)
         {
             try
             {
-
-                var userDataBase = await GetDiscordUserFromId(userId);
+                var userDataBase = GetDiscordUserFromId(userId);
                 if (userDataBase == null)
                 {
                     return;
@@ -171,8 +177,11 @@ namespace DiscordOgerBot.Controller
 
                 userDataBase.QuizPointsTotal += pointsToAdd;
 
-                Context.DiscordUsers.Update(userDataBase);
-                await Context.SaveChangesAsync();
+                lock (Context)
+                {
+                    Context.DiscordUsers.Update(userDataBase);
+                    Context.SaveChanges();
+                }
 
                 Log.Information($"Added Total Point to user {userDataBase.Name}");
             }
@@ -182,12 +191,11 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task IncreaseQuizWonTotal(ulong userId)
+        public static void IncreaseQuizWonTotal(ulong userId)
         {
             try
             {
-
-                var userDataBase = await GetDiscordUserFromId(userId);
+                var userDataBase = GetDiscordUserFromId(userId);
                 if (userDataBase == null)
                 {
                     return;
@@ -195,8 +203,11 @@ namespace DiscordOgerBot.Controller
 
                 userDataBase.QuizWonTotal++;
 
-                Context.DiscordUsers.Update(userDataBase);
-                await Context.SaveChangesAsync();
+                lock (Context)
+                {
+                    Context.DiscordUsers.Update(userDataBase);
+                    Context.SaveChanges();
+                }
 
                 Log.Information($"Added Total Wins to user {userDataBase.Name}");
             }
@@ -206,11 +217,11 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task<int> GetTimesQuizWonTotal(ulong userId)
+        public static int GetTimesQuizWonTotal(ulong userId)
         {
             try
             {
-                var userDataBase = await GetDiscordUserFromId(userId);
+                var userDataBase = GetDiscordUserFromId(userId);
                 return userDataBase?.QuizWonTotal ?? 0;
             }
             catch (Exception ex)
@@ -220,11 +231,11 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task<int> GetQuizPointsTotal(ulong userId)
+        public static int GetQuizPointsTotal(ulong userId)
         {
             try
             {
-                var userDataBase = await GetDiscordUserFromId(userId);
+                var userDataBase = GetDiscordUserFromId(userId);
                 return userDataBase?.QuizPointsTotal ?? 0;
             }
             catch (Exception ex)
@@ -234,12 +245,12 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task DecreaseTimeSpendWorking(ulong userId, TimeSpan additionalTime)
+        public static void DecreaseTimeSpendWorking(ulong userId, TimeSpan additionalTime)
         {
             try
             {
 
-                var userDataBase = await GetDiscordUserFromId(userId);
+                var userDataBase = GetDiscordUserFromId(userId);
                 if (userDataBase == null)
                 {
                     return;
@@ -247,8 +258,11 @@ namespace DiscordOgerBot.Controller
 
                 userDataBase.TimeSpendWorking -= additionalTime;
 
-                Context.DiscordUsers.Update(userDataBase);
-                await Context.SaveChangesAsync();
+                lock (Context)
+                {
+                    Context.DiscordUsers.Update(userDataBase);
+                    Context.SaveChanges();
+                }
 
                 Log.Information($"Removed time from user {userDataBase.Name}, Time: {additionalTime}");
             }
@@ -259,29 +273,32 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static async Task CreateUser(IUser user, ulong guildId)
+        public static void CreateUser(IUser user, ulong guildId)
         {
 
             try
             {
-
-                if(await AsyncEnumerable.AnyAsync(Context.DiscordUsers, m => m.Id == user.Id.ToString())) return;
-
-                await Context.DiscordUsers.AddRangeAsync(new DiscordUser
+                lock (Context)
                 {
-                    Id = user.Id.ToString(),
-                    Name = user.Username,
-                    ActiveGuildsId = new List<string>{ guildId.ToString()},
-                    TimesBotUsed = 0,
-                    TimeSpendWorking = new TimeSpan()
-                });
+                    if (Context.DiscordUsers.Any(m => m.Id == user.Id.ToString())) return;
+
+                    Context.DiscordUsers.AddRange(new DiscordUser
+                    {
+                        Id = user.Id.ToString(),
+                        Name = user.Username,
+                        ActiveGuildsId = new List<string> { guildId.ToString() },
+                        TimesBotUsed = 0,
+                        TimeSpendWorking = new TimeSpan()
+                    });
 
 
-                await Context.SaveChangesAsync();
+                    Context.SaveChanges();
 
-                Log.Information($"Created new User! {Environment.NewLine}" +
-                                   $"User: {user.Username} {Environment.NewLine}" +
-                                   $"Guild: {guildId}");
+                    Log.Information($"Created new User! {Environment.NewLine}" +
+                                    $"User: {user.Username} {Environment.NewLine}" +
+                                    $"Guild: {guildId}");
+                }
+
             }
             catch (Exception ex)
             {
@@ -295,12 +312,39 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                return Context.DiscordUsers.ToList();
+                lock (Context)
+                {
+                    return Context.DiscordUsers.ToList();
+                }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, nameof(GetAllUsers));
                 return new List<DiscordUser>();
+            }
+        }
+
+        internal static void ResetQuizDatabase()
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var users = Context.DiscordUsers.ToList();
+                    foreach (var user in users)
+                    {
+                        user.QuizPointsTotal = 0;
+                        user.QuizWonTotal = 0;
+                    }
+
+                    Context.DiscordUsers.UpdateRange(users);
+                    Context.SaveChanges();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(ResetQuizDatabase));
             }
         }
     }

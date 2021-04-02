@@ -146,8 +146,8 @@ namespace DiscordOgerBot.Controller
 
                 var user = await channel.GetUserAsync(reaction.UserId);
 
-                var pointsTotal = await DataBase.GetQuizPointsTotal(user.Id);
-                var winsTotal = await DataBase.GetTimesQuizWonTotal(user.Id);
+                var pointsTotal = DataBase.GetQuizPointsTotal(user.Id);
+                var winsTotal = DataBase.GetTimesQuizWonTotal(user.Id);
 
                 lock (ListLock)
                 {
