@@ -158,7 +158,7 @@ namespace DiscordOgerBot.Modules
                                  $"Wärend der Spielphase kann der Quizmaster mit dem ✅ Emote richtige Antworten markieren und werten lassen. {Environment.NewLine}" +
                                  $"Wird das ✅ Emote vom Quizmaster entfernt wird die Antwort nicht gezählt. {Environment.NewLine}" +
                                  $"Nachdem der Quizmaster das Spiel beended hat werden die Punkte & Plätze der Spieler angezeigt. {Environment.NewLine}" +
-                                 $"Spieler bekommen, je nach Platz, Quiz-Punkte auf ihr Konto guteschrieben, dies führt zu einem globalem Ranking.")
+                                 $"Spieler bekommen, je nach Platz, Quiz-Punkte auf ihr Konto gutgeschrieben, dies führt zu einem globalem Ranking.")
 
                 .AddField("Commands für jeden",
                     $"**og quiz rank** Zeigt deinen globalen Rang an, falls du einen hast. {Environment.NewLine}" +
