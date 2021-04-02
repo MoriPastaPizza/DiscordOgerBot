@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Discord;
 using Discord.Rest;
 using Discord.WebSocket;
 using DiscordOgerBot.Globals;
@@ -28,6 +29,7 @@ namespace DiscordOgerBot.Controller
 
                 OgerBot.Client.ReactionAdded += ReactionAddedPrep;
                 CurrentQuiz.QuizState = QuizState.PrepPhase;
+                await OgerBot.Client.SetGameAsync("Bereitet ein Quiz vor", type: ActivityType.CustomStatus);
             }
             catch (Exception ex)
             {
