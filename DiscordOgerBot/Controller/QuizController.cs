@@ -86,7 +86,7 @@ namespace DiscordOgerBot.Controller
                 CurrentQuiz.QuizState = QuizState.EndPhase;
 
                 var message = $"**Das Quiz ist beendet** {Environment.NewLine}{Environment.NewLine}Hier der Punktestand!:" + Environment.NewLine;
-                const int maxPoints = 7;
+                const int maxPoints = 6;
                 lock (ListLock)
                 {
                     var listSort = CurrentQuiz.CurrentQuizUsers.OrderByDescending(m => m.CurrentQuizPoints).ToList();
@@ -95,7 +95,7 @@ namespace DiscordOgerBot.Controller
                     var i = 1;
                     foreach (var quizUser in listSort)
                     {
-                        var points = (pointCount - i) < 0 ? 0 : (pointCount - i);
+                        var points = (pointCount - i + 1) < 0 ? 0 : (pointCount - i + 1);
                         DataBase.IncreaseQuizPointsTotal(ulong.Parse(quizUser.Id), points);
 
                         if (i == 1)
