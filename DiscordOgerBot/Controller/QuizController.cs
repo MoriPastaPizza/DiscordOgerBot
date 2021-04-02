@@ -85,7 +85,7 @@ namespace DiscordOgerBot.Controller
                 OgerBot.Client.ReactionAdded -= ReactionRemovedRunning;
                 CurrentQuiz.QuizState = QuizState.EndPhase;
 
-                var message = $"**Das Quiz ist beendet** {Environment.NewLine}{Environment.NewLine}Hier der Punktestand!:" + Environment.NewLine;
+                var message = $"**Das Quiz ist beendet** {Environment.NewLine}{Environment.NewLine}Hier der Endstand:" + Environment.NewLine;
                 const int maxPoints = 6;
                 lock (ListLock)
                 {
