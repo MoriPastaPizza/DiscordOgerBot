@@ -61,7 +61,7 @@ namespace DiscordOgerBot.Controller
                     foreach (var quizUser in CurrentQuiz.CurrentQuizUsers)
                     {
                         message +=
-                            $"<@{quizUser.Id}> Mit {quizUser.QuizWonTotal} gewonnenen Quiz/es und {quizUser.QuizPointsTotal} Quiz-Punkt/e!{Environment.NewLine}";
+                            $"<@{quizUser.Id}> Mit {quizUser.QuizWonTotal} gewonnenen Quiz/ze und {quizUser.QuizPointsTotal} Quiz-Punkt/e!{Environment.NewLine}";
                     }
                 }
 

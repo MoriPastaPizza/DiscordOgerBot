@@ -114,7 +114,7 @@ namespace DiscordOgerBot.Modules
 
             var rank = 1 + allUsers.TakeWhile(user => user.Id != currentUser.Id).Count();
 
-            await Context.Message.ReplyAsync($"Du bist derzeit auf Platz {rank}! Mit {currentUser.QuizPointsTotal} Punkt/en und {currentUser.QuizWonTotal} Gewonnenen Quiz/es!");
+            await Context.Message.ReplyAsync($"Du bist derzeit auf Platz {rank}! Mit {currentUser.QuizPointsTotal} Punkt/en und {currentUser.QuizWonTotal} Gewonnenen Quiz/ze!");
         }
 
         [Command("abort")]
