@@ -35,7 +35,7 @@ namespace DiscordOgerBot.Controller
                 }
 
                 PrepMessage = await QuizChannel.SendMessageAsync(
-                    "<@&827310534352175135> Macht euch bereit ein Quiz beginnt bald! Wenn ihr mitspielen wollt reagiert auf diese Nachricht mit <:RainerSchlau:759174717155311627>");
+                    $"<@&827310534352175135> **Macht euch bereit ein Quiz beginnt bald!** {Environment.NewLine} Wenn ihr mitspielen wollt reagiert auf diese Nachricht mit <:RainerSchlau:759174717155311627>");
 
                 OgerBot.Client.ReactionAdded += ReactionAddedPrep;
                 CurrentQuiz.QuizState = QuizState.PrepPhase;
@@ -54,7 +54,7 @@ namespace DiscordOgerBot.Controller
                 OgerBot.Client.ReactionAdded -= ReactionAddedPrep;
                 CurrentQuiz.QuizState = QuizState.Running;
 
-                var message = "Das Quiz startet! Und dabei isch:" + Environment.NewLine;
+                var message = $"**Das Quiz startet!** {Environment.NewLine} Und dabei isch:" + Environment.NewLine;
 
                 lock (ListLock)
                 {
@@ -65,7 +65,7 @@ namespace DiscordOgerBot.Controller
                     }
                 }
 
-                message += $"Und dem guden: <@{CurrentQuiz.CurrentQuizMaster.Id}> als Quizmaster!";
+                message += $"{Environment.NewLine}Und dem guden: <@{CurrentQuiz.CurrentQuizMaster.Id}> als Quizmaster!";
 
                 await QuizChannel.SendMessageAsync(message);
 
@@ -87,7 +87,7 @@ namespace DiscordOgerBot.Controller
                 OgerBot.Client.ReactionAdded -= ReactionRemovedRunning;
                 CurrentQuiz.QuizState = QuizState.EndPhase;
 
-                var message = "Das Quiz ist beendet hier der Punktestand!:" + Environment.NewLine;
+                var message = $"**Das Quiz ist beendet** {Environment.NewLine}Hier der Punktestand!:" + Environment.NewLine;
                 lock (ListLock)
                 {
                     var listSort = CurrentQuiz.CurrentQuizUsers.OrderByDescending(m => m.CurrentQuizPoints).ToList();
