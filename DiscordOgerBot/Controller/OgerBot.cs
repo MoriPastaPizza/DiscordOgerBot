@@ -22,6 +22,7 @@ namespace DiscordOgerBot.Controller
         internal static List<string> FooterDictionary { get; private set; }
         internal static DiscordSocketClient Client { get; private set; }
 
+        private static DateTime _frauchenTime = new DateTime(2008, 4, 1, 18, 00, 0);
         private static List<string> _oragleList;
         private static IServiceProvider _services;
         private static Dictionary<ulong, ulong> _repliedMessagesId;
@@ -498,9 +499,22 @@ namespace DiscordOgerBot.Controller
         {
             while (!_cancellationTokenCheckUsers.Token.IsCancellationRequested)
             {
-                _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(5));
 
+                await CheckForFrauchenTime();
+                _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(5));
                 await CheckUsers();
+            }
+        }
+
+        private static async Task CheckForFrauchenTime()
+        {
+            var timeNow = DateTime.Now.Hour;
+
+            Log.Information($"Frauchen: {_frauchenTime.Hour}, now: {timeNow}");
+
+            if (timeNow == _frauchenTime.Hour)
+            {
+
             }
         }
 
