@@ -22,7 +22,9 @@ namespace DiscordOgerBot.Controller
         internal static List<string> FooterDictionary { get; private set; }
         internal static DiscordSocketClient Client { get; private set; }
 
-        private static DateTime _frauchenTime = new DateTime(2008, 4, 1, 18, 00, 0);
+        private static DateTime FrauchenTime { get; set; } = new(2008, 4, 1, 17, 00, 0);
+        private static bool FrauchenFlag { get; set; } = false;
+
         private static List<string> _oragleList;
         private static IServiceProvider _services;
         private static Dictionary<ulong, ulong> _repliedMessagesId;
@@ -508,13 +510,20 @@ namespace DiscordOgerBot.Controller
 
         private static async Task CheckForFrauchenTime()
         {
-            var timeNow = DateTime.Now.Hour;
-
-            Log.Information($"Frauchen: {_frauchenTime.Hour}, now: {timeNow}");
-
-            if (timeNow == _frauchenTime.Hour)
+            try
             {
-
+                if (DateTime.Now.Hour == FrauchenTime.Hour && !FrauchenFlag)
+                {
+                    FrauchenFlag = true;
+                    var videoPath = Path.GetFullPath(
+                        Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
+                    var channel = (ISocketMessageChannel)Client.GetChannel(759039858319687700);
+                    await channel.SendFileAsync(videoPath + "/frauchen.mp4", embed: GetStandardSoundEmbed(), text: "Hier die tägliche Frauchen-Dosis <:Kopfhrer:773464326920077343>");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(CheckForFrauchenTime));
             }
         }
 
