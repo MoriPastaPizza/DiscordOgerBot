@@ -327,5 +327,12 @@ namespace DiscordOgerBot.Modules
 
             await Context.Channel.SendFileAsync(_videoPath + $"/Honey{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("stirb")]
+        [Alias("klirren")]
+        public async Task SendStirb()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/stirb.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
