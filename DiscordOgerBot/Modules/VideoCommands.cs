@@ -334,5 +334,12 @@ namespace DiscordOgerBot.Modules
         {
             await Context.Channel.SendFileAsync(_videoPath + "/stirb.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
+
+        [Command("mariokart")]
+        [Alias("lieblingsmap")]
+        public async Task SendMarioKart()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/mariokart.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
     }
 }
