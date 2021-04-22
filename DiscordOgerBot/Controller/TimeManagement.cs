@@ -73,7 +73,7 @@ namespace DiscordOgerBot.Controller
                     user.ActiveTime += stopWatch.Elapsed;
 
                     Log.Information($"Measured time for User{userId}, Time: {user.ActiveTime}");
-                    Task.Factory.StartNew(() => DataBase.IncreaseTimeSpendWorking(userId, user.ActiveTime), cancellationToken);
+                    DataBase.IncreaseTimeSpendWorking(userId, user.ActiveTime);
 
                     ActiveUsers.Remove(userId);
                     user.CancellationTokenSource.Cancel();

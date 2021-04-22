@@ -112,7 +112,9 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
+                Log.Information($"Getting user: {userId}");
                 var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                Log.Information($"Got User {userDataBase}");
                 if (userDataBase == null)
                 {
                     return;
