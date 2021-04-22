@@ -186,13 +186,5 @@ namespace DiscordOgerBot.Modules
 
             await Context.Channel.SendMessageAsync(embed: buildEmbed);
         }
-
-        [Command("reset")]
-        [RequireOwner]
-        public async Task ResetPoints()
-        {
-            DataBase.ResetQuizDatabase();
-            await Context.Message.ReplyAsync("Quiz Datenbank gelöscht!");
-        }
     }
 }

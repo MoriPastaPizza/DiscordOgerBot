@@ -34,6 +34,7 @@ namespace DiscordOgerBot.Controller
 
                 OgerBot.Client.ReactionAdded += ReactionAddedPrep;
                 OgerBot.Client.ReactionAdded += ReactionAddedRunning;
+                OgerBot.Client.ReactionRemoved += ReactionRemovedPrep;
                 OgerBot.Client.ReactionRemoved += ReactionRemovedRunning;
 
                 PrepMessage = await CurrentQuiz.CurrentQuizChannel.SendMessageAsync(
@@ -129,6 +130,7 @@ namespace DiscordOgerBot.Controller
 
                 OgerBot.Client.ReactionAdded -= ReactionAddedPrep;
                 OgerBot.Client.ReactionAdded -= ReactionAddedRunning;
+                OgerBot.Client.ReactionRemoved -= ReactionRemovedPrep;
                 OgerBot.Client.ReactionRemoved -= ReactionRemovedRunning;
 
                 await OgerBot.Client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
@@ -152,6 +154,7 @@ namespace DiscordOgerBot.Controller
 
                 OgerBot.Client.ReactionAdded -= ReactionAddedPrep;
                 OgerBot.Client.ReactionAdded -= ReactionAddedRunning;
+                OgerBot.Client.ReactionRemoved -= ReactionRemovedPrep;
                 OgerBot.Client.ReactionRemoved -= ReactionRemovedRunning;
 
                 await OgerBot.Client.SetGameAsync("ob Haider vorm Tor stehen", type: ActivityType.Watching);
@@ -225,6 +228,29 @@ namespace DiscordOgerBot.Controller
                 Log.Error(ex, nameof(ReactionAddedPrep));
             }
         }
+
+        private static async Task ReactionRemovedPrep(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        {
+            try
+            {
+                if (CurrentQuiz.QuizState != QuizState.PrepPhase) return;
+                if (channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
+                if (message.Id != PrepMessage.Id) return;
+                if (reaction.Emote.Name != "RainerSchlau") return;
+
+                var user = await channel.GetUserAsync(reaction.UserId);
+
+                lock (ListLock)
+                { 
+                    CurrentQuiz.CurrentQuizUsers.RemoveAll(m => m.Id == user.Id.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(ReactionRemovedPrep));
+            }
+        }
+
 
         private static async Task ReactionAddedRunning(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
         {
