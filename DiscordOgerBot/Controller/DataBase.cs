@@ -34,12 +34,12 @@ namespace DiscordOgerBot.Controller
             try
             {
 
-                var userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
+                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
 
                 if (userDataBase == null)
                 {
                     CreateUser(user);
-                    userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
+                    Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
                 }
 
                 if (userDataBase == null)
@@ -72,10 +72,10 @@ namespace DiscordOgerBot.Controller
             try
             {
 
-                var userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
+                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
                 if (userDataBase != null) return userDataBase.TimesBotUsed;
                 CreateUser(user);
-                userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
+                userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
 
                 return userDataBase.TimesBotUsed;
             }
@@ -92,10 +92,10 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
+                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
                 if (userDataBase != null) return userDataBase.TimeSpendWorking;
                 CreateUser(user);
-                userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
+                userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
 
                 return userDataBase.TimeSpendWorking;
             }
@@ -112,7 +112,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
+                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
                 if (userDataBase == null)
                 {
                     return;
@@ -141,7 +141,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
+                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
                 if (userDataBase == null)
                 {
                     return;
@@ -167,7 +167,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
+                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
                 if (userDataBase == null)
                 {
                     return;
@@ -193,7 +193,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
+                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
                 return userDataBase?.QuizWonTotal ?? 0;
             }
             catch (Exception ex)
@@ -207,7 +207,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
+                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
                 return userDataBase?.QuizPointsTotal ?? 0;
             }
             catch (Exception ex)
@@ -222,7 +222,7 @@ namespace DiscordOgerBot.Controller
             try
             {
 
-                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
+                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
                 if (userDataBase == null)
                 {
                     return;
