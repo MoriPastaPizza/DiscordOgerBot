@@ -28,46 +28,18 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static DiscordUser GetDiscordUserFromId(ulong userId, ulong? guildId = null)
-        {
-            try
-            {
-                lock (Context)
-                {
-                    var user = Context.DiscordUsers.Find(userId.ToString());
-
-                    if (user == null) return null;
-                    if (guildId == null) return user;
-
-                    if (!user.ActiveGuildsId.Contains(guildId.ToString()))
-                    {
-                        user.ActiveGuildsId.Add(guildId.ToString());
-                    }
-
-                    Context.DiscordUsers.Update(user);
-                    Context.SaveChanges();
-                    return user;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, $"Could not create User in DB {Environment.NewLine}" +
-                                    $"UserId: {userId} {Environment.NewLine}" +
-                                    $"Guild: {guildId}");
-                throw;
-            }
-        }
 
         public static void IncreaseInteractionCount(IUser user, ulong guildId)
         {
             try
             {
 
-                var userDataBase = GetDiscordUserFromId(user.Id, guildId);
+                var userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
+
                 if (userDataBase == null)
                 {
                     CreateUser(user);
-                    userDataBase = GetDiscordUserFromId(user.Id, guildId);
+                    userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
                 }
 
                 if (userDataBase == null)
@@ -100,10 +72,10 @@ namespace DiscordOgerBot.Controller
             try
             {
 
-                var userDataBase = GetDiscordUserFromId(user.Id, guildId);
+                var userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
                 if (userDataBase != null) return userDataBase.TimesBotUsed;
                 CreateUser(user);
-                userDataBase = GetDiscordUserFromId(user.Id, guildId);
+                userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
 
                 return userDataBase.TimesBotUsed;
             }
@@ -120,10 +92,10 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = GetDiscordUserFromId(user.Id, guildId);
+                var userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
                 if (userDataBase != null) return userDataBase.TimeSpendWorking;
                 CreateUser(user);
-                userDataBase = GetDiscordUserFromId(user.Id, guildId);
+                userDataBase = Context.DiscordUsers.Find(user.Id.ToString());
 
                 return userDataBase.TimeSpendWorking;
             }
@@ -140,7 +112,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = GetDiscordUserFromId(userId);
+                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
                 if (userDataBase == null)
                 {
                     return;
@@ -169,7 +141,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = GetDiscordUserFromId(userId);
+                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
                 if (userDataBase == null)
                 {
                     return;
@@ -195,7 +167,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = GetDiscordUserFromId(userId);
+                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
                 if (userDataBase == null)
                 {
                     return;
@@ -221,7 +193,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = GetDiscordUserFromId(userId);
+                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
                 return userDataBase?.QuizWonTotal ?? 0;
             }
             catch (Exception ex)
@@ -235,7 +207,7 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = GetDiscordUserFromId(userId);
+                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
                 return userDataBase?.QuizPointsTotal ?? 0;
             }
             catch (Exception ex)
@@ -250,7 +222,7 @@ namespace DiscordOgerBot.Controller
             try
             {
 
-                var userDataBase = GetDiscordUserFromId(userId);
+                var userDataBase = Context.DiscordUsers.Find(userId.ToString());
                 if (userDataBase == null)
                 {
                     return;
