@@ -222,22 +222,23 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task MessageReceived(SocketMessage arg)
+        private static async Task MessageReceived(SocketMessage origMessage)
         {
             try
             {
-                if (!(arg is SocketUserMessage message)) return;
-                if (message.Author.IsBot) return;
+                if (origMessage.Author.IsBot) return;
+                DataBase.CreateUser(origMessage.Author);
+                TimeManagement.Measure(origMessage.Author.Id);
 
+                if (!(origMessage is SocketUserMessage message)) return;
                 var context = new SocketCommandContext(Client, message);
+
                 var argPos = 0;
 
-                DataBase.CreateUser(message.Author, context.Guild.Id);
 
                 if (context.Guild.Id == 758745761566818314)
                 {
                     await CheckUser(message.Author as SocketGuildUser);
-                    TimeManagement.Measure(message.Author.Id);
                 }
 
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
@@ -293,8 +294,6 @@ namespace DiscordOgerBot.Controller
 
                 var context = new SocketCommandContext(Client, message);
                 var argPos = 0;
-
-                DataBase.CreateUser(message.Author, context.Guild.Id);
 
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
                 {

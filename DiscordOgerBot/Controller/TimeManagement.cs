@@ -17,6 +17,8 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
+                Log.Information($"Measure for User: {userId}");
+
                 if (ActiveUsers.TryGetValue(userId, out var activeUserStruct))
                 {
                     activeUserStruct.CancellationTokenSource.Cancel();
@@ -70,6 +72,7 @@ namespace DiscordOgerBot.Controller
                     var user = ActiveUsers[userId];
                     user.ActiveTime += stopWatch.Elapsed;
 
+                    Log.Information($"Measured time for User{userId}, Time: {user.ActiveTime}");
                     Task.Factory.StartNew(() => DataBase.IncreaseTimeSpendWorking(userId, user.ActiveTime), cancellationToken);
 
                     ActiveUsers.Remove(userId);

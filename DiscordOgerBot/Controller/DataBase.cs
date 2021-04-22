@@ -66,7 +66,7 @@ namespace DiscordOgerBot.Controller
                 var userDataBase = GetDiscordUserFromId(user.Id, guildId);
                 if (userDataBase == null)
                 {
-                    CreateUser(user, guildId);
+                    CreateUser(user);
                     userDataBase = GetDiscordUserFromId(user.Id, guildId);
                 }
 
@@ -102,7 +102,7 @@ namespace DiscordOgerBot.Controller
 
                 var userDataBase = GetDiscordUserFromId(user.Id, guildId);
                 if (userDataBase != null) return userDataBase.TimesBotUsed;
-                CreateUser(user, guildId);
+                CreateUser(user);
                 userDataBase = GetDiscordUserFromId(user.Id, guildId);
 
                 return userDataBase.TimesBotUsed;
@@ -122,7 +122,7 @@ namespace DiscordOgerBot.Controller
             {
                 var userDataBase = GetDiscordUserFromId(user.Id, guildId);
                 if (userDataBase != null) return userDataBase.TimeSpendWorking;
-                CreateUser(user, guildId);
+                CreateUser(user);
                 userDataBase = GetDiscordUserFromId(user.Id, guildId);
 
                 return userDataBase.TimeSpendWorking;
@@ -273,7 +273,7 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static void CreateUser(IUser user, ulong guildId)
+        public static void CreateUser(IUser user)
         {
 
             try
@@ -286,7 +286,7 @@ namespace DiscordOgerBot.Controller
                     {
                         Id = user.Id.ToString(),
                         Name = user.Username,
-                        ActiveGuildsId = new List<string> { guildId.ToString() },
+                        ActiveGuildsId = new List<string>(),
                         TimesBotUsed = 0,
                         TimeSpendWorking = new TimeSpan()
                     });
@@ -295,16 +295,14 @@ namespace DiscordOgerBot.Controller
                     Context.SaveChanges();
 
                     Log.Information($"Created new User! {Environment.NewLine}" +
-                                    $"User: {user.Username} {Environment.NewLine}" +
-                                    $"Guild: {guildId}");
+                                    $"User: {user.Username} {Environment.NewLine}");
                 }
 
             }
             catch (Exception ex)
             {
                 Log.Error(ex, $"Could not create User in DB {Environment.NewLine}" +
-                                 $"User: {user.Username} {Environment.NewLine}" +
-                                 $"Guild: {guildId}");
+                                 $"User: {user.Username} {Environment.NewLine}");
             }
         }
 
