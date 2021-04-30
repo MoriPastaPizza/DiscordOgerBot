@@ -22,8 +22,8 @@ namespace DiscordOgerBot.Controller
         internal static List<string> FooterDictionary { get; private set; }
         internal static DiscordSocketClient Client { get; private set; }
 
-        private static DateTime FrauchenTime { get; set; } = new(2008, 4, 1, 17, 00, 0);
-        private static bool FrauchenFlag { get; set; } = false;
+        private static DateTime FrauchenTime { get; } = new(2008, 4, 1, 17, 00, 0);
+        private static bool FrauchenFlag { get; set; }
 
         private static List<string> _oragleList;
         private static IServiceProvider _services;
@@ -107,7 +107,7 @@ namespace DiscordOgerBot.Controller
                         await Translate(message, channel, reaction);
                         break;
                     case "OgerBotOragle":
-                        await OgerOragle(message, channel);
+                        await OgerOragle(message);
                         break;
                     default:
                         return;
@@ -170,7 +170,7 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task OgerOragle(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel)
+        private static async Task OgerOragle(Cacheable<IUserMessage, ulong> message)
         {
             try
             {
@@ -373,7 +373,7 @@ namespace DiscordOgerBot.Controller
                     var pattern = Regex.Escape(wordToTranslate);
 
                     newMessage = Regex.Replace(newMessage, pattern,
-                        m => possibleTranslations[rand.Next(length)], RegexOptions.IgnoreCase);
+                        _ => possibleTranslations[rand.Next(length)], RegexOptions.IgnoreCase);
                 }
             }
             catch (Exception ex)
