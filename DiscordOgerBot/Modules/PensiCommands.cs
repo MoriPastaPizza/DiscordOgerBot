@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DiscordOgerBot.Modules
@@ -17,7 +15,12 @@ namespace DiscordOgerBot.Modules
         [Alias("penis","speer")]
         public async Task SendPensi()
         {
-            await Context.Channel.SendFileAsync(_pensiPath + "/1jJ77goh.jpg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            var pensiArray = Directory.GetFiles(_pensiPath);
+
+            var rand = new Random();
+            var index = rand.Next(pensiArray.Length);
+
+            await Context.Channel.SendFileAsync(_pensiPath + pensiArray[index], embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: true);
         }
     }
 }
