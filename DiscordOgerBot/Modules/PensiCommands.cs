@@ -23,7 +23,7 @@ namespace DiscordOgerBot.Modules
             var pensi = Path.GetFileName(pensiArray[index]);
             if(pensi == null) throw new Exception("Pensi Bild nicht gefunden");
 
-            await Context.Channel.SendFileAsync(_pensiPath + pensi, embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: true);
+            await Context.Channel.SendFileAsync($"{_pensiPath}/{pensi}", embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: true);
         }
     }
 }
