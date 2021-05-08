@@ -20,7 +20,10 @@ namespace DiscordOgerBot.Modules
             var rand = new Random();
             var index = rand.Next(pensiArray.Length);
 
-            await Context.Channel.SendFileAsync(_pensiPath + pensiArray[index], embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: true);
+            var pensi = Path.GetFileName(pensiArray[index]);
+            if(pensi == null) throw new Exception("Pensi Bild nicht gefunden");
+
+            await Context.Channel.SendFileAsync(_pensiPath + pensi, embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: true);
         }
     }
 }
