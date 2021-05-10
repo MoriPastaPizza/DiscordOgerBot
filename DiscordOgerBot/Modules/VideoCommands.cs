@@ -10,11 +10,62 @@ namespace DiscordOgerBot.Modules
         private readonly string _videoPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
+        [Command("hure")]
+        public async Task SendHure()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/Hure.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("kiste")]
+        [Alias("sarkasmus","ichliebedich","kommvorbei","indiekiste")]
+        public async Task SendKiste()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/in_die_Kiste_springen.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("faust")]
+        [Alias("stahl")]
+        public async Task SendFaust()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/faust.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("sagensoll")]
+        [Alias("sagen","weißnichtmehr")]
+        public async Task SendSagesoll()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/sagensoll.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("hinten")]
+        [Alias("dahinten", "dahintne","hintne")]
+        public async Task SendHinten()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/hinten.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+
+        [Command("bodybuilder")]
+        [Alias("fiech", "viech", "mukkies","muggies","folldesviech","folldesfiech")]
+        public async Task SendBodybuilder()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/Follderbaddibilda.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("fakt")]
         [Alias("faktis","faktist","faggd","fagd","fagt","faggt","faggdis","faggdist")]
         public async Task SendFakt()
         {
             await Context.Channel.SendFileAsync(_videoPath + "/fakt_ist.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("schlaganfall")]
+        [Summary("ein zufälliges Schlaganfall Video")]
+        public async Task SendSchlaganfall()
+        {
+            var number = new Random().Next(1, 3);
+
+            await Context.Channel.SendFileAsync(_videoPath + $"/schlaganfall{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("anime")]
