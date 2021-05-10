@@ -10,10 +10,26 @@ namespace DiscordOgerBot.Modules
         private readonly string _videoPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
+        [Command("kissenwurf")]
+        [Summary("ein zufälliges Kissenwurf Video")]
+        public async Task SendKissenwurf()
+        {
+            var number = new Random().Next(1, 3);
+
+            await Context.Channel.SendFileAsync(_videoPath + $"/kissenwurf{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("hure")]
         public async Task SendHure()
         {
             await Context.Channel.SendFileAsync(_videoPath + "/Hure.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("look")]
+        [Alias("neuerlook","schminke")]
+        public async Task SendLook()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/Look.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("kiste")]
@@ -83,6 +99,7 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("dinge")]
+        [Alias("ding")]
         public async Task SendDinge()
         {
             await Context.Channel.SendFileAsync(_videoPath + "/Dinge.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
