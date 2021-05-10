@@ -263,7 +263,7 @@ namespace DiscordOgerBot.Modules
         [Summary("ein zufälliges Neger Video")]
         public async Task SendNeger()
         {
-            var number = new Random().Next(1, 2);
+            var number = new Random().Next(1, 3);
 
             await Context.Channel.SendFileAsync(_videoPath + $"/neger{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
