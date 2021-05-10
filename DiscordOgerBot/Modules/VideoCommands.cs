@@ -21,9 +21,21 @@ namespace DiscordOgerBot.Modules
         [Alias("seakyle")]
         public async Task SendAnime()
         {
-            await Context.Channel.SendFileAsync(_videoPath + "/VID_20210420_160909_996.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            await Context.Channel.SendFileAsync(_videoPath + "/anime.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
+        [Command("knie")]
+        [Alias("fickteuch")]
+        public async Task SendKnie()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/Knie.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("dinge")]
+        public async Task SendDinge()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/Dinge.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
 
         [Command("kindergarten")]
         public async Task SendKinderGarten()
