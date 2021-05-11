@@ -10,6 +10,54 @@ namespace DiscordOgerBot.Modules
         private readonly string _videoPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
+        [Command("furz")]
+        public async Task SendFurz()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/furz.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("arbeitslord")]
+        [Alias("erarbeitet")]
+        public async Task SendArbeitslord()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/arbeitslord.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("lisa")]
+        [Alias("geile muschi","geile Lisa")]
+        public async Task SendLisa()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/Lisa.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: true);
+        }
+
+        [Command("jagen")]
+        [Alias("finden")]
+        public async Task SendJagen()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/jagen.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("panflöte")]
+        [Alias("flötenlord")]
+        public async Task SendPanflöte()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/panflöte.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("liepe")]
+        [Alias("liebe")]
+        public async Task SendLiepe()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/liepe.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("schönen abend")]
+        [Alias("meddl off")]
+        public async Task SendSchönenAbend()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/liepe.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("kissenwurf")]
         [Summary("ein zufälliges Kissenwurf Video")]
         public async Task SendKissenwurf()
@@ -17,6 +65,13 @@ namespace DiscordOgerBot.Modules
             var number = new Random().Next(1, 3);
 
             await Context.Channel.SendFileAsync(_videoPath + $"/kissenwurf{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("polizei")]
+        [Alias("bolizei")]
+        public async Task SendPolizei()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/polizei.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("hure")]
@@ -60,7 +115,6 @@ namespace DiscordOgerBot.Modules
             await Context.Channel.SendFileAsync(_videoPath + "/hinten.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
-
         [Command("bodybuilder")]
         [Alias("fiech", "viech", "mukkies","muggies","folldesviech","folldesfiech")]
         public async Task SendBodybuilder()
@@ -79,7 +133,7 @@ namespace DiscordOgerBot.Modules
         [Summary("ein zufälliges Schlaganfall Video")]
         public async Task SendSchlaganfall()
         {
-            var number = new Random().Next(1, 3);
+            var number = new Random().Next(1, 4);
 
             await Context.Channel.SendFileAsync(_videoPath + $"/schlaganfall{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
@@ -169,10 +223,12 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("haggebudne")]
-        [Alias("hagebudne")]
+        [Alias("hagebudne","hagebuddne")]
         public async Task SendHagebudne()
         {
-            await Context.Channel.SendFileAsync(_videoPath + "/haggebudne.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            var number = new Random().Next(1, 5);
+
+            await Context.Channel.SendFileAsync(_videoPath + $"/haggebudne{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("sohn")]
@@ -195,10 +251,10 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("wiggst")]
-        [Alias("wichst", "wixt", "wixxt", "wigst")]
+        [Alias("wichst", "wixt", "wixxt", "wigst","wiggsne")]
         public async Task SendWiggstIhrNet()
         {
-            var number = new Random().Next(1, 3);
+            var number = new Random().Next(1, 5);
 
             await Context.Channel.SendFileAsync(_videoPath + $"/wiggsne{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
