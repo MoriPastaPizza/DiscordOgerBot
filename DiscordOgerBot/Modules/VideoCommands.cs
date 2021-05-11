@@ -55,7 +55,7 @@ namespace DiscordOgerBot.Modules
         [Alias("meddl off")]
         public async Task SendSchönenAbend()
         {
-            await Context.Channel.SendFileAsync(_videoPath + "/liepe.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            await Context.Channel.SendFileAsync(_videoPath + "/schönen_abend.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("kissenwurf")]
