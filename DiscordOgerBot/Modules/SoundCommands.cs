@@ -356,8 +356,8 @@ namespace DiscordOgerBot.Modules
             await Context.Channel.SendFileAsync(_soundPath + "/aggst.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
-        [Command("schlaganfall")]
-        public async Task SendSchlaganfall()
+        [Command("schlaganfallsound")]
+        public async Task SendSchlaganfallsound()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/schlaganfall.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
@@ -384,7 +384,7 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("alarm")]
-        [Alias("wiwi")]
+        [Alias("wiwi","wiwiwi")]
         public async Task SendWiwiw()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/wiwiwiwiiw.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
