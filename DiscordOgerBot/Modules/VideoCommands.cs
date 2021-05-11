@@ -224,6 +224,7 @@ namespace DiscordOgerBot.Modules
 
         [Command("haggebudne")]
         [Alias("hagebudne","hagebuddne")]
+        [Summary("ein zufälliges Hagebudne Video")]
         public async Task SendHagebudne()
         {
             var number = new Random().Next(1, 5);
