@@ -21,8 +21,9 @@ namespace DiscordOgerBot.Modules
         [Alias("nodiert","nodierd")]
         public async Task SendNotiert()
         {
-            var rand = new Random();
-            await Context.Channel.SendFileAsync(_imagePath + $"/notiert{rand.Next(1, 3)}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            var number = new Random().Next(1, 3);
+
+            await Context.Channel.SendFileAsync(_imagePath + $"/notiert{number}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("nice")]
