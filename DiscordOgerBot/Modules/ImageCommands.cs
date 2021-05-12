@@ -18,7 +18,7 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("notiert")]
-        [Alias("´nodiert","nodierd")]
+        [Alias("nodiert","nodierd")]
         public async Task SendNotiert()
         {
             var rand = new Random();
