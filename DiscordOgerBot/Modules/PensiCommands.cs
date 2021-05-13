@@ -31,7 +31,7 @@ namespace DiscordOgerBot.Modules
             {
                 var rand = new Random();
                 var index = rand.Next(pensiArray.Length);
-                pensiString = Path.GetFileName(pensiArray[index]);
+                pensiString = Path.GetFileName(pensiArray[index - 1]);
             }
 
             if (pensiString == null)
