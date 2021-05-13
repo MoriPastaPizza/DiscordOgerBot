@@ -368,13 +368,12 @@ namespace DiscordOgerBot.Modules
             await Context.Channel.SendFileAsync(_soundPath + "/1337.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
-        [Command("derjeniche")]
-        [Alias("derjenige")]
-        public async Task SendDerjenice()
+        [Command("derjenichesound")]
+        [Alias("derjenigesound")]
+        public async Task SendDerjenicheSound()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/derjeniche.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
-
 
         [Command("freiflug")]
         [Alias("freiflüge")]
