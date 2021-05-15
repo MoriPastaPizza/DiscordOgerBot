@@ -12,11 +12,18 @@ namespace DiscordOgerBot.Modules
 
         [Command("kinderdisco")]
         [Summary("ein zufälliges Kinderdisco Video")]
-        public async Task SendKinderdisco()
+        public async Task SendKinderdisco([Remainder] string args = null)
         {
-            var number = new Random().Next(1, 3);
+            if(args == null)
+            {
+                var number = new Random().Next(1, 3);
 
-            await Context.Channel.SendFileAsync(_videoPath + $"/kinderdisco{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+                await Context.Channel.SendFileAsync(_videoPath + $"/kinderdisco{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_videoPath + $"/kinderdisco{args}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
         }
 
         [Command("sound")]
@@ -286,11 +293,18 @@ namespace DiscordOgerBot.Modules
         [Command("haggebudne")]
         [Alias("hagebudne","hagebuddne")]
         [Summary("ein zufälliges Hagebudne Video")]
-        public async Task SendHagebudne()
+        public async Task SendHagebudne([Remainder] string args = null)
         {
-            var number = new Random().Next(1, 5);
+            if (args == null)
+            {
+                var number = new Random().Next(1, 5);
 
-            await Context.Channel.SendFileAsync(_videoPath + $"/haggebudne{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+                await Context.Channel.SendFileAsync(_videoPath + $"/haggebudne{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_videoPath + $"/haggebudne{args}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
         }
 
         [Command("sohn")]
