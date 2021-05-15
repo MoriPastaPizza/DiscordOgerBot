@@ -25,6 +25,7 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("entglasen")]
+        [Alias("entglasen")]
         public async Task SendEntglasung()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/entglasen.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
