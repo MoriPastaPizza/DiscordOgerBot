@@ -18,14 +18,14 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("headshot")]
-        [Alias("mitrevolver")]
+        [Alias("mitrevolver", "revolver")]
         public async Task SendHeadshot()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/Headshot_mit_Revolver.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("sieofsiefs")]
-        [Alias("siefs", "sieof", "ßie","ßieofßiefs","ßiefs","sie")]
+        [Alias("siefs", "sieof", "ßie", "ßieofßiefs", "ßiefs", "sie", "sea", "seaof", "sea of")]
         public async Task SendSieofsiefs()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/sieofsiefs.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
