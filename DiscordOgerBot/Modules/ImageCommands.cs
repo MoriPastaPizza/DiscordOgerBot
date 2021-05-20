@@ -19,27 +19,50 @@ namespace DiscordOgerBot.Modules
 
         [Command("notiert")]
         [Alias("nodiert","nodierd")]
-        public async Task SendNotiert()
+        public async Task SendNotiert([Remainder] string args = null)
         {
-            var number = new Random().Next(1, 3);
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
 
-            await Context.Channel.SendFileAsync(_imagePath + $"/notiert{number}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+                await Context.Channel.SendFileAsync(_imagePath + $"/notiert{number}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_imagePath + $"/notiert{args}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
         }
 
         [Command("nice")]
         [Alias("nais")]
-        public async Task SendNice()
+        public async Task SendNice([Remainder] string args = null)
         {
-            var rand = new Random();
-            await Context.Channel.SendFileAsync(_imagePath + $"/nais{rand.Next(1,4)}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            if (args == null)
+            {
+                var number = new Random().Next(1, 4);
+
+                await Context.Channel.SendFileAsync(_imagePath + $"/nais{number}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_imagePath + $"/nais{args}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
         }
 
         [Command("sport")]
         [Alias("sportlord")]
-        public async Task SendSportLord()
+        public async Task SendSportLord([Remainder] string args = null)
         {
-            var rand = new Random();
-            await Context.Channel.SendFileAsync(_imagePath + $"/sportLord{rand.Next(1, 6)}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            if (args == null)
+            {
+                var number = new Random().Next(1, 6);
+
+                await Context.Channel.SendFileAsync(_imagePath + $"/sportLord{number}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_imagePath + $"/sportLord{args}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
         }
 
         [Command("buddern")]

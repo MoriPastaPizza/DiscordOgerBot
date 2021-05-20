@@ -10,6 +10,19 @@ namespace DiscordOgerBot.Modules
         private readonly string _videoPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
+        [Command("eisviech")]
+        public async Task SendEisviech()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/Eisviech.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+        
+        [Command("ach du scheiße")]
+        [Alias("scheiße","achduscheiße")]
+        public async Task SendScheiße()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/Ach_du_Scheiße.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("kinderdisco")]
         [Summary("ein zufälliges Kinderdisco Video")]
         public async Task SendKinderdisco([Remainder] string args = null)
