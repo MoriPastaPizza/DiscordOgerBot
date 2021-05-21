@@ -10,11 +10,21 @@ namespace DiscordOgerBot.Modules
         private readonly string _soundPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Sounds"));
 
-        [Command("revolver2")]
-        [Alias("schuss")]
-        public async Task SendRevolver()
+        [Command("revolver")]
+        [Alias("schuss", "mitrevolver", "headshot")]
+        public async Task SendRevolver([Remainder] string args = null)
         {
-            await Context.Channel.SendFileAsync(_soundPath + "/revolver.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+                await Context.Channel.SendFileAsync(_soundPath + $"/revolver{number}.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_soundPath + $"/revolver{args}.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+
         }
 
         [Command("PipiKaka")]
@@ -36,13 +46,6 @@ namespace DiscordOgerBot.Modules
         public async Task SendBaddne()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/baddne.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
-        }
-
-        [Command("headshot")]
-        [Alias("mitrevolver", "revolver")]
-        public async Task SendHeadshot()
-        {
-            await Context.Channel.SendFileAsync(_soundPath + "/Headshot_mit_Revolver.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("sieofsiefs")]

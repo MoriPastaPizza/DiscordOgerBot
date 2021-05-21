@@ -10,6 +10,14 @@ namespace DiscordOgerBot.Modules
         private readonly string _videoPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
+
+        [Command("lesen")]
+        [Alias("lesne")]
+        public async Task SendLesne()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/lesne.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("eisviech")]
         public async Task SendEisviech()
         {
@@ -417,9 +425,17 @@ namespace DiscordOgerBot.Modules
 
         [Command("nein")]
         [Alias("nö")]
-        public async Task SendNein()
+        public async Task SendNein([Remainder] string args = null)
         {
-            await Context.Channel.SendFileAsync(_videoPath + "/nein.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+                await Context.Channel.SendFileAsync(_videoPath + $"/nein{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_videoPath + $"/nein{args}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
         }
 
         [Command("neudral")]
