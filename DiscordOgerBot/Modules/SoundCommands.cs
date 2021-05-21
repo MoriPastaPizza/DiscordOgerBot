@@ -10,8 +10,28 @@ namespace DiscordOgerBot.Modules
         private readonly string _soundPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Sounds"));
 
+        [Command("revolver2")]
+        public async Task SendRevolver()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/revolver.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("PipiKaka")]
+        [Alias("ppkk", "AA", "PipiKakaAA", "Kaka")]
+        public async Task SendKaka()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/ppkkaa.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("fortnite")]
+        [Alias("tanz")]
+        public async Task SendFortnite()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/fortnite.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("baddne")]
-        [Alias("badden","baddn")]
+        [Alias("badden", "baddn")]
         public async Task SendBaddne()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/baddne.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
