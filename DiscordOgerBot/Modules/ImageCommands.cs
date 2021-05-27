@@ -10,6 +10,13 @@ namespace DiscordOgerBot.Modules
         private readonly string _imagePath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Images"));
 
+        [Command("verbeugung")]
+        [Alias("verbeugen")]
+        public async Task SendVerbeugung()
+        {
+            await Context.Channel.SendFileAsync(_imagePath + "/verbeugung.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("kind")]
         [Alias("kindinauto","kindweint","zeigteier")]
         public async Task SendKind()
