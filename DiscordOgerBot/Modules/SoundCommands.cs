@@ -10,22 +10,46 @@ namespace DiscordOgerBot.Modules
         private readonly string _soundPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Sounds"));
 
+        [Command("revolver")]
+        [Alias("schuss", "mitrevolver", "headshot")]
+        public async Task SendRevolver([Remainder] string args = null)
+        {
+
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+                await Context.Channel.SendFileAsync(_soundPath + $"/revolver{number}.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_soundPath + $"/revolver{args}.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+
+        }
+
+        [Command("PipiKaka")]
+        [Alias("ppkk", "AA", "PipiKakaAA", "Kaka")]
+        public async Task SendKaka()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/ppkkaa.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("fortnite")]
+        [Alias("tanz", "grab")]
+        public async Task SendFortnite()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/fortnitetanz.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("baddne")]
-        [Alias("badden","baddn")]
+        [Alias("badden", "baddn")]
         public async Task SendBaddne()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/baddne.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
-        [Command("headshot")]
-        [Alias("mitrevolver")]
-        public async Task SendHeadshot()
-        {
-            await Context.Channel.SendFileAsync(_soundPath + "/Headshot_mit_Revolver.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
-        }
-
         [Command("sieofsiefs")]
-        [Alias("siefs", "sieof", "ßie","ßieofßiefs","ßiefs","sie")]
+        [Alias("siefs", "sieof", "ßie", "ßieofßiefs", "ßiefs", "sie", "sea", "seaof", "sea of")]
         public async Task SendSieofsiefs()
         {
             await Context.Channel.SendFileAsync(_soundPath + "/sieofsiefs.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
