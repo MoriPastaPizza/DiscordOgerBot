@@ -25,6 +25,9 @@ namespace DiscordOgerBot.Controller
         private static DateTime FrauchenTime { get; } = new(2008, 4, 1, 17, 00, 0);
         private static bool FrauchenFlag { get; set; }
 
+        private static DateTime Time1510 { get; } = new(2008, 4, 1, 13, 10, 0);
+        private static bool TimeFlag1510 { get; set; }
+
         private static List<string> _oragleList;
         private static IServiceProvider _services;
         private static Dictionary<ulong, ulong> _repliedMessagesId;
@@ -502,7 +505,8 @@ namespace DiscordOgerBot.Controller
             {
 
                 await CheckForFrauchenTime();
-                _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(5));
+                await CheckForTime1510();
+                _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(1));
                 await CheckUsers();
             }
         }
@@ -523,6 +527,25 @@ namespace DiscordOgerBot.Controller
             catch (Exception ex)
             {
                 Log.Error(ex, nameof(CheckForFrauchenTime));
+            }
+        }
+
+        private static async Task CheckForTime1510()
+        {
+            try
+            {
+                if (DateTime.Now.Hour == Time1510.Hour && DateTime.Now.Minute == Time1510.Minute && !TimeFlag1510)
+                {
+                    TimeFlag1510 = true;
+                    var videoPath = Path.GetFullPath(
+                        Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
+                    var channel = (ISocketMessageChannel)Client.GetChannel(759039858319687700);
+                    await channel.SendFileAsync(videoPath + "/1510.mp4", embed: GetStandardSoundEmbed(), text: "15:10 Uhr <:bier:764052806160089138>");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(CheckForTime1510));
             }
         }
 
