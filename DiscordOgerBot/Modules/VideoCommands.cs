@@ -10,6 +10,29 @@ namespace DiscordOgerBot.Modules
         private readonly string _videoPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
+        [Command("klo")]
+        [Alias("toilette", "muscheln")]
+        [Summary("ein zufälliges Klo Video")]
+        public async Task SendKlo([Remainder] string args = null)
+        {
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+
+                await Context.Channel.SendFileAsync(_videoPath + $"/klo{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_videoPath + $"/klo{args}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+        }
+
+        [Command("welt")]
+        [Alias("weld")]
+        public async Task SendWelt()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/welt.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
 
         [Command("bär")]
         [Alias("bärenangriff", "angriff")]
@@ -186,9 +209,18 @@ namespace DiscordOgerBot.Modules
 
         [Command("polizei")]
         [Alias("bolizei")]
-        public async Task SendPolizei()
+        public async Task SendPolizei([Remainder] string args = null)
         {
-            await Context.Channel.SendFileAsync(_videoPath + "/polizei.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+
+                await Context.Channel.SendFileAsync(_videoPath + $"/polizei{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_videoPath + $"/polizei{args}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
         }
 
         [Command("hure")]
@@ -248,11 +280,18 @@ namespace DiscordOgerBot.Modules
 
         [Command("schlaganfall")]
         [Summary("ein zufälliges Schlaganfall Video")]
-        public async Task SendSchlaganfall()
+        public async Task SendSchlaganfall([Remainder] string args = null)
         {
-            var number = new Random().Next(1, 4);
+            if (args == null)
+            {
+                var number = new Random().Next(1, 5);
 
-            await Context.Channel.SendFileAsync(_videoPath + $"/schlaganfall{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+                await Context.Channel.SendFileAsync(_videoPath + $"/schlaganfall{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_videoPath + $"/schlaganfall{args}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
         }
 
         [Command("anime")]
