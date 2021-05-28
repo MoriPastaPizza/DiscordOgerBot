@@ -10,6 +10,14 @@ namespace DiscordOgerBot.Modules
         private readonly string _videoPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
+
+        [Command("land")]
+        [Alias("land gewinnen")]
+        public async Task SendLand()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/land.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("klo")]
         [Alias("toilette", "muscheln")]
         [Summary("ein zufälliges Klo Video")]
