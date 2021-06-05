@@ -8,8 +8,21 @@ namespace DiscordOgerBot.Modules
     public class VideoCommands : ModuleBase<SocketCommandContext>
     {
         private readonly string _videoPath = Path.GetFullPath(
-            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
+            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos")); 
 
+        [Command("badummtss")]
+        [Alias("badumm tss","flachwitz")]
+        public async Task SendBadummtss()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/badumm_tss.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("ääh")]
+        [Alias("ähm")]
+        public async Task SendÄäh()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/ääh.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
 
         [Command("land")]
         [Alias("land gewinnen")]
@@ -407,7 +420,7 @@ namespace DiscordOgerBot.Modules
         {
             if (args == null)
             {
-                var number = new Random().Next(1, 5);
+                var number = new Random().Next(1, 6);
 
                 await Context.Channel.SendFileAsync(_videoPath + $"/haggebudne{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
             }
