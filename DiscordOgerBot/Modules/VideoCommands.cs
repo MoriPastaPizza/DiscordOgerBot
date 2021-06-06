@@ -8,7 +8,15 @@ namespace DiscordOgerBot.Modules
     public class VideoCommands : ModuleBase<SocketCommandContext>
     {
         private readonly string _videoPath = Path.GetFullPath(
-            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos")); 
+            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
+
+
+        [Command("winkler")]
+        [Alias("wingler", "winggl")]
+        public async Task SendWinkler()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/winkler.webm", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
 
         [Command("badummtss")]
         [Alias("badumm tss","flachwitz")]
