@@ -15,7 +15,7 @@ namespace DiscordOgerBot.Modules
         [Alias("wingler", "winggl")]
         public async Task SendWinkler()
         {
-            await Context.Channel.SendFileAsync(_videoPath + "/winkler.webm", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            await Context.Channel.SendFileAsync(_videoPath + "/winkler.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("badummtss")]
