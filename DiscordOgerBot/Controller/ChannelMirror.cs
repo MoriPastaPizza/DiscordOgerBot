@@ -23,16 +23,17 @@ namespace DiscordOgerBot.Controller
                 var mirrorChannel = (SocketTextChannel)OgerBot.Client.GetChannel(856581010039767050);
                 var messageContent = origMessage.Content ?? string.Empty;
 
+                if (messageContent != string.Empty)
+                {
+                    await mirrorChannel.SendMessageAsync(messageContent);
+                }
+
                 if (origMessage.Attachments.Count > 0 || origMessage.Attachments != null)
                 {
                     foreach (var attachment in origMessage.Attachments)
                     {
-                        await mirrorChannel.SendFileAsync(attachment.Url.Replace("/app/heroku_output/", string.Empty), messageContent);
+                        await mirrorChannel.SendMessageAsync(attachment.Url);
                     }
-                }
-                else
-                {
-                    await mirrorChannel.SendMessageAsync(messageContent);
                 }
 
             }
