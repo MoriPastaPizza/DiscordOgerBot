@@ -27,7 +27,7 @@ namespace DiscordOgerBot.Controller
                 {
                     foreach (var attachment in origMessage.Attachments)
                     {
-                        await mirrorChannel.SendFileAsync(attachment.Url, messageContent);
+                        await mirrorChannel.SendFileAsync(attachment.Url.Replace("/app/heroku_output/", string.Empty), messageContent);
                     }
                 }
                 else
