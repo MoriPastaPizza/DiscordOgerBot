@@ -15,7 +15,6 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                if (origMessage.Author.IsBot) return;
                 if (!(origMessage is SocketUserMessage message)) return;
                 var context = new SocketCommandContext(OgerBot.Client, message);
                 if (context.Channel.Id != 763782279548895233) return;
