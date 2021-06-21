@@ -22,6 +22,8 @@ namespace DiscordOgerBot.Controller
                 var mirrorChannel = (SocketTextChannel)OgerBot.Client.GetChannel(856581010039767050);
                 var messageContent = origMessage.Content ?? string.Empty;
 
+                await mirrorChannel.SendMessageAsync($"{message.Author.Username}:");
+
                 if (messageContent != string.Empty)
                 {
                     await mirrorChannel.SendMessageAsync(messageContent);
