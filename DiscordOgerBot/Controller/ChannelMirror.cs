@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -11,19 +9,31 @@ namespace DiscordOgerBot.Controller
 {
     internal static class ChannelMirror
     {
+
+        private static readonly List<ulong> ChannelsToMirror = new()
+        {
+            782676609349189642,
+            782673372961964063,
+            782683410803458078,
+            783116240914350102,
+            784787966827429899,
+            782673501915578408,
+            782683111237353482
+        };
+
         internal static async Task MessageReceived(SocketMessage origMessage)
         {
             try
             {
                 if (!(origMessage is SocketUserMessage message)) return;
                 var context = new SocketCommandContext(OgerBot.Client, message);
-                if (context.Channel.Id != 782676609349189642) return;
+                if (!ChannelsToMirror.Contains(context.Channel.Id)) return;
 
-                var mirrorChannel = (SocketTextChannel)OgerBot.Client.GetChannel(856581010039767050);
+                var mirrorChannel = (SocketTextChannel)OgerBot.Client.GetChannel(857164844478365697);
                 var messageContent = origMessage.Content ?? string.Empty;
 
                 await mirrorChannel.SendMessageAsync("⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯");
-                await mirrorChannel.SendMessageAsync($"{message.Author.Username}:");
+                await mirrorChannel.SendMessageAsync($"{message.Author.Username} in {message.Channel.Name}:");
 
                 if (messageContent != string.Empty)
                 {
