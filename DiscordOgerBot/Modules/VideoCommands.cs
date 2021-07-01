@@ -11,6 +11,12 @@ namespace DiscordOgerBot.Modules
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
 
+        [Command("steffi")]
+        public async Task SendSteffi()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/steffi.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("dick")]
         [Alias("dicke eier")]
         public async Task SendDick()
