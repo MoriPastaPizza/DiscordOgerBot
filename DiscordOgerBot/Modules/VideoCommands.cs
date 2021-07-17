@@ -10,6 +10,25 @@ namespace DiscordOgerBot.Modules
         private readonly string _videoPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
+        [Command("hippielord")]
+        [Alias("mensch")]
+        public async Task SendHippielord()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/Hippielord.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("stuhl")]
+        [Alias("schduhl")]
+        public async Task SendStuhl()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/stuhl.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("paniert")]
+        public async Task SendPaniert()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/paniert.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
 
         [Command("steffi")]
         public async Task SendSteffi()
@@ -262,7 +281,7 @@ namespace DiscordOgerBot.Modules
         {
             if (args == null)
             {
-                var number = new Random().Next(1, 3);
+                var number = new Random().Next(1, 4);
 
                 await Context.Channel.SendFileAsync(_videoPath + $"/polizei{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
             }
@@ -333,7 +352,7 @@ namespace DiscordOgerBot.Modules
         {
             if (args == null)
             {
-                var number = new Random().Next(1, 5);
+                var number = new Random().Next(1, 6);
 
                 await Context.Channel.SendFileAsync(_videoPath + $"/schlaganfall{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
             }
@@ -535,9 +554,18 @@ namespace DiscordOgerBot.Modules
 
         [Command("neudral")]
         [Alias("neutral")]
-        public async Task SendNeutral()
+        public async Task SendNeutral([Remainder] string args = null)
         {
-            await Context.Channel.SendFileAsync(_videoPath + "/neudral.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+                await Context.Channel.SendFileAsync(_videoPath + $"/neudral{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_videoPath + $"/neudral{args}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+
         }
 
         [Command("pferdefotze")]
