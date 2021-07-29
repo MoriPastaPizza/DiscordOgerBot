@@ -11,7 +11,6 @@ namespace DiscordOgerBot.Modules
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
         [Command("helfen")]
-        [Alias("kopf ab")]
         public async Task SendHelfen()
         {
             await Context.Channel.SendFileAsync(_videoPath + "/helfen.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
