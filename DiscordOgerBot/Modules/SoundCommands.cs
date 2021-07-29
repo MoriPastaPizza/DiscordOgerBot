@@ -58,7 +58,7 @@ namespace DiscordOgerBot.Modules
         [Alias("oh", "ohh")]
         public async Task SendOoh()
         {
-            await Context.Channel.SendFileAsync(_soundPath + "/ohh.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            await Context.Channel.SendFileAsync(_soundPath + "/ooh.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("ferlassuns")]
