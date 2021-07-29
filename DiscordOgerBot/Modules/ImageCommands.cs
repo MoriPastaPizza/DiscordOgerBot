@@ -19,9 +19,18 @@ namespace DiscordOgerBot.Modules
 
         [Command("verbeugung")]
         [Alias("verbeugen")]
-        public async Task SendVerbeugung()
+        public async Task SendVerbeugung([Remainder] string args = null)
         {
-            await Context.Channel.SendFileAsync(_imagePath + "/verbeugung.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+
+                await Context.Channel.SendFileAsync(_imagePath + $"/verbeugung{number}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
+            else
+            {
+                await Context.Channel.SendFileAsync(_imagePath + $"/verbeugung{args}.gif", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            }
         }
 
         [Command("kind")]

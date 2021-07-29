@@ -10,6 +10,33 @@ namespace DiscordOgerBot.Modules
         private readonly string _videoPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
+        [Command("helfen")]
+        [Alias("kopf ab")]
+        public async Task SendHelfen()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/helfen.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("kopfab")]
+        [Alias("kopf ab")]
+        public async Task SendKopfAb()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/kopfab.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("traum")]
+        public async Task SendTraum()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/traum.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("mori")]
+        [Alias("lauch")]
+        public async Task SendMori()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/mori.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("hippielord")]
         [Alias("mensch")]
         public async Task SendHippielord()
@@ -352,7 +379,7 @@ namespace DiscordOgerBot.Modules
         {
             if (args == null)
             {
-                var number = new Random().Next(1, 6);
+                var number = new Random().Next(1, 8);
 
                 await Context.Channel.SendFileAsync(_videoPath + $"/schlaganfall{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
             }
@@ -502,7 +529,7 @@ namespace DiscordOgerBot.Modules
         {
             if (args == null)
             {
-                var number = new Random().Next(1, 5);
+                var number = new Random().Next(1, 6);
 
                 await Context.Channel.SendFileAsync(_videoPath + $"/wiggsne{number}.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
             }

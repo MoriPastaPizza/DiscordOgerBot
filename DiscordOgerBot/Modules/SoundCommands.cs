@@ -10,6 +10,70 @@ namespace DiscordOgerBot.Modules
         private readonly string _soundPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Sounds"));
 
+        [Command("nazis")]
+        public async Task SendNazis()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/nazis.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("gadsenfutter")]
+        [Alias("Katzenfutter", "Katzenfudder", "Gadsenfudder")]
+        public async Task SendGadzenfutter()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/gadzenfutter.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("flodderotto")]
+        [Alias("flodderoddo", "flotterotto", "flotter otto", "flodder oddo", "flodder otto")]
+        public async Task SendFlodderOtto()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/flodderotto.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("600 full")]
+        public async Task Send600Full()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/600km_full.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("600")]
+        public async Task Send600()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/600km_cut.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("winkelspasti")]
+        public async Task SendWinkelSpasti()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/winkelspasti.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("durchfall")]
+        public async Task SendDurchfall()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/durchfall.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("ooh")]
+        [Alias("oh", "ohh")]
+        public async Task SendOoh()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/ohh.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("ferlassuns")]
+        [Alias("verlass uns", "ferlass uns")]
+        public async Task SendFerlassuns()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/ferlassuns.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("rechtssystem")]
+        public async Task SendRechtssystem()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/rechtssystem.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("verdammteaxt")]
         [Alias("verdammte axt", "verdammte aggst")]
         public async Task SendVerdammteaxt()
