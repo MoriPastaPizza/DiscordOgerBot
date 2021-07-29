@@ -10,6 +10,12 @@ namespace DiscordOgerBot.Modules
         private readonly string _videoPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
+        [Command("hallo")]
+        public async Task SendHallo()
+        {
+            await Context.Channel.SendFileAsync(_videoPath + "/hallo.webm", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("helfen")]
         public async Task SendHelfen()
         {
