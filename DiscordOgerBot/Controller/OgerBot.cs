@@ -245,6 +245,12 @@ namespace DiscordOgerBot.Controller
                     await CheckUser(message.Author as SocketGuildUser);
                 }
 
+                if (origMessage.Author.Id == 258235138066874369)
+                {
+                    await origMessage.AddReactionAsync(new Emoji("🦤"));
+                    await origMessage.AddReactionAsync(new Emoji("💀"));
+                }
+
                 if (message.HasStringPrefix("og ", ref argPos, StringComparison.OrdinalIgnoreCase))
                 {
                     var result = await CommandService.ExecuteAsync(context, argPos, _services);
