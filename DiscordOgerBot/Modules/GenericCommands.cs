@@ -9,7 +9,7 @@ namespace DiscordOgerBot.Modules
     public class GenericCommands : ModuleBase<SocketCommandContext>
     {
 
-        private readonly Random _rand = new Random();
+        private readonly Random _rand = new();
 
         [Command("help")]
         public async Task SendHelp()

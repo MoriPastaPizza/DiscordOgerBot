@@ -9,7 +9,7 @@ namespace DiscordOgerBot.Controller
 {
     public static class TimeManagement
     {
-        private static readonly Dictionary<ulong, ActiveUserStruct> ActiveUsers = new Dictionary<ulong, ActiveUserStruct>();
+        private static readonly Dictionary<ulong, ActiveUserStruct> ActiveUsers = new();
         private static readonly TimeSpan CoolOfTime = TimeSpan.FromMinutes(1);
 
 

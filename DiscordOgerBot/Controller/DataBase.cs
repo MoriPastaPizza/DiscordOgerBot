@@ -11,7 +11,7 @@ namespace DiscordOgerBot.Controller
 {
     public static class DataBase
     {
-        private static readonly OgerBotDataBaseContext Context = new OgerBotDataBaseContext();
+        private static readonly OgerBotDataBaseContext Context = new();
 
         public static void StartupDataBase()
         {
