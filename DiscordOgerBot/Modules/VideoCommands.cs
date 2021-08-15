@@ -13,7 +13,7 @@ namespace DiscordOgerBot.Modules
         [Command("hallo")]
         public async Task SendHallo()
         {
-            await Context.Channel.SendFileAsync(_videoPath + "/hallo.webm", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            await Context.Channel.SendFileAsync(_videoPath + "/hallo.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("helfen")]
