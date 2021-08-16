@@ -10,6 +10,34 @@ namespace DiscordOgerBot.Modules
         private readonly string _soundPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Sounds"));
 
+        [Command("aufgelegt")]
+        public async Task SendAufgelegt()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/aufgelegt.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+        
+        [Command("wer sonst")]
+        [Alias("winkler wer sonst")]
+        [Summary("*Wer sonst?*")]
+        public async Task SendWerSonst()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/winklerwersonst.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+        
+        [Command("hurensohn")]
+        [Alias("du blöder hurensohn")]
+        public async Task SendHurensohn()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/dubloederhurensohn.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+        
+        [Command("asthma")]
+        [Alias("schnaufen")]
+        public async Task SendSchnaufen()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/asthma.ogg", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+        
         [Command("nazis")]
         public async Task SendNazis()
         {
