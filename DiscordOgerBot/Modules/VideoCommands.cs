@@ -11,10 +11,10 @@ namespace DiscordOgerBot.Modules
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
         [Command("besucher")]
-        [Alias("richtig und wichtig", "richtig & wichtig", "richtig&wichtig")]
+        [Alias("richtig und wichtig", "richtig & wichtig", "richtig&wichtig", "besuche")]
         public async Task SendBesucher()
         {
-            await Context.Channel.SendFileAsync(_videoPath + "/besucher_sind_richtig_und_wichtig.webm", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            await Context.Channel.SendFileAsync(_videoPath + "/besucher_sind_richtig_und_wichtig.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("vogel")]
