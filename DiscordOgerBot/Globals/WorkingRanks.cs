@@ -7,6 +7,7 @@ namespace DiscordOgerBot.Globals
     {
         public static readonly List<WorkingRankProperties> TimeForRanks = new()
         {
+            new WorkingRankProperties{Time = TimeSpan.FromDays(15), Rank = 11, RankId = 880555878258987058, ImageUrl = "https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Images/Drachenzaehmer.PNG" },
             new WorkingRankProperties{Time = TimeSpan.FromDays(8), Rank = 10, RankId = 873708896131375215, ImageUrl = "https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Images/Drachenmeister.PNG" },
             new WorkingRankProperties{Time = TimeSpan.FromDays(5), Rank = 9, RankId = 791994133307850762, ImageUrl = "https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Images/youtube.png"},
             new WorkingRankProperties{Time = TimeSpan.FromDays(2), Rank = 8, RankId = 791993814436806676, ImageUrl = "https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Images/rendern.png"},
