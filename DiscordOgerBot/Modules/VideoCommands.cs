@@ -12,7 +12,7 @@ namespace DiscordOgerBot.Modules
 
         [Command("unbesiegt2")]
         [Alias("unbesigt", "auf ewig", "auf ewich", "drachenlord4ever", "thebest", "the best")]
-        public async Task SendMilchschnitte()
+        public async Task SendUnbesiegtAufEwig()
         {
             await Context.Channel.SendFileAsync(_videoPath + "/unbesiegt.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
         }
