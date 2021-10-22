@@ -1,10 +1,7 @@
 ﻿using Discord.Commands;
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Design;
 
 namespace DiscordOgerBot.Modules
 {

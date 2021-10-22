@@ -229,34 +229,6 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        public static void DecreaseTimeSpendWorking(ulong userId, TimeSpan additionalTime)
-        {
-            try
-            {
-                lock (Context)
-                {
-                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
-                    if (userDataBase == null)
-                    {
-                        return;
-                    }
-
-                    userDataBase.TimeSpendWorking -= additionalTime;
-
-                    Context.DiscordUsers.Update(userDataBase);
-                    Context.SaveChanges();
-
-                    Log.Information($"Removed time from user {userDataBase.Name}, Time: {additionalTime}");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, $"Could not Increase the working hours {Environment.NewLine}" +
-                              $"User: {userId} {Environment.NewLine}");
-            }
-        }
-
         public static void CreateUser(IUser user)
         {
 
@@ -303,30 +275,6 @@ namespace DiscordOgerBot.Controller
             {
                 Log.Error(ex, nameof(GetAllUsers));
                 return new List<DiscordUser>();
-            }
-        }
-
-        internal static void ResetQuizDatabase()
-        {
-            try
-            {
-                lock (Context)
-                {
-                    var users = Context.DiscordUsers.ToList();
-                    foreach (var user in users)
-                    {
-                        user.QuizPointsTotal = 0;
-                        user.QuizWonTotal = 0;
-                    }
-
-                    Context.DiscordUsers.UpdateRange(users);
-                    Context.SaveChanges();
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, nameof(ResetQuizDatabase));
             }
         }
     }

@@ -76,7 +76,7 @@ namespace DiscordOgerBot.Modules
         [Command("points")]
         public async Task GetCurrentPoints()
         {
-            if (!(Context.User is SocketGuildUser user)) return;
+            if (!(Context.User is SocketGuildUser)) return;
             if(Context.Channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
             if (CurrentQuiz.QuizState != QuizState.Running)
             {
