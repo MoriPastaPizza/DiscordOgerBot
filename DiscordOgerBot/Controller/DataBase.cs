@@ -33,31 +33,31 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-
-                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
-
-                if (userDataBase == null)
-                {
-                    CreateUser(user);
-                    Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
-                }
-
-                if (userDataBase == null)
-                {
-                    Log.Warning($"User not Found! {Environment.NewLine}" +
-                                $"Id: {user.Id} {Environment.NewLine}" +
-                                $"Name: {user.Username} {Environment.NewLine}" +
-                                $"Guild: {guildId}");
-                    return;
-                }
-
-                userDataBase.TimesBotUsed++;
-
                 lock (Context)
                 {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
+
+                    if (userDataBase == null)
+                    {
+                        CreateUser(user);
+                        userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
+                    }
+
+                    if (userDataBase == null)
+                    {
+                        Log.Warning($"User not Found! {Environment.NewLine}" +
+                                    $"Id: {user.Id} {Environment.NewLine}" +
+                                    $"Name: {user.Username} {Environment.NewLine}" +
+                                    $"Guild: {guildId}");
+                        return;
+                    }
+
+                    userDataBase.TimesBotUsed++;
+
                     Context.DiscordUsers.Update(userDataBase);
                     Context.SaveChanges();
                 }
+
             }
             catch (Exception ex)
             {
@@ -71,13 +71,16 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
+                    if (userDataBase != null) return userDataBase.TimesBotUsed;
+                    CreateUser(user);
+                    userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
 
-                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
-                if (userDataBase != null) return userDataBase.TimesBotUsed;
-                CreateUser(user);
-                userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
+                    return userDataBase?.TimesBotUsed ?? 0;
+                }
 
-                return userDataBase.TimesBotUsed;
             }
             catch (Exception ex)
             {
@@ -92,12 +95,15 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
-                if (userDataBase != null) return userDataBase.TimeSpendWorking;
-                CreateUser(user);
-                userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
+                    if (userDataBase != null) return userDataBase.TimeSpendWorking;
+                    CreateUser(user);
+                    userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
 
-                return userDataBase.TimeSpendWorking;
+                    return userDataBase?.TimeSpendWorking ?? new TimeSpan();
+                }
             }
             catch (Exception ex)
             {
@@ -112,22 +118,22 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
-                if (userDataBase == null)
-                {
-                    return;
-                }
-
-                userDataBase.TimeSpendWorking += additionalTime;
-
                 lock (Context)
                 {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    if (userDataBase == null)
+                    {
+                        return;
+                    }
+
+                    userDataBase.TimeSpendWorking += additionalTime;
+
+
                     Context.DiscordUsers.Update(userDataBase);
                     Context.SaveChanges();
+
+                    Log.Information($"Added time to user {userDataBase.Name}, Time: {additionalTime}");
                 }
-
-
-                Log.Information($"Added time to user {userDataBase.Name}, Time: {additionalTime}");
 
             }
             catch (Exception ex)
@@ -141,21 +147,21 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
-                if (userDataBase == null)
-                {
-                    return;
-                }
-
-                userDataBase.QuizPointsTotal += pointsToAdd;
-
                 lock (Context)
                 {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    if (userDataBase == null)
+                    {
+                        return;
+                    }
+
+                    userDataBase.QuizPointsTotal += pointsToAdd;
+
                     Context.DiscordUsers.Update(userDataBase);
                     Context.SaveChanges();
-                }
 
-                Log.Information($"Added Total Point to user {userDataBase.Name}");
+                    Log.Information($"Added Total Point to user {userDataBase.Name}");
+                }
             }
             catch (Exception ex)
             {
@@ -167,21 +173,21 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
-                if (userDataBase == null)
-                {
-                    return;
-                }
-
-                userDataBase.QuizWonTotal++;
-
                 lock (Context)
                 {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    if (userDataBase == null)
+                    {
+                        return;
+                    }
+
+                    userDataBase.QuizWonTotal++;
+
                     Context.DiscordUsers.Update(userDataBase);
                     Context.SaveChanges();
-                }
 
-                Log.Information($"Added Total Wins to user {userDataBase.Name}");
+                    Log.Information($"Added Total Wins to user {userDataBase.Name}");
+                }
             }
             catch (Exception ex)
             {
@@ -193,8 +199,11 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
-                return userDataBase?.QuizWonTotal ?? 0;
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    return userDataBase?.QuizWonTotal ?? 0;
+                }
             }
             catch (Exception ex)
             {
@@ -207,8 +216,11 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
-                return userDataBase?.QuizPointsTotal ?? 0;
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    return userDataBase?.QuizPointsTotal ?? 0;
+                }
             }
             catch (Exception ex)
             {
@@ -221,22 +233,22 @@ namespace DiscordOgerBot.Controller
         {
             try
             {
-
-                var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
-                if (userDataBase == null)
-                {
-                    return;
-                }
-
-                userDataBase.TimeSpendWorking -= additionalTime;
-
                 lock (Context)
                 {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    if (userDataBase == null)
+                    {
+                        return;
+                    }
+
+                    userDataBase.TimeSpendWorking -= additionalTime;
+
                     Context.DiscordUsers.Update(userDataBase);
                     Context.SaveChanges();
+
+                    Log.Information($"Removed time from user {userDataBase.Name}, Time: {additionalTime}");
                 }
 
-                Log.Information($"Removed time from user {userDataBase.Name}, Time: {additionalTime}");
             }
             catch (Exception ex)
             {
