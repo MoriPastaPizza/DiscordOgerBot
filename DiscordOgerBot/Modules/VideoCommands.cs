@@ -11,11 +11,51 @@ namespace DiscordOgerBot.Modules
     {
         private readonly string _gitHubBaseUrl = "https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Videos/";
 
-        private async Task SendVideo(string fileName)
+        private async Task SendVideo(string fileName, bool isSpoiler = false)
         {
             using var client = new WebClient();
             await using var stream = new MemoryStream(client.DownloadData(_gitHubBaseUrl + fileName));
-            await Context.Channel.SendFileAsync(stream, fileName, embed: Controller.OgerBot.GetStandardSoundEmbed());
+            await Context.Channel.SendFileAsync(stream, fileName, embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: isSpoiler);
+        }
+
+        [Command("unbesiegt")]
+        [Alias("unbesigt")]
+        public async Task SendUnbesigt()
+        {
+            await SendVideo("unbesigt.mp4", true);
+        }
+
+        [Command("größe")]
+        [Alias("groeße", "grösse", "groesse")]
+        public async Task SendGroesse()
+        {
+            await SendVideo("groesse.webm", true);
+        }
+
+        [Command("schnitte")]
+        public async Task SendSchnitte()
+        {
+            await SendVideo("schnitte.mp4");
+        }
+
+        [Command("russisch")]
+        public async Task SendRussisch()
+        {
+            await SendVideo("russisch.mp4");
+        }
+
+        [Command("made")]
+        [Alias("fliege", "fruchtfliege")]
+        public async Task SendMade()
+        {
+            await SendVideo("made.mp4");
+        }
+
+        [Command("kampf")]
+        [Alias("gampf", "kämpfen", "walze")]
+        public async Task SendKampf()
+        {
+            await SendVideo("kampf.mp4");
         }
 
         [Command("besiegt")]
@@ -26,7 +66,7 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("freundin")]
-        [Alias("liepe2", "liebe2", "liepe 2", "liebe 2", "kissenwurf")]
+        [Alias("liepe2", "liebe2", "liepe 2", "liebe 2")]
         public async Task SendFreundin()
         {
             await SendVideo("freundin.mp4");
@@ -87,9 +127,18 @@ namespace DiscordOgerBot.Modules
 
         [Command("stuhl")]
         [Alias("schduhl")]
-        public async Task SendStuhl()
+        public async Task SendStuhl([Remainder] string args = null)
         {
-            await SendVideo("stuhl.mp4");
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+
+                await SendVideo($"stuhl{number}.mp4");
+            }
+            else
+            {
+                await SendVideo($"stuhl{args}.mp4");
+            }
         }
 
         [Command("paniert")]
@@ -333,7 +382,7 @@ namespace DiscordOgerBot.Modules
         {
             if (args == null)
             {
-                var number = new Random().Next(1, 3);
+                var number = new Random().Next(1, 6);
 
                 await SendVideo($"kissenwurf{number}.mp4");
             }
@@ -420,7 +469,7 @@ namespace DiscordOgerBot.Modules
         {
             if (args == null)
             {
-                var number = new Random().Next(1, 8);
+                var number = new Random().Next(1, 10);
 
                 await SendVideo($"schlaganfall{number}.mp4");
             }
@@ -432,9 +481,18 @@ namespace DiscordOgerBot.Modules
 
         [Command("anime")]
         [Alias("seakyle")]
-        public async Task SendAnime()
+        public async Task SendAnime([Remainder] string args = null)
         {
-            await SendVideo("anime.mp4");
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+
+                await SendVideo($"seakyle{number}.mp4");
+            }
+            else
+            {
+                await SendVideo($"seakyle{args}.mp4");
+            }
         }
 
         [Command("knie")]
@@ -779,10 +837,19 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("saufen")]
-        [Alias("wochenende", "neikibbn")]
-        public async Task SendSaufen()
+        [Alias("wochenende", "neikibbn", "saufne")]
+        public async Task SendSaufen([Remainder] string args = null)
         {
-            await SendVideo("neikibbn.mp4");
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+
+                await SendVideo($"saufen{number}.mp4");
+            }
+            else
+            {
+                await SendVideo($"saufen{args}.mp4");
+            }
         }
 
         [Command("sauerstoff")]
@@ -834,7 +901,7 @@ namespace DiscordOgerBot.Modules
         {
             if (args == null)
             {
-                var number = new Random().Next(1, 4);
+                var number = new Random().Next(1, 5);
 
                 await SendVideo($"Honey{number}.mp4");
             }
