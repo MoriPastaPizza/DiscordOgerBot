@@ -69,7 +69,7 @@ namespace DiscordOgerBot.Controller
                 await Client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("BOTTOKEN"));
                 await Client.StartAsync();
                 await CommandService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-                await Client.SetGameAsync("ob Haider vor dem Tor stehen", type: ActivityType.Watching);
+                await Client.SetGameAsync("wer in den Knast muss", type: ActivityType.Watching);
 
                 _cancellationTokenCheckUsers = new CancellationTokenSource();
                 new Task(CheckUsersTask, _cancellationTokenCheckUsers.Token, TaskCreationOptions.LongRunning).Start();

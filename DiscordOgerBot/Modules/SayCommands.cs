@@ -2,6 +2,7 @@
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using DiscordOgerBot.Controller;
 
 namespace DiscordOgerBot.Modules
 {
@@ -27,6 +28,13 @@ namespace DiscordOgerBot.Modules
                 await Context.Message.DeleteAsync();
                 await Context.Channel.SendMessageAsync(message);
             }
+        }
+
+        [Command("status")]
+        [RequireOwner]
+        public async Task SetBotStatus([Remainder] string status)
+        {
+            await OgerBot.Client.SetGameAsync(status, type: ActivityType.Watching);
         }
     }
 }
