@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using Discord.Commands;
 
@@ -10,11 +11,20 @@ namespace DiscordOgerBot.Modules
         private readonly string _videoPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
 
+        private readonly string _gitHubBaseUrl = "https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Videos/";
+
+        private async Task SendVideo(string fileName)
+        {
+            using var client = new WebClient();
+            await using var stream = new MemoryStream(client.DownloadData(_gitHubBaseUrl + fileName));
+            await Context.Channel.SendFileAsync(stream, fileName, embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("besiegt")]
         [Alias("besigt", "nicht gewinnen")]
         public async Task SendBesiegt()
         {
-            await Context.Channel.SendFileAsync(_videoPath + "/besiegt.mp4", embed: Controller.OgerBot.GetStandardSoundEmbed());
+            await SendVideo("besiegt.mp4");
         }
 
         [Command("freundin")]
