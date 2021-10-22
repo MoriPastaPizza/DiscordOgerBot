@@ -25,8 +25,8 @@ namespace DiscordOgerBot.Modules
             await SendVideo("alarm3.mp4");
         }
 
-        [Command("unbesiegt")]
-        [Alias("unbesigt")]
+        [Command("unbesiegt 2")]
+        [Alias("unbesigt", "auf ewig", "auf ewich", "drachenlord4ever", "thebest", "the best")]
         public async Task SendUnbesigt()
         {
             await SendVideo("unbesigt.mp4");
@@ -39,7 +39,8 @@ namespace DiscordOgerBot.Modules
             await SendVideo("groesse.webm", true);
         }
 
-        [Command("schnitte")]
+        [Command("milchschnitte")]
+        [Alias("schnitte", "milch schnitte", "schnidde")]
         public async Task SendSchnitte()
         {
             await SendVideo("schnitte.mp4");
