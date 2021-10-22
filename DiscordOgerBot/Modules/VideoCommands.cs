@@ -19,6 +19,7 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("alarm 3")]
+        [Alias("siegesgeheul", "siegesgeheule")]
         public async Task SendAlarm()
         {
             await SendVideo("alarm3.mp4");
