@@ -10,6 +10,20 @@ namespace DiscordOgerBot.Modules
         private readonly string _soundPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Sounds"));
 
+        [Command("kleiner schwanz")]
+        [Alias("selbstbewusstsen")]
+        public async Task SendKleinerSchwanz()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/kleiner.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
+        [Command("eingesperrt")]
+        [Alias("kinderschänder", "ungerecht", "massenmörder")]
+        public async Task SendMassenmorderKinderschander()
+        {
+            await Context.Channel.SendFileAsync(_soundPath + "/massenmorder_kinderschander.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
+
         [Command("knien")]
         [Alias("demut", "demut zeigen", "niemals knien")]
         public async Task SendKnien()
