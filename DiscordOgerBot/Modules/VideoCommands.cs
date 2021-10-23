@@ -73,6 +73,13 @@ namespace DiscordOgerBot.Modules
             await SendVideo("besiegt.mp4");
         }
 
+        [Command("besiegt 2")]
+        [Alias("besigt 2")]
+        public async Task SendBesiegt2()
+        {
+            await SendVideo("besiegt2.mp4");
+        }
+
         [Command("freundin")]
         [Alias("liepe2", "liebe2", "liepe 2", "liebe 2")]
         public async Task SendFreundin()
