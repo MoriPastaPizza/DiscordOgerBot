@@ -23,6 +23,13 @@ namespace DiscordOgerBot.Modules
         {
             await SendVideo("applaus.mp4");
         }
+            
+        [Command("mimimi")]
+        [Alias("mimi")]
+        public async Task SendMimi()
+        {
+            await SendVideo("mimimi.mp4");
+        }
 
         [Command("alarm 3")]
         [Alias("siegesgeheul", "siegesgeheule")]
@@ -74,16 +81,18 @@ namespace DiscordOgerBot.Modules
 
         [Command("besiegt")]
         [Alias("besigt", "nicht gewinnen")]
-        public async Task SendBesiegt()
+        public async Task SendBesiegt([Remainder] string args = null)
         {
-            await SendVideo("besiegt.mp4");
-        }
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
 
-        [Command("besiegt 2")]
-        [Alias("besigt 2")]
-        public async Task SendBesiegt2()
-        {
-            await SendVideo("besiegt2.mp4");
+                await SendVideo($"besiegt{number}.mp4");
+            }
+            else
+            {
+                await SendVideo($"besiegt{args}.mp4");
+            }
         }
 
         [Command("freundin")]
@@ -235,9 +244,18 @@ namespace DiscordOgerBot.Modules
 
         [Command("welt")]
         [Alias("weld")]
-        public async Task SendWelt()
+        public async Task SendWelt([Remainder] string args = null)
         {
-            await SendVideo("welt.mp4");
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+
+                await SendVideo($"welt{number}.mp4");
+            }
+            else
+            {
+                await SendVideo($"welt{args}.mp4");
+            }
         }
 
         [Command("bär")]
