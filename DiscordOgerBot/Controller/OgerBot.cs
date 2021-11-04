@@ -612,7 +612,7 @@ namespace DiscordOgerBot.Controller
 
             foreach (var commit in commits)
             {
-                embed.AddField($"#{commit.Sha.Remove(7)}", $"{commit.Commit.Message} | [Link]({commit.HtmlUrl})");
+                embed.AddField("------------------------------", $"{commit.Commit.Message} | [Link]({commit.HtmlUrl})");
             }
 
             var buildEmbed = embed
