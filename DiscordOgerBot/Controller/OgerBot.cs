@@ -28,6 +28,8 @@ namespace DiscordOgerBot.Controller
         private static DateTime Time1510 { get; } = new(2008, 4, 1, 13, 10, 0);
         private static bool TimeFlag1510 { get; set; }
 
+        private static DateTime SchanzenCountDownTime { get; } = new (2022, 1, 5, 0, 0, 0);
+
         private static List<string> _oragleList;
         private static IServiceProvider _services;
         private static Dictionary<ulong, ulong> _repliedMessagesId;
@@ -69,10 +71,7 @@ namespace DiscordOgerBot.Controller
                 await Client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("BOTTOKEN"));
                 await Client.StartAsync();
                 await CommandService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-
-                _cancellationTokenCheckUsers = new CancellationTokenSource();
-                new Task(CheckUsersTask, _cancellationTokenCheckUsers.Token, TaskCreationOptions.LongRunning).Start();
-
+                
                 await Task.Delay(-1);
 
             }
@@ -497,6 +496,11 @@ namespace DiscordOgerBot.Controller
             Log.Information("Setting Game...");
             await Client.SetGameAsync("wer in den Knast muss", type: ActivityType.Watching);
 
+            Log.Information("Starting long running tasks....");
+            _cancellationTokenCheckUsers = new CancellationTokenSource();
+            new Task(OneMinuteTask, _cancellationTokenCheckUsers.Token, TaskCreationOptions.LongRunning).Start();
+            new Task(TwentyMinuteTask, _cancellationTokenCheckUsers.Token, TaskCreationOptions.LongRunning).Start();
+
             Log.Information("Getting Build-version....");
             var version = Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION");
             if (version != null)
@@ -513,15 +517,44 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async void CheckUsersTask()
+        private static async void OneMinuteTask()
         {
             while (!_cancellationTokenCheckUsers.Token.IsCancellationRequested)
             {
-
                 await CheckForFrauchenTime();
                 await CheckForTime1510();
-                _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(1));
                 await CheckUsers();
+                _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(1));
+            }
+        }
+
+        private static async void TwentyMinuteTask()
+        {
+            while (!_cancellationTokenCheckUsers.Token.IsCancellationRequested)
+            {
+                await SetCountDowns();
+                _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(20));
+            }
+        }
+
+        private static async Task SetCountDowns()
+        {
+            try
+            {
+                var guild = Client.Guilds.FirstOrDefault(m => m.Id == 758745761566818314);
+                if(guild == null) return;
+                var channel = (SocketVoiceChannel) guild.GetChannel(905795752360558643);
+
+                var timeLeft = SchanzenCountDownTime - DateTime.Now + TimeSpan.FromHours(2);
+
+                await channel.ModifyAsync(props =>
+                {
+                    props.Name = $"🏠🔜Auszug: {timeLeft.Days} Days, {timeLeft.Hours}h";
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(SetCountDowns));
             }
         }
 
