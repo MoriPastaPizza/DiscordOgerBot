@@ -548,11 +548,11 @@ namespace DiscordOgerBot.Controller
                 if(guild == null) return;
                 var channel = (SocketVoiceChannel) guild.GetChannel(905795752360558643);
 
-                var timeLeft = SchanzenCountDownTime - DateTime.Now + TimeSpan.FromHours(2);
+                var timeLeft = SchanzenCountDownTime - DateTime.Now;
 
                 await channel.ModifyAsync(props =>
                 {
-                    props.Name = $"🏠🔜Auszug: {timeLeft.Days} Days, {timeLeft.Hours}h";
+                    props.Name = $"🏠🔜Auszug: {timeLeft.Days} Days {timeLeft.Hours}h";
                 });
             }
             catch (Exception ex)
