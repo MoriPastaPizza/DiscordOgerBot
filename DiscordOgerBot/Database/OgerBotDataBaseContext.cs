@@ -11,5 +11,7 @@ namespace DiscordOgerBot.Database
 
 
         public DbSet<DiscordUser> DiscordUsers { get; set; }
+
+        public DbSet<PersistentData> PersistentData { get; set; }
     }
 }
