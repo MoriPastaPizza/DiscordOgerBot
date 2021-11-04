@@ -69,7 +69,6 @@ namespace DiscordOgerBot.Controller
                 await Client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("BOTTOKEN"));
                 await Client.StartAsync();
                 await CommandService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-                await Client.SetGameAsync("wer in den Knast muss", type: ActivityType.Watching);
 
                 _cancellationTokenCheckUsers = new CancellationTokenSource();
                 new Task(CheckUsersTask, _cancellationTokenCheckUsers.Token, TaskCreationOptions.LongRunning).Start();
@@ -492,10 +491,26 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static Task ClientReady()
+        private static async Task ClientReady()
         {
             Log.Information("Bot Started!");
-            return Task.CompletedTask;
+            Log.Information("Setting Game...");
+            await Client.SetGameAsync("wer in den Knast muss", type: ActivityType.Watching);
+
+            Log.Information("Getting Build-version....");
+            var version = Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION");
+            if (version != null)
+            {
+                Log.Information("Version: " + version);
+                var guild = Client.Guilds.FirstOrDefault(m => m.Id == 758745761566818314);
+                if(guild == null) return;
+
+                var role = guild.GetRole(818550591773081632);
+                await role.ModifyAsync(props =>
+                {
+                    props.Name = version;
+                });
+            }
         }
 
         private static async void CheckUsersTask()
