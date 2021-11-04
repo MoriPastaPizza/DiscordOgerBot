@@ -10,7 +10,7 @@ namespace DiscordOgerBot.Controller
 {
     internal static class GitHub
     {
-        internal static async Task<List<string>> GetCommitMessagesSinceLastUpdate()
+        internal static async Task<List<GitHubCommit>> GetCommitMessagesSinceLastUpdate()
         {
             try
             {
@@ -34,7 +34,7 @@ namespace DiscordOgerBot.Controller
                 DataBase.SetPersistentData(persData);
 
                 var missedCommits = commits.TakeWhile(m => m.Sha != oldHash);
-                return missedCommits.Select(m => m.Commit.Message).ToList();
+                return missedCommits.ToList();
 
             }
             catch (Exception ex)

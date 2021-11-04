@@ -601,8 +601,8 @@ namespace DiscordOgerBot.Controller
 
         private static async Task CheckForNewReleaseNotes()
         {
-            var updateMessages = await GitHub.GetCommitMessagesSinceLastUpdate();
-            if(updateMessages == null || updateMessages.Count == 0) return;
+            var commits = await GitHub.GetCommitMessagesSinceLastUpdate();
+            if(commits == null || commits.Count == 0) return;
 
             var random = new Random();
             var embed = new EmbedBuilder
@@ -610,9 +610,9 @@ namespace DiscordOgerBot.Controller
                 Title = $"Release Notes {Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION")} :metal:",
             };
 
-            foreach (var updateMessage in updateMessages)
+            foreach (var commit in commits)
             {
-                embed.AddField("Commit", updateMessage);
+                embed.AddField($"#{commit.Sha.Remove(7)}", $"{commit.Commit.Message} | [Link]({commit.HtmlUrl})");
             }
 
             var buildEmbed = embed
