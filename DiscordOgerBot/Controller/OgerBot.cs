@@ -630,6 +630,7 @@ namespace DiscordOgerBot.Controller
                 .WithCurrentTimestamp()
                 .Build();
             var channel = (SocketTextChannel) Client.GetChannel(776846121653370921);
+            await channel.SendMessageAsync("<@&905881043909886032>");
             await channel.SendMessageAsync(embed: buildEmbed);
         }
 
