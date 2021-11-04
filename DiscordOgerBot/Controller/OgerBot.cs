@@ -629,7 +629,7 @@ namespace DiscordOgerBot.Controller
                 .WithColor(Color.Gold)
                 .WithCurrentTimestamp()
                 .Build();
-            var channel = (SocketTextChannel) Client.GetChannel(763782279548895233);
+            var channel = (SocketTextChannel) Client.GetChannel(776846121653370921);
             await channel.SendMessageAsync(embed: buildEmbed);
         }
 
