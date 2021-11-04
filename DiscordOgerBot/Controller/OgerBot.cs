@@ -515,6 +515,9 @@ namespace DiscordOgerBot.Controller
                     props.Name = version;
                 });
             }
+
+            Log.Information("Getting Changes...");
+            await CheckForNewReleaseNotes();
         }
 
         private static async void OneMinuteTask()
@@ -594,6 +597,40 @@ namespace DiscordOgerBot.Controller
             {
                 Log.Error(ex, nameof(CheckForTime1510));
             }
+        }
+
+        private static async Task CheckForNewReleaseNotes()
+        {
+            var updateMessages = await GitHub.GetCommitMessagesSinceLastUpdate();
+            if(updateMessages == null || updateMessages.Count == 0) return;
+
+            var random = new Random();
+            var embed = new EmbedBuilder
+            {
+                Title = $"Release Notes {Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION")} :metal:",
+            };
+
+            foreach (var updateMessage in updateMessages)
+            {
+                embed.AddField("Commit", updateMessage);
+            }
+
+            var buildEmbed = embed
+
+                .AddField("Links",
+                    "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
+                    "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
+                    "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
+
+                .WithAuthor(Client.CurrentUser)
+                .WithFooter(footer =>
+                    footer.Text =
+                        FooterDictionary[random.Next(FooterDictionary.Count)])
+                .WithColor(Color.Gold)
+                .WithCurrentTimestamp()
+                .Build();
+            var channel = (SocketTextChannel) Client.GetChannel(763782279548895233);
+            await channel.SendMessageAsync(embed: buildEmbed);
         }
 
         private static Dictionary<string, List<string>> ReadDictionaryFromFile(string path)

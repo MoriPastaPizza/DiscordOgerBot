@@ -291,7 +291,7 @@ namespace DiscordOgerBot.Controller
                     {
                         Id = "0",
                         BotVersion = Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION"),
-                        ComitHash = "000"
+                        ComitHash = "68a7a69c67ca8a6a611ce24f2220312d50f778d0"
                     });
 
                     Context.SaveChanges();
