@@ -260,7 +260,7 @@ namespace DiscordOgerBot.Controller
                 if (channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
                 if (reaction.Emote.Name != "✅") return;
                 if (!(await channel.GetUserAsync(reaction.UserId) is SocketGuildUser reactionUser)) return;
-                if (reactionUser.Roles.All(m => m.Id != 826886898114363432)) return;
+                if (reactionUser.Id.ToString() != CurrentQuiz.CurrentQuizMaster.Id) return;
 
                 var messageDownload= await message.GetOrDownloadAsync();
                 var messageUserId = messageDownload.Author.Id;
@@ -287,7 +287,7 @@ namespace DiscordOgerBot.Controller
                 if (channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
                 if (reaction.Emote.Name != "✅") return;
                 if (!(await channel.GetUserAsync(reaction.UserId) is SocketGuildUser reactionUser)) return;
-                if (reactionUser.Roles.All(m => m.Id != 826886898114363432)) return;
+                if (reactionUser.Id.ToString() != CurrentQuiz.CurrentQuizMaster.Id) return;
 
                 var messageDownload = await message.GetOrDownloadAsync();
                 var messageUserId = messageDownload.Author.Id;
