@@ -277,5 +277,55 @@ namespace DiscordOgerBot.Controller
                 return new List<DiscordUser>();
             }
         }
+
+        internal static PersistentData GetPersistentData()
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var data = Context.PersistentData.FirstOrDefault(m => m.Id == "0");
+                    if (data != null) return data;
+
+                    Context.PersistentData.Add(new PersistentData
+                    {
+                        Id = "0",
+                        BotVersion = Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION"),
+                        ComitHash = "000"
+                    });
+
+                    Context.SaveChanges();
+
+                    data = Context.PersistentData.FirstOrDefault(m => m.Id == "0");
+                    return data;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetPersistentData));
+                return null;
+            }
+        }
+
+        internal static void SetPersistentData(PersistentData data)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var dataBaseData = Context.PersistentData.FirstOrDefault(m => m.Id == data.Id);
+                    if(dataBaseData == null) return;
+
+                    dataBaseData = data;
+
+                    Context.PersistentData.Update(dataBaseData);
+                    Context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(SetPersistentData));
+            }
+        }
     }
 }
