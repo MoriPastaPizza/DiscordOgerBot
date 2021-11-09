@@ -109,30 +109,29 @@ namespace DiscordOgerBot.Modules
                 .OrderBy(m => m.Name)
                 .ToList();
 
-            var commandList = commands
-                .Select(command => $"**{command.Aliases.Aggregate((i, j) => i + " " + j)}** {command.Summary}")
-                .ToList();
-            var fieldString = commandList.Aggregate((i, j) => i + " | " + j).ToString();
-
-            var embedBuilder = new EmbedBuilder
+            var subCommandsCount = Math.Ceiling((double)commands.Count / 60);
+            for (var commandIndex = 0; commandIndex < subCommandsCount; commandIndex++)
             {
-                Title = "Sound Commands"
-            };
+                var commandList = commands
+                    .Select(command => $"**{command.Aliases.Aggregate((i, j) => i + " " + j)}** {command.Summary}")
+                    .Skip(commandIndex * 60)
+                    .Take(60)
+                    .ToList();
+                var fieldString = commandList.Aggregate((i, j) => i + " | " + j).ToString();
 
-            embedBuilder
-                .WithDescription(fieldString)
-                .AddField("Links",
-                    "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
-                    "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
-                .WithAuthor(Context.Client.CurrentUser)
-                .WithFooter(footer =>
-                    footer.Text =
-                        Controller.OgerBot.FooterDictionary[_rand.Next(Controller.OgerBot.FooterDictionary.Count)])
-                .WithColor(Color.Red)
-                .WithCurrentTimestamp();
+                var embedBuilder = new EmbedBuilder
+                {
+                    Title = $"Sound Commands #{commandIndex + 1}"
+                };
 
-            await Context.Channel.SendMessageAsync(embed: embedBuilder.Build());
+                embedBuilder
+                    .WithDescription(fieldString)
+                    .WithAuthor(Context.Client.CurrentUser)
+                    .WithColor(Color.Red)
+                    .WithCurrentTimestamp();
+
+                await Context.Channel.SendMessageAsync(embed: embedBuilder.Build());
+            }
 
         }
 
@@ -149,31 +148,29 @@ namespace DiscordOgerBot.Modules
                 .OrderBy(m => m.Name)
                 .ToList();
 
-            var commandList = commands
-                .Select(command => $"**{command.Aliases.Aggregate((i, j) => i + " " + j)}** {command.Summary}")
-                .ToList();
-            var fieldString = commandList.Aggregate((i, j) => i + " | " + j).ToString();
-
-            var embedBuilder = new EmbedBuilder
+            var subCommandsCount = Math.Ceiling((double)commands.Count / 60);
+            for (var commandIndex = 0; commandIndex < subCommandsCount; commandIndex++)
             {
-                Title = "Video Commands"
-            };
+                var commandList = commands
+                    .Select(command => $"**{command.Aliases.Aggregate((i, j) => i + " " + j)}** {command.Summary}")
+                    .Skip(commandIndex * 60)
+                    .Take(60)
+                    .ToList();
+                var fieldString = commandList.Aggregate((i, j) => i + " | " + j).ToString();
 
-            embedBuilder
-                .WithDescription(fieldString)
-                .AddField("Links",
-                    "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
-                    "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
-                .WithAuthor(Context.Client.CurrentUser)
-                .WithFooter(footer =>
-                    footer.Text =
-                        Controller.OgerBot.FooterDictionary[_rand.Next(Controller.OgerBot.FooterDictionary.Count)])
-                .WithColor(Color.Red)
-                .WithCurrentTimestamp();
+                var embedBuilder = new EmbedBuilder
+                {
+                    Title = $"Video Commands #{commandIndex + 1}"
+                };
 
-            await Context.Channel.SendMessageAsync(embed: embedBuilder.Build());
+                embedBuilder
+                    .WithDescription(fieldString)
+                    .WithAuthor(Context.Client.CurrentUser)
+                    .WithColor(Color.Red)
+                    .WithCurrentTimestamp();
 
+                await Context.Channel.SendMessageAsync(embed: embedBuilder.Build());
+            }
         }
 
         [Command("images")]
@@ -188,31 +185,29 @@ namespace DiscordOgerBot.Modules
                 .OrderBy(m => m.Name)
                 .ToList();
 
-            var commandList = commands
-                .Select(command => $"**{command.Aliases.Aggregate((i, j) => i + " " + j)}** {command.Summary}")
-                .ToList();
-            var fieldString = commandList.Aggregate((i, j) => i + " | " + j).ToString();
-
-            var embedBuilder = new EmbedBuilder
+            var subCommandsCount = Math.Ceiling((double)commands.Count / 60);
+            for (var commandIndex = 0; commandIndex < subCommandsCount; commandIndex++)
             {
-                Title = "Image Commands"
-            };
+                var commandList = commands
+                    .Select(command => $"**{command.Aliases.Aggregate((i, j) => i + " " + j)}** {command.Summary}")
+                    .Skip(commandIndex * 60)
+                    .Take(60)
+                    .ToList();
+                var fieldString = commandList.Aggregate((i, j) => i + " | " + j).ToString();
 
-            embedBuilder
-                .WithDescription(fieldString)
-                .AddField("Links",
-                    "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
-                    "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
-                .WithAuthor(Context.Client.CurrentUser)
-                .WithFooter(footer =>
-                    footer.Text =
-                        Controller.OgerBot.FooterDictionary[_rand.Next(Controller.OgerBot.FooterDictionary.Count)])
-                .WithColor(Color.Red)
-                .WithCurrentTimestamp();
+                var embedBuilder = new EmbedBuilder
+                {
+                    Title = $"Image Commands #{commandIndex + 1}"
+                };
 
-            await Context.Channel.SendMessageAsync(embed: embedBuilder.Build());
+                embedBuilder
+                    .WithDescription(fieldString)
+                    .WithAuthor(Context.Client.CurrentUser)
+                    .WithColor(Color.Red)
+                    .WithCurrentTimestamp();
 
+                await Context.Channel.SendMessageAsync(embed: embedBuilder.Build());
+            }
         }
     }
 }
