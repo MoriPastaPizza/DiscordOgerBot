@@ -64,7 +64,6 @@ namespace DiscordOgerBot.Controller
                 Client.ReactionAdded += ReactionAdded;
                 Client.ReactionRemoved += ReactionRemoved;
                 Client.MessageReceived += MessageReceived;
-                Client.MessageReceived += ChannelMirror.MessageReceived;
                 Client.MessageUpdated += MessageUpdated;
                 Client.Ready += ClientReady;
 
