@@ -18,6 +18,13 @@ namespace DiscordOgerBot.Modules
             await Context.Channel.SendFileAsync(stream, fileName, embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: isSpoiler);
         }
 
+        [Command("kaugummi")]
+        [Alias("gaugummi")]
+        public async Task SendKaugummi()
+        {
+            await SendVideo("kaugummi.mp4");
+        }
+
         [Command("ahhh")]
         [Alias("erschrecken", "drachenschrei", "schrei")]
         public async Task SendSchrei()
