@@ -25,11 +25,20 @@ namespace DiscordOgerBot.Modules
             await SendVideo("kaugummi.mp4");
         }
 
-        [Command("ahhh")]
-        [Alias("erschrecken", "drachenschrei", "schrei")]
-        public async Task SendSchrei()
+        [Command("drachenschrei")]
+        [Alias("erschrecken", "ahhh", "schrei")]
+        public async Task SendSchrei([Remainder] string args = null)
         {
-            await SendVideo("drachenschrei.mp4");
+            if (args == null)
+            {
+                var number = new Random().Next(1, 2);
+
+                await SendVideo($"drachenschrei{number}.mp4");
+            }
+            else
+            {
+                await SendVideo($"drachenschrei{args}.mp4");
+            }
         }
 
         [Command("applaus")]
