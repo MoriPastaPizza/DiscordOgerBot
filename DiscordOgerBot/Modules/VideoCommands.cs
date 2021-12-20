@@ -18,6 +18,25 @@ namespace DiscordOgerBot.Modules
             await Context.Channel.SendFileAsync(stream, fileName, embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: isSpoiler);
         }
 
+        [Command("schwanger")]
+        public async Task SendSchwanger()
+        {
+            await SendVideo("schwanger.mp4");
+        }
+
+        [Command("müller")]
+        [Alias("herr müller")]
+        public async Task SendMueller()
+        {
+            await SendVideo("müller.mp4");
+        }
+
+        [Command("klagabu")]
+        public async Task SendKlagabu()
+        {
+            await SendVideo("klagabu.mp4");
+        }
+
         [Command("kaugummi")]
         [Alias("gaugummi")]
         public async Task SendKaugummi()
@@ -531,7 +550,7 @@ namespace DiscordOgerBot.Modules
         {
             if (args == null)
             {
-                var number = new Random().Next(1, 10);
+                var number = new Random().Next(1, 11);
 
                 await SendVideo($"schlaganfall{number}.mp4");
             }
