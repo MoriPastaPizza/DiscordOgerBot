@@ -18,6 +18,7 @@ namespace DiscordOgerBot.Modules
             await Context.Channel.SendFileAsync(stream, fileName, embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: isSpoiler);
         }
 
+
         [Command("schwanger")]
         public async Task SendSchwanger()
         {
@@ -50,7 +51,7 @@ namespace DiscordOgerBot.Modules
         {
             if (args == null)
             {
-                var number = new Random().Next(1, 2);
+                var number = new Random().Next(1, 3);
 
                 await SendVideo($"drachenschrei{number}.mp4");
             }
@@ -80,7 +81,7 @@ namespace DiscordOgerBot.Modules
             await SendVideo("alarm3.mp4");
         }
 
-        [Command("unbesiegt 2")]
+        [Command("unbesiegt")]
         [Alias("unbesigt", "auf ewig", "auf ewich", "drachenlord4ever", "thebest", "the best")]
         public async Task SendUnbesigt()
         {
@@ -139,9 +140,18 @@ namespace DiscordOgerBot.Modules
 
         [Command("freundin")]
         [Alias("liepe2", "liebe2", "liepe 2", "liebe 2")]
-        public async Task SendFreundin()
+        public async Task SendFreundin([Remainder] string args = null)
         {
-            await SendVideo("freundin.mp4");
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+
+                await SendVideo($"freundin{number}.mp4");
+            }
+            else
+            {
+                await SendVideo($"freundin{args}.mp4");
+            }
         }
         
         [Command("besucher")]
@@ -241,9 +251,18 @@ namespace DiscordOgerBot.Modules
 
         [Command("winkler")]
         [Alias("wingler", "winggl")]
-        public async Task SendWinkler()
+        public async Task SendWinkler([Remainder] string args = null)
         {
-            await SendVideo("winkler.mp4");
+            if (args == null)
+            {
+                var number = new Random().Next(1, 3);
+
+                await SendVideo($"winkler{number}.mp4");
+            }
+            else
+            {
+                await SendVideo($"winkler{args}.mp4");
+            }
         }
 
         [Command("badummtss")]
