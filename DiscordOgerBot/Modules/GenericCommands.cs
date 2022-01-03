@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 
 namespace DiscordOgerBot.Modules
 {
@@ -208,6 +209,22 @@ namespace DiscordOgerBot.Modules
 
                 await Context.Channel.SendMessageAsync(embed: embedBuilder.Build());
             }
+        }
+
+        [Command("edi")]
+        public async Task Edi()
+        {
+            if (!(Context.User is SocketGuildUser user)) return;
+            if (!user.GuildPermissions.KickMembers)
+            {
+                await Context.Message.ReplyAsync("Nix Edi, hier nen Timeout");
+                await user.SetTimeOutAsync(TimeSpan.FromMinutes(5));
+                return;
+            }
+
+            var sticker = await Context.Guild.GetStickerAsync(849529660492218368);
+            if (sticker == null) return;
+            await Context.Channel.SendMessageAsync("Hier Edi UwU", stickers: new ISticker[]{ sticker });
         }
     }
 }
