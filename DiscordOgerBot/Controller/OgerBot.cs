@@ -552,7 +552,7 @@ namespace DiscordOgerBot.Controller
 
                 await channel.ModifyAsync(props =>
                 {
-                    props.Name = $"🏠🔜Auszug: {timeLeft.Days} Days {timeLeft.Hours}h";
+                    props.Name = $"🏠🔜Auszug?: {timeLeft.Days} Days {timeLeft.Hours}h";
                 });
             }
             catch (Exception ex)
