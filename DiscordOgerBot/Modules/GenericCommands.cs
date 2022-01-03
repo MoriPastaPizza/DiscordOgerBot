@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -222,9 +223,10 @@ namespace DiscordOgerBot.Modules
                 return;
             }
 
-            var sticker = await Context.Guild.GetStickerAsync(849529660492218368);
-            if (sticker == null) return;
-            await Context.Channel.SendMessageAsync("Hier Edi UwU", stickers: new ISticker[]{ sticker });
+            var imagePath = Path.GetFullPath(
+                Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Images"));
+
+            await Context.Channel.SendFileAsync(imagePath + "/edi.png", text: "Hier Edi UwU");
         }
     }
 }
