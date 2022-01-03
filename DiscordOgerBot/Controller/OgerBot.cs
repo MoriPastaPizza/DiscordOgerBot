@@ -28,7 +28,8 @@ namespace DiscordOgerBot.Controller
         private static DateTime Time1510 { get; } = new(2008, 4, 1, 13, 10, 0);
         private static bool TimeFlag1510 { get; set; }
 
-        private static DateTime SchanzenCountDownTime { get; } = new (2022, 1, 5, 0, 0, 0);
+        private static DateTime AuszugCountDownTime { get; } = new (2022, 1, 5, 0, 0, 0);
+        private static DateTime GerichtTerminCountDownTime { get; } = new(2022, 3, 23, 7, 30, 0);
 
         private static List<string> _oragleList;
         private static IServiceProvider _services;
@@ -546,13 +547,19 @@ namespace DiscordOgerBot.Controller
             {
                 var guild = Client.Guilds.FirstOrDefault(m => m.Id == 758745761566818314);
                 if(guild == null) return;
-                var channel = (SocketVoiceChannel) guild.GetChannel(905795752360558643);
+                var channelSchanzenAuszug = (SocketVoiceChannel) guild.GetChannel(905795752360558643);
+                var channelGericht = (SocketVoiceChannel) guild.GetChannel(927609106603335823);
 
-                var timeLeft = SchanzenCountDownTime - DateTime.Now;
+                var timeLeftAuszug = AuszugCountDownTime - DateTime.Now;
+                var timeLeftGericht = GerichtTerminCountDownTime - DateTime.Now;
 
-                await channel.ModifyAsync(props =>
+                await channelSchanzenAuszug.ModifyAsync(props =>
                 {
-                    props.Name = $"🏠🔜Auszug?: {timeLeft.Days} Days {timeLeft.Hours}h";
+                    props.Name = $"🏠🔜Auszug?: {timeLeftAuszug.Days} Days {timeLeftAuszug.Hours}h";
+                });
+                await channelGericht.ModifyAsync(props =>
+                {
+                    props.Name = $"👩‍⚖️Gericht: {timeLeftGericht.Days} Days {timeLeftGericht.Hours}h";
                 });
             }
             catch (Exception ex)
