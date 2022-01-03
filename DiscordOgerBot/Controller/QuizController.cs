@@ -197,7 +197,7 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task ReactionAddedPrep(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        private static async Task ReactionAddedPrep(Cacheable<IUserMessage, ulong> message, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
         {
             try
             {
@@ -206,7 +206,8 @@ namespace DiscordOgerBot.Controller
                 if (message.Id != PrepMessage.Id) return;
                 if (reaction.Emote.Name != "RainerSchlau") return;
 
-                var user = await channel.GetUserAsync(reaction.UserId);
+                var channelDownload = await channel.GetOrDownloadAsync();
+                var user = await channelDownload.GetUserAsync(reaction.UserId);
 
                 var pointsTotal = DataBase.GetQuizPointsTotal(user.Id);
                 var winsTotal = DataBase.GetTimesQuizWonTotal(user.Id);
@@ -229,7 +230,7 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task ReactionRemovedPrep(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        private static async Task ReactionRemovedPrep(Cacheable<IUserMessage, ulong> message, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
         {
             try
             {
@@ -238,7 +239,8 @@ namespace DiscordOgerBot.Controller
                 if (message.Id != PrepMessage.Id) return;
                 if (reaction.Emote.Name != "RainerSchlau") return;
 
-                var user = await channel.GetUserAsync(reaction.UserId);
+                var channelDownload = await channel.GetOrDownloadAsync();
+                var user = await channelDownload.GetUserAsync(reaction.UserId);
 
                 lock (ListLock)
                 { 
@@ -252,14 +254,15 @@ namespace DiscordOgerBot.Controller
         }
 
 
-        private static async Task ReactionAddedRunning(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        private static async Task ReactionAddedRunning(Cacheable<IUserMessage, ulong> message, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
         {
             try
             {
                 if (CurrentQuiz.QuizState != QuizState.Running) return;
                 if (channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
                 if (reaction.Emote.Name != "✅") return;
-                if (!(await channel.GetUserAsync(reaction.UserId) is SocketGuildUser reactionUser)) return;
+                var channelDownload = await channel.GetOrDownloadAsync();
+                if (!(await channelDownload.GetUserAsync(reaction.UserId) is SocketGuildUser reactionUser)) return;
                 if (reactionUser.Id.ToString() != CurrentQuiz.CurrentQuizMaster.Id) return;
 
                 var messageDownload= await message.GetOrDownloadAsync();
@@ -279,14 +282,15 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task ReactionRemovedRunning(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        private static async Task ReactionRemovedRunning(Cacheable<IUserMessage, ulong> message, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
         {
             try
             {
                 if (CurrentQuiz.QuizState != QuizState.Running) return;
                 if (channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
                 if (reaction.Emote.Name != "✅") return;
-                if (!(await channel.GetUserAsync(reaction.UserId) is SocketGuildUser reactionUser)) return;
+                var channelDownload = await channel.GetOrDownloadAsync();
+                if (!(await channelDownload.GetUserAsync(reaction.UserId) is SocketGuildUser reactionUser)) return;
                 if (reactionUser.Id.ToString() != CurrentQuiz.CurrentQuizMaster.Id) return;
 
                 var messageDownload = await message.GetOrDownloadAsync();

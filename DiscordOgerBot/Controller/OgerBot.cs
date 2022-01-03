@@ -80,6 +80,7 @@ namespace DiscordOgerBot.Controller
             }
         }
 
+
         public static async Task<IUser> GetUserFromId(ulong userId)
         {
             try
@@ -98,14 +99,14 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task ReactionAdded(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        private static async Task ReactionAdded(Cacheable<IUserMessage, ulong> message, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
         {
             try
             {
                 switch (reaction.Emote.Name)
                 {
                     case "OgerBot":
-                        await Translate(message, channel, reaction);
+                        await Translate(message, await channel.GetOrDownloadAsync(), reaction);
                         break;
                     case "OgerBotOragle":
                         await OgerOragle(message);
@@ -120,7 +121,7 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task Translate(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        private static async Task Translate(Cacheable<IUserMessage, ulong> message, IMessageChannel channel, SocketReaction reaction)
         {
             try
             {
@@ -192,7 +193,7 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        private static async Task ReactionRemoved(Cacheable<IUserMessage, ulong> message, ISocketMessageChannel channel, SocketReaction reaction)
+        private static async Task ReactionRemoved(Cacheable<IUserMessage, ulong> message, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
         {
             try
             {
@@ -206,7 +207,7 @@ namespace DiscordOgerBot.Controller
 
                 if (_repliedMessagesId.TryGetValue(originalMessage.Id, out var botReplyId))
                 {
-                    var botReplyMessage = await channel.GetMessageAsync(botReplyId);
+                    var botReplyMessage = await channel.GetOrDownloadAsync().Result.GetMessageAsync(botReplyId);
                     await botReplyMessage.DeleteAsync();
                     _repliedMessagesId.Remove(originalMessage.Id);
 
