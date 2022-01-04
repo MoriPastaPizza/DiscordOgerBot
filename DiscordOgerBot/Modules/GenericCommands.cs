@@ -218,8 +218,11 @@ namespace DiscordOgerBot.Modules
             if (!(Context.User is SocketGuildUser user)) return;
             if (!user.GuildPermissions.KickMembers)
             {
-                await Context.Message.ReplyAsync("Nix Edi, hier nen Timeout");
-                await user.SetTimeOutAsync(TimeSpan.FromMinutes(5));
+                var rand = new Random();
+                var timeout = TimeSpan.FromMinutes(rand.Next(5, 61));
+
+                await Context.Message.ReplyAsync($"Nix Edi, hier nen Timeout für: {timeout.Minutes} Minuten");
+                await user.SetTimeOutAsync(timeout);
                 return;
             }
 
