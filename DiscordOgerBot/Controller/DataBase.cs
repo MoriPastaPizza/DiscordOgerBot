@@ -229,6 +229,138 @@ namespace DiscordOgerBot.Controller
             }
         }
 
+        public static void IncreaseEdiTimeoutTotal(ulong userId, TimeSpan timeout)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    if (userDataBase == null)
+                    {
+                        return;
+                    }
+
+                    userDataBase.EdiTimeOutTotal += timeout;
+
+
+                    Context.DiscordUsers.Update(userDataBase);
+                    Context.SaveChanges();
+
+                    Log.Information($"Added Edi timeout to user {userDataBase.Name}, Time: {timeout}");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Could not Increase the Edi Timeout hours {Environment.NewLine}" +
+                              $"User: {userId} {Environment.NewLine}");
+            }
+        }
+
+        public static TimeSpan GetEdiTimeoutTotal(ulong userId)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    return userDataBase?.EdiTimeOutTotal ?? new TimeSpan();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetEdiTimeoutTotal));
+                return new TimeSpan();
+            }
+        }
+
+        public static void IncreaseEdiUsed(ulong userId)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    if (userDataBase == null)
+                    {
+                        return;
+                    }
+
+                    userDataBase.EdiUsed++;
+
+                    Context.DiscordUsers.Update(userDataBase);
+                    Context.SaveChanges();
+
+                    Log.Information($"Added Edi used {userDataBase.Name}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(IncreaseEdiUsed));
+            }
+        }
+
+        public static int GetEdiUsed(ulong userId)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    return userDataBase?.EdiUsed ?? 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetEdiUsed));
+                return 0;
+            }
+        }
+
+        public static void IncreaseEdiSuccessfull(ulong userId)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    if (userDataBase == null)
+                    {
+                        return;
+                    }
+
+                    userDataBase.EdiSuccessfull++;
+
+                    Context.DiscordUsers.Update(userDataBase);
+                    Context.SaveChanges();
+
+                    Log.Information($"Added Edi succ. {userDataBase.Name}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(IncreaseEdiSuccessfull));
+            }
+        }
+
+        public static int GetEdiSuccessfull(ulong userId)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    return userDataBase?.EdiSuccessfull ?? 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetEdiSuccessfull));
+                return 0;
+            }
+        }
+
         public static void CreateUser(IUser user)
         {
 
@@ -325,6 +457,31 @@ namespace DiscordOgerBot.Controller
             catch (Exception ex)
             {
                 Log.Error(ex, nameof(SetPersistentData));
+            }
+        }
+
+        internal static void ResetEdiData()
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var users = Context.DiscordUsers.ToList();
+                    foreach (var user in users)
+                    {
+                        user.EdiUsed = 0;
+                        user.EdiSuccessfull = 0;
+                        user.EdiTimeOutTotal = new TimeSpan();
+                    }
+
+                    Context.DiscordUsers.UpdateRange(users);
+                    Context.SaveChanges();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(ResetEdiData));
             }
         }
     }
