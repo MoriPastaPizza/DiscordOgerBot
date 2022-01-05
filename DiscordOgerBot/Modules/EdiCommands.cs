@@ -18,21 +18,22 @@ namespace DiscordOgerBot.Modules
         private const int EdiChance = 20;
         private readonly Random _rand = new();
 
-        [Command("edy")]
+        [Command("edi")]
         public async Task Edi()
         {
             if (!(Context.User is SocketGuildUser user)) return;
-            //if (Context.Channel.Id != 925680854229995571)
-            //{
-            //    await ReplyAsync("Edi nur noch in: <#925680854229995571>");
-            //    return;
-            //}
 
-            //if (user.GuildPermissions.KickMembers)
-            //{
-            //    await ReplyAsync("Mods dürfen nicht mit spielen <:loser:888861000303018054>");
-            //    return;
-            //}
+            if (Context.Channel.Id != 925680854229995571)
+            {
+                await ReplyAsync("Edi nur noch in: <#925680854229995571>");
+                return;
+            }
+
+            if (user.GuildPermissions.KickMembers)
+            {
+                await ReplyAsync("Mods dürfen nicht mit spielen <:loser:888861000303018054>");
+                return;
+            }
 
             var roll = _rand.Next(1, 101);
             var rollSuccess = roll <= EdiChance;
@@ -56,22 +57,23 @@ namespace DiscordOgerBot.Modules
             DataBase.IncreaseEdiUsed(user.Id);
         }
 
-        [Command("edy rank")]
-        [Alias("edy score")]
+        [Command("edi rank")]
+        [Alias("edi score")]
         public async Task GetEdiScore()
         {
             if (!(Context.User is SocketGuildUser user)) return;
-            //if (Context.Channel.Id != 925680854229995571)
-            //{
-            //    await ReplyAsync("Edi nur noch in: <#925680854229995571>");
-            //    return;
-            //}
 
-            //if (user.GuildPermissions.KickMembers)
-            //{
-            //    await ReplyAsync("Mods dürfen nicht mit spielen <:loser:888861000303018054>");
-            //    return;
-            //}
+            if (Context.Channel.Id != 925680854229995571)
+            {
+                await ReplyAsync("Edi nur noch in: <#925680854229995571>");
+                return;
+            }
+
+            if (user.GuildPermissions.KickMembers)
+            {
+                await ReplyAsync("Mods dürfen nicht mit spielen <:loser:888861000303018054>");
+                return;
+            }
 
             var allUsers = DataBase.GetAllUsers();
             var currentUser = allUsers.FirstOrDefault(m => m.Id == Context.User.Id.ToString());
@@ -94,12 +96,12 @@ namespace DiscordOgerBot.Modules
 
         }
 
-        [Command("edy purge")]
-        [RequireOwner]
-        public async Task PurgeEdi()
-        {
-            DataBase.ResetEdiData();
-            await Context.Channel.SendMessageAsync("Edi Scores purged!");
-        }
+        //[Command("edi purge")]
+        //[RequireOwner]
+        //public async Task PurgeEdi()
+        //{
+        //    DataBase.ResetEdiData();
+        //    await Context.Channel.SendMessageAsync("Edi Scores purged!");
+        //}
     }
 }
