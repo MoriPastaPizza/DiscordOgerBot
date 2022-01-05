@@ -1,10 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 
 namespace DiscordOgerBot.Modules
 {
@@ -212,25 +210,6 @@ namespace DiscordOgerBot.Modules
             }
         }
 
-        [Command("edi")]
-        public async Task Edi()
-        {
-            if (!(Context.User is SocketGuildUser user)) return;
-            if (!user.GuildPermissions.KickMembers)
-            {
-                var rand = new Random();
-                var timeout = TimeSpan.FromMinutes(rand.Next(5, 61));
-
-                await Context.Message.ReplyAsync($"Nix Edi, hier nen Timeout für: {timeout.Minutes} Minuten");
-                await user.SetTimeOutAsync(timeout);
-                return;
-            }
-
-            var imagePath = Path.GetFullPath(
-                Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Images"));
-
-            await Context.Channel.SendFileAsync(imagePath + "/edi.png", text: "Hier Edi UwU");
-        }
     }
 }
 
