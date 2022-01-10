@@ -93,7 +93,7 @@ namespace DiscordOgerBot.Modules
             var rank = 1 + allUsers.TakeWhile(user => user.Id != currentUser.Id).Count();
 
             await Context.Message.ReplyAsync($"Du bist derzeit auf **Platz {rank}!** {Environment.NewLine}" +
-                                             $"Mit {Math.Round(currentUser.EdiTimeOutTotal.TotalHours, 2)} im Edi-Timeout!{Environment.NewLine}" +
+                                             $"Mit {Math.Round(currentUser.EdiTimeOutTotal.TotalHours, 2)} Stunden im Edi-Timeout!{Environment.NewLine}" +
                                              $"Du hast Edi {currentUser.EdiUsed} mal benutzt | {currentUser.EdiSuccessfull} mal davon erfolgreich!");
 
         }
