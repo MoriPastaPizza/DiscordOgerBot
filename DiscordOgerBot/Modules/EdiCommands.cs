@@ -6,6 +6,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using DiscordOgerBot.Controller;
+using Serilog;
 
 namespace DiscordOgerBot.Modules
 {
@@ -95,6 +96,48 @@ namespace DiscordOgerBot.Modules
                                              $"Mit {currentUser.EdiTimeOutTotal} im Edi-Timeout!{Environment.NewLine}" +
                                              $"Du hast Edi {currentUser.EdiUsed} mal benutzt | {currentUser.EdiSuccessfull} mal davon erfolgreich!");
 
+        }
+
+        [Command("edi top")]
+        public async Task GetTopEdi()
+        {
+            try
+            {
+                if (Context.Channel.Id != NecoChannelId)
+                {
+                    await ReplyAsync($"Edi nur noch in: <#{NecoChannelId}>");
+                    return;
+                }
+
+                var allUsers = DataBase.GetAllUsers();
+                allUsers = allUsers
+                    .Where(m => m.EdiUsed > 0)
+                    .OrderByDescending(m => m.EdiTimeOutTotal)
+                    .ToList();
+
+                var topString = string.Empty;
+                for (var i = 0; i < 20; i++)
+                {
+                    topString += $"{1 + i}. {allUsers[i].Name} => {allUsers[i].EdiTimeOutTotal}{Environment.NewLine}";
+                }
+
+                var embedBuilder = new EmbedBuilder();
+                var embed = embedBuilder
+                    .WithTitle("Top Edi Fans <:edi:849529660492218368>")
+                    .WithDescription(topString)
+                    .WithFooter(footer =>
+                        footer.Text =
+                            OgerBot.FooterDictionary[_rand.Next(OgerBot.FooterDictionary.Count)])
+                    .WithColor(Color.LightOrange)
+                    .WithCurrentTimestamp()
+                    .Build();
+
+                await Context.Channel.SendMessageAsync(embed: embed);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetTopEdi));
+            }
         }
     }
 }
