@@ -16,6 +16,7 @@ namespace DiscordOgerBot.Modules
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Images/Edi"));
 
         private const int EdiChance = 20;
+        private const ulong NecoChannelId = 925680854229995571;
         private readonly Random _rand = new();
 
         [Command("edi")]
@@ -23,9 +24,9 @@ namespace DiscordOgerBot.Modules
         {
             if (!(Context.User is SocketGuildUser user)) return;
 
-            if (Context.Channel.Id != 925680854229995571)
+            if (Context.Channel.Id != NecoChannelId)
             {
-                await ReplyAsync("Edi nur noch in: <#925680854229995571>");
+                await ReplyAsync($"Edi nur noch in: <#{NecoChannelId}>");
                 return;
             }
 
@@ -48,7 +49,7 @@ namespace DiscordOgerBot.Modules
             }
             else
             {
-                var timeout = TimeSpan.FromMinutes(_rand.Next(5, 121));
+                var timeout = TimeSpan.FromMinutes(_rand.Next(5, 181));
                 await Context.Message.ReplyAsync($"Du hast {roll} gewürfelt: Das gibt nen Timeout für {timeout}");
                 await user.SetTimeOutAsync(timeout);
                 DataBase.IncreaseEdiTimeoutTotal(user.Id, timeout);
@@ -63,9 +64,9 @@ namespace DiscordOgerBot.Modules
         {
             if (!(Context.User is SocketGuildUser user)) return;
 
-            if (Context.Channel.Id != 925680854229995571)
+            if (Context.Channel.Id != NecoChannelId)
             {
-                await ReplyAsync("Edi nur noch in: <#925680854229995571>");
+                await ReplyAsync($"Edi nur noch in: <#{NecoChannelId}>");
                 return;
             }
 
@@ -95,13 +96,5 @@ namespace DiscordOgerBot.Modules
                                              $"Du hast Edi {currentUser.EdiUsed} mal benutzt | {currentUser.EdiSuccessfull} mal davon erfolgreich!");
 
         }
-
-        //[Command("edi purge")]
-        //[RequireOwner]
-        //public async Task PurgeEdi()
-        //{
-        //    DataBase.ResetEdiData();
-        //    await Context.Channel.SendMessageAsync("Edi Scores purged!");
-        //}
     }
 }
