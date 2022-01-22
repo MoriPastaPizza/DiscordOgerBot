@@ -518,7 +518,7 @@ namespace DiscordOgerBot.Controller
             }
 
             Log.Information("Getting Changes...");
-            await CheckForNewReleaseNotes();
+            //await CheckForNewReleaseNotes();
         }
 
         private static async void OneMinuteTask()

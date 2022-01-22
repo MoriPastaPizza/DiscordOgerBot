@@ -14,7 +14,7 @@ namespace DiscordOgerBot.Modules
     {
 
         private readonly string _imagePath = Path.GetFullPath(
-            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Images/Edi"));
+            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Images/Edi/Common"));
 
         private const int EdiChance = 20;
         private const ulong NecoChannelId = 925680854229995571;
