@@ -18,6 +18,7 @@ namespace DiscordOgerBot.Modules
 
         private const int EdiChance = 20;
         private const ulong NecoChannelId = 925680854229995571;
+        private const ulong EdiPlayerRoleId = 935194892718710794;
         private readonly Random _rand = new();
 
         [Command("edi")]
@@ -57,6 +58,7 @@ namespace DiscordOgerBot.Modules
             }
 
             DataBase.IncreaseEdiUsed(user.Id);
+            await user.AddRoleAsync(EdiPlayerRoleId);
         }
 
         [Command("edi rank")]
