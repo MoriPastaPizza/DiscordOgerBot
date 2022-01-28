@@ -325,7 +325,7 @@ namespace DiscordOgerBot.Modules
                     var timeTillUnlockUnix = DataBase.GetEdiTimeTillUnlock(user.Id);
                     var timeTillUnlock = DateTimeOffset.FromUnixTimeSeconds(timeTillUnlockUnix);
                     var timeCet =
-                        TimeZoneInfo.ConvertTimeBySystemTimeZoneId(timeTillUnlock, "Central Europe Standard Time");
+                        TimeZoneInfo.ConvertTimeBySystemTimeZoneId(timeTillUnlock, "Europe/Berlin");
 
                     await ReplyAsync($"Du bist noch im Timeout bis: {timeCet}");
                     return;
@@ -335,7 +335,7 @@ namespace DiscordOgerBot.Modules
                 var embedBuilder = new EmbedBuilder();
                 var totalTime = edi.BasicTime + edi.BonusTime;
                 var endTime =
-                    TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Central Europe Standard Time") +
+                    TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Europe/Berlin") +
                     totalTime;
                 var endTimeUnix = new DateTimeOffset(endTime).ToUnixTimeSeconds();
                 

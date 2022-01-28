@@ -108,7 +108,7 @@ namespace DiscordOgerBot.Controller
                     if (ediRole == null) return;
 
                     var timeNow =
-                        TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Central Europe Standard Time");
+                        TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Europe/Berlin");
                     var timeNowUnix = new DateTimeOffset(timeNow).ToUnixTimeSeconds();
 
                     foreach (var member in ediRole.Members)
