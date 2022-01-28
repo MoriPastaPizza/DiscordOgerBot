@@ -51,7 +51,13 @@ namespace DiscordOgerBot.Controller
                 _translateDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
                     "../DiscordOgerBot/Dict/dictionary_default.json")));
 
-                Client = new DiscordSocketClient(new DiscordSocketConfig {MessageCacheSize = 1000, GatewayIntents = GatewayIntents.GuildMembers});
+                Client = new DiscordSocketClient(new DiscordSocketConfig {MessageCacheSize = 1000, 
+                    GatewayIntents = GatewayIntents.Guilds |
+                                     GatewayIntents.GuildMembers |
+                                     GatewayIntents.GuildMessageReactions |
+                                     GatewayIntents.GuildMessages |
+                                     GatewayIntents.GuildVoiceStates
+                });
                 CommandService = new CommandService();
 
                 _services = new ServiceCollection()
