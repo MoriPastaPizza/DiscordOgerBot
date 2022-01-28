@@ -323,9 +323,9 @@ namespace DiscordOgerBot.Modules
                 if (user.Roles.Any(m => m.Id == EdiTimeoutRole))
                 {
                     var timeTillUnlockUnix = DataBase.GetEdiTimeTillUnlock(user.Id);
-                    var timeTillUnlock = DateTimeOffset.FromUnixTimeSeconds(timeTillUnlockUnix);
-                    var timeCet =
-                        TimeZoneInfo.ConvertTimeBySystemTimeZoneId(timeTillUnlock, "Europe/Berlin");
+                    var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                    dtDateTime = dtDateTime.AddSeconds(timeTillUnlockUnix);
+                    var timeCet = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dtDateTime, "Europe/Berlin");
 
                     await ReplyAsync($"Du bist noch im Timeout bis: {timeCet}");
                     return;
