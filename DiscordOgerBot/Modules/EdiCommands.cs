@@ -297,22 +297,6 @@ namespace DiscordOgerBot.Modules
             }
         }
 
-
-        [Command("edi merge")]
-        [RequireOwner]
-        public async Task MergeEdi()
-        {
-            try
-            {
-                var count = DataBase.MergeEdi();
-                await Context.Message.ReplyAsync($"Merged {count} Users!");
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, nameof(MergeEdi));
-            }
-        }
-
         [Command("edi test")]
         [RequireOwner]
         public async Task Test()
@@ -361,13 +345,21 @@ namespace DiscordOgerBot.Modules
                 await user.AddRoleAsync(EdiTimeoutRole);
                 DataBase.AddTimetoSeason1(user.Id, totalTime);
                 DataBase.SetEdiTimeTillUnlock(user.Id, endTimeUnix);
-                await Context.Message.ReplyAsync(embed: embed);
+                await ReplyAsync(embed: embed);
 
             }
             catch (Exception ex)
             {
                 Log.Error(ex, nameof(Test));
             }
+        }
+
+        [Command("edi purge")]
+        [RequireOwner]
+        public async Task PurgeMori()
+        {
+            DataBase.PurgeMori();
+            await ReplyAsync("purged");
         }
     }
 }

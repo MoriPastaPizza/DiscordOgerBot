@@ -467,31 +467,6 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        internal static int MergeEdi()
-        {
-            try
-            {
-                lock (Context)
-                {
-                    var users = Context.DiscordUsers.ToList();
-                    users = users.Where(m => m.EdiTimeOutTotal > TimeSpan.Zero).ToList();
-                    foreach (var user in users)
-                    {
-                        user.EdiTimeOutTotalSeason0 = user.EdiTimeOutTotal;
-                    }
-
-                    Context.DiscordUsers.UpdateRange(users);
-                    Context.SaveChanges();
-                    return users.Count;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, nameof(MergeEdi));
-                return 0;
-            }
-        }
-
         public static void CreateUser(IUser user)
         {
 
@@ -588,6 +563,33 @@ namespace DiscordOgerBot.Controller
             catch (Exception ex)
             {
                 Log.Error(ex, nameof(SetPersistentData));
+            }
+        }
+
+        internal static void PurgeMori()
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == "386989432148066306");
+                    if (userDataBase == null)
+                    {
+                        return;
+                    }
+
+                    userDataBase.EdiTimeOutTotalSeason1 = new TimeSpan();
+
+
+                    Context.DiscordUsers.Update(userDataBase);
+                    Context.SaveChanges();
+
+                    Log.Information($"Purged mori");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(PurgeMori));
             }
         }
 
