@@ -337,8 +337,9 @@ namespace DiscordOgerBot.Modules
                 var endTime =
                     TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Europe/Berlin") +
                     totalTime;
-                var endTimeUnix = new DateTimeOffset(TimeZoneInfo.ConvertTimeToUtc(endTime)).ToUnixTimeSeconds();
-                
+                var endTimeUnix = DateTimeOffset.Now.ToUnixTimeSeconds() + (long)totalTime.TotalSeconds;
+
+
                 embedBuilder
                     .WithTitle(edi.Name)
                     .WithDescription($"Du hast einen {edi.Name} gezogen!")
