@@ -497,6 +497,9 @@ namespace DiscordOgerBot.Controller
             Log.Information("Setting Game...");
             await Client.SetGameAsync("wer in den Knast muss", type: ActivityType.Watching);
 
+            Log.Information("Starting Edi Controller....");
+            EdiController.Init();
+
             Log.Information("Starting long running tasks....");
             _cancellationTokenCheckUsers = new CancellationTokenSource();
             new Task(OneMinuteTask, _cancellationTokenCheckUsers.Token, TaskCreationOptions.LongRunning).Start();

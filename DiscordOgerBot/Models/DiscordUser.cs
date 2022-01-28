@@ -17,6 +17,9 @@ namespace DiscordOgerBot.Models
         public TimeSpan EdiTimeOutTotal { get; set; }
         public int EdiUsed { get; set; }
         public int EdiSuccessfull { get; set; }
+        public TimeSpan EdiTimeOutTotalSeason0 { get; set; }
+        public TimeSpan EdiTimeOutTotalSeason1 { get; set; }
+        public long EdiTimeTillUnlock { get; set; }
     }
 
     public class QuizUser : DiscordUser

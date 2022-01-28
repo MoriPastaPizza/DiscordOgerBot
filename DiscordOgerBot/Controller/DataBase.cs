@@ -361,6 +361,137 @@ namespace DiscordOgerBot.Controller
             }
         }
 
+        public static TimeSpan GetSeason0Time(ulong userId)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    return userDataBase?.EdiTimeOutTotalSeason0 ?? new TimeSpan();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetSeason0Time));
+                return new TimeSpan();
+            }
+        }
+
+        public static TimeSpan GetSeason1Time(ulong userId)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    return userDataBase?.EdiTimeOutTotalSeason1 ?? new TimeSpan();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetSeason1Time));
+                return new TimeSpan();
+            }
+        }
+
+        public static void AddTimetoSeason1(ulong userId, TimeSpan time)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    if (userDataBase == null)
+                    {
+                        return;
+                    }
+
+                    userDataBase.EdiTimeOutTotalSeason1 += time;
+                    userDataBase.EdiTimeOutTotal += time;
+
+
+                    Context.DiscordUsers.Update(userDataBase);
+                    Context.SaveChanges();
+
+                    Log.Information($"Added Edi timeout to user {userDataBase.Name}, Time: {time}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(AddTimetoSeason1));
+            }
+        }
+
+        public static void SetEdiTimeTillUnlock(ulong userId, long date)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    if (userDataBase == null)
+                    {
+                        return;
+                    }
+
+                    userDataBase.EdiTimeTillUnlock = date;
+
+
+                    Context.DiscordUsers.Update(userDataBase);
+                    Context.SaveChanges();
+
+                    Log.Information($"Set Edi timeout to user {userDataBase.Name}, till: {date}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(SetEdiTimeTillUnlock));
+            }
+        }
+
+        public static long GetEdiTimeTillUnlock(ulong userId)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    return userDataBase?.EdiTimeTillUnlock ?? 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetEdiTimeTillUnlock));
+                return 0;
+            }
+        }
+
+        internal static int MergeEdi()
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var users = Context.DiscordUsers.ToList();
+                    users = users.Where(m => m.EdiTimeOutTotal > TimeSpan.Zero).ToList();
+                    foreach (var user in users)
+                    {
+                        user.EdiTimeOutTotalSeason0 = user.EdiTimeOutTotal;
+                    }
+
+                    Context.DiscordUsers.UpdateRange(users);
+                    Context.SaveChanges();
+                    return users.Count;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(MergeEdi));
+                return 0;
+            }
+        }
+
         public static void CreateUser(IUser user)
         {
 
@@ -460,29 +591,5 @@ namespace DiscordOgerBot.Controller
             }
         }
 
-        internal static void ResetEdiData()
-        {
-            try
-            {
-                lock (Context)
-                {
-                    var users = Context.DiscordUsers.ToList();
-                    foreach (var user in users)
-                    {
-                        user.EdiUsed = 0;
-                        user.EdiSuccessfull = 0;
-                        user.EdiTimeOutTotal = new TimeSpan();
-                    }
-
-                    Context.DiscordUsers.UpdateRange(users);
-                    Context.SaveChanges();
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, nameof(ResetEdiData));
-            }
-        }
     }
 }
