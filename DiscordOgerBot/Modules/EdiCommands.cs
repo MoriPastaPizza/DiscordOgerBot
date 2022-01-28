@@ -228,9 +228,10 @@ namespace DiscordOgerBot.Modules
                     .ToList();
 
                 var topString = string.Empty;
-                for (var i = 0; i < 20; i++)
+                for (var i = 0; i < allUsers.Count; i++)
                 {
                     topString += $"{1 + i}. {allUsers[i].Name} => {Math.Round(allUsers[i].EdiTimeOutTotalSeason1.TotalHours, 2)} Stunden {Environment.NewLine}";
+                    if(i >= 19) break;
                 }
 
                 var embedBuilder = new EmbedBuilder();
@@ -327,7 +328,7 @@ namespace DiscordOgerBot.Modules
                     dtDateTime = dtDateTime.AddSeconds(timeTillUnlockUnix);
                     var timeCet = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dtDateTime, "Europe/Berlin");
 
-                    await ReplyAsync($"Du bist noch im Timeout bis: {timeCet}");
+                    await Context.Message.ReplyAsync($"Du bist noch im Timeout bis: {timeCet} CET");
                     return;
                 }
 
