@@ -13,11 +13,6 @@ namespace DiscordOgerBot.Modules
 {
     public class EdiCommands : ModuleBase<SocketCommandContext>
     {
-
-        private readonly string _imagePath = Path.GetFullPath(
-            Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Images/Edi/Common"));
-
-        private const int EdiChance = 20;
         private const ulong NecoChannelId = 925680854229995571;
         private const ulong EdiPlayerRoleId = 935194892718710794;
         private const ulong EdiTimeoutRole = 934758329228591104;
@@ -31,47 +26,57 @@ namespace DiscordOgerBot.Modules
         {
             if (!(Context.User is SocketGuildUser user)) return;
 
-            await ReplyAsync("Edi derzeit pausiert für Season 1!");
-            return;
-
             if (Context.Channel.Id != NecoChannelId)
             {
                 await ReplyAsync($"Edi nur noch in: <#{NecoChannelId}>");
                 return;
             }
 
-            if (user.GuildPermissions.KickMembers)
+            if (user.Roles.Any(m => m.Id == EdiTimeoutRole))
             {
-                await ReplyAsync("Mods dürfen nicht mit spielen <:loser:888861000303018054>");
+                var timeTillUnlockUnix = DataBase.GetEdiTimeTillUnlock(user.Id);
+                var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                dtDateTime = dtDateTime.AddSeconds(timeTillUnlockUnix);
+                var timeCet = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dtDateTime, "Europe/Berlin");
+
+                await Context.Message.ReplyAsync($"Du bist noch im Timeout bis: {timeCet} CET");
                 return;
             }
 
-            var roll = _rand.Next(1, 101);
-            var rollSuccess = roll <= EdiChance;
+            var edi = EdiController.GetAnEdi();
+            var embedBuilder = new EmbedBuilder();
+            var totalTime = edi.BasicTime + edi.BonusTime;
+            var endTime =
+                TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Europe/Berlin") +
+                totalTime;
+            var endTimeUnix = DateTimeOffset.Now.ToUnixTimeSeconds() + (long)totalTime.TotalSeconds;
 
-            if (rollSuccess)
-            {
-                var edis = Directory.GetFiles(_imagePath);
-                var selectedEdi = edis[_rand.Next(edis.Length)];
 
-                await Context.Channel.SendFileAsync(selectedEdi, $"Du hast {roll} gewürfelt: Hier ein Edi :3");
-                DataBase.IncreaseEdiSuccessfull(user.Id);
-            }
-            else
-            {
-                var timeout = TimeSpan.FromMinutes(_rand.Next(5, 181));
-                await Context.Message.ReplyAsync($"Du hast {roll} gewürfelt: Das gibt nen Timeout für {timeout}");
-                await user.SetTimeOutAsync(timeout);
-                DataBase.IncreaseEdiTimeoutTotal(user.Id, timeout);
-            }
+            embedBuilder
+                .WithTitle(edi.Name)
+                .WithDescription($"Du hast einen {edi.Name} gezogen!")
+                .AddField("Deine Zeit", edi.BasicTime + " + Bonus: " + edi.BonusTime + Environment.NewLine
+                + "Gesamt: " + totalTime)
+                .AddField("Auszeit Ende", endTime + " CET")
+                .AddField("Roll", edi.Roll)
+                .WithColor(edi.Color.Item1, edi.Color.Item2, edi.Color.Item3)
+                .WithImageUrl(edi.ImageUrl)
+                .WithAuthor("Good Luck Boi Edi", EdiAuthorImageUrl)
+                .WithFooter(footer =>
+                    footer.Text =
+                        OgerBot.FooterDictionary[_rand.Next(OgerBot.FooterDictionary.Count)])
+                .WithCurrentTimestamp();
 
-            DataBase.IncreaseEdiUsed(user.Id);
+            var embed = embedBuilder.Build();
+
+            await user.AddRoleAsync(EdiTimeoutRole);
+            DataBase.AddTimetoSeason1(user.Id, totalTime);
+            DataBase.SetEdiTimeTillUnlock(user.Id, endTimeUnix);
+            await ReplyAsync(embed: embed);
             await user.AddRoleAsync(EdiPlayerRoleId);
         }
 
         [Command("edi rank")]
-        [Alias("edi score")]
-        [RequireOwner]
         public async Task GetEdiScore()
         {
             if (!(Context.User is SocketGuildUser user)) return;
@@ -110,7 +115,6 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("edi top")]
-        [RequireOwner]
         public async Task GetTopEdi()
         {
             try
@@ -124,7 +128,6 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("edi top all")]
-        [RequireOwner]
         public async Task GetTopEdiAll()
         {
             try
@@ -167,7 +170,6 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("edi top 0")]
-        [RequireOwner]
         public async Task GetTopSeason0()
         {
             try
@@ -210,7 +212,6 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("edi top 1")]
-        [RequireOwner]
         public async Task GetTopSeason1()
         {
             try
@@ -254,7 +255,6 @@ namespace DiscordOgerBot.Modules
         }
 
         [Command("edi rates")]
-        [RequireOwner]
         public async Task GetEdiRates()
         {
             try
@@ -295,71 +295,6 @@ namespace DiscordOgerBot.Modules
             {
                 Log.Error(ex, nameof(GetEdiRates));
             }
-        }
-
-        [Command("edi test")]
-        [RequireOwner]
-        public async Task Test()
-        {
-            try
-            {
-                if (!(Context.User is SocketGuildUser user)) return;
-
-                if (user.Roles.Any(m => m.Id == EdiTimeoutRole))
-                {
-                    var timeTillUnlockUnix = DataBase.GetEdiTimeTillUnlock(user.Id);
-                    var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-                    dtDateTime = dtDateTime.AddSeconds(timeTillUnlockUnix);
-                    var timeCet = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dtDateTime, "Europe/Berlin");
-
-                    await Context.Message.ReplyAsync($"Du bist noch im Timeout bis: {timeCet} CET");
-                    return;
-                }
-
-                var edi = EdiController.GetAnEdi();
-                var embedBuilder = new EmbedBuilder();
-                var totalTime = edi.BasicTime + edi.BonusTime;
-                var endTime =
-                    TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Europe/Berlin") +
-                    totalTime;
-                var endTimeUnix = DateTimeOffset.Now.ToUnixTimeSeconds() + (long)totalTime.TotalSeconds;
-
-
-                embedBuilder
-                    .WithTitle(edi.Name)
-                    .WithDescription($"Du hast einen {edi.Name} gezogen!")
-                    .AddField("Deine Zeit", edi.BasicTime + " + Bonus: "  + edi.BonusTime + Environment.NewLine
-                    + "Gesamt: " + totalTime)
-                    .AddField("Auszeit Ende", endTime + " CET")
-                    .AddField("Roll", edi.Roll)
-                    .WithColor(edi.Color.Item1, edi.Color.Item2, edi.Color.Item3)
-                    .WithImageUrl(edi.ImageUrl)
-                    .WithAuthor("Good Luck Boi Edi", EdiAuthorImageUrl)
-                    .WithFooter(footer =>
-                        footer.Text =
-                            OgerBot.FooterDictionary[_rand.Next(OgerBot.FooterDictionary.Count)])
-                    .WithCurrentTimestamp();
-
-                var embed = embedBuilder.Build();
-
-                await user.AddRoleAsync(EdiTimeoutRole);
-                DataBase.AddTimetoSeason1(user.Id, totalTime);
-                DataBase.SetEdiTimeTillUnlock(user.Id, endTimeUnix);
-                await ReplyAsync(embed: embed);
-
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, nameof(Test));
-            }
-        }
-
-        [Command("edi purge")]
-        [RequireOwner]
-        public async Task PurgeMori()
-        {
-            DataBase.PurgeMori();
-            await ReplyAsync("purged");
         }
     }
 }
