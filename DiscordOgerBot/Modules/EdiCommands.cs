@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace DiscordOgerBot.Modules
                     dtDateTime = dtDateTime.AddSeconds(timeTillUnlockUnix);
                     var timeCet = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dtDateTime, "Europe/Berlin");
 
-                    await Context.Message.ReplyAsync($"Du bist noch im Timeout bis: {timeCet} CET");
+                    await Context.Message.ReplyAsync($"Du bist noch im Timeout bis: {timeCet.ToString(new CultureInfo("DE-de"))} CET");
                     return;
                 }
 
@@ -64,7 +65,7 @@ namespace DiscordOgerBot.Modules
                 .WithDescription($"Du hast einen {edi.Name} gezogen!")
                 .AddField("Deine Zeit", edi.BasicTime + " + Bonus: " + edi.BonusTime + Environment.NewLine
                 + "Gesamt: " + totalTime)
-                .AddField("Auszeit Ende", endTime + " CET")
+                .AddField("Auszeit Ende", endTime.ToString(new CultureInfo("DE-de")) + " CET")
                 .AddField("Roll", edi.Roll)
                 .WithColor(edi.Color.Item1, edi.Color.Item2, edi.Color.Item3)
                 .WithImageUrl(edi.ImageUrl)
