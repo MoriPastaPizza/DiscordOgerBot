@@ -100,7 +100,7 @@ namespace DiscordOgerBot.Controller
             {
                 try
                 {
-                    await Task.Delay(TimeSpan.FromMinutes(1));
+                    await Task.Delay(TimeSpan.FromSeconds(30));
 
                     var server = OgerBot.Client.GetGuild(758745761566818314);
                     var ediRole = server?.GetRole(EdiTimeoutRole);

@@ -35,12 +35,19 @@ namespace DiscordOgerBot.Modules
             if (user.Roles.Any(m => m.Id == EdiTimeoutRole))
             {
                 var timeTillUnlockUnix = DataBase.GetEdiTimeTillUnlock(user.Id);
-                var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-                dtDateTime = dtDateTime.AddSeconds(timeTillUnlockUnix);
-                var timeCet = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dtDateTime, "Europe/Berlin");
 
-                await Context.Message.ReplyAsync($"Du bist noch im Timeout bis: {timeCet} CET");
-                return;
+                if (DateTimeOffset.Now.ToUnixTimeSeconds() < timeTillUnlockUnix)
+                {
+                    var dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                    dtDateTime = dtDateTime.AddSeconds(timeTillUnlockUnix);
+                    var timeCet = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dtDateTime, "Europe/Berlin");
+
+                    await Context.Message.ReplyAsync($"Du bist noch im Timeout bis: {timeCet} CET");
+                    return;
+                }
+
+                await user.RemoveRoleAsync(EdiTimeoutRole);
+
             }
 
             var edi = EdiController.GetAnEdi();
