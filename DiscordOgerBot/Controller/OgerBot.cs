@@ -556,16 +556,9 @@ namespace DiscordOgerBot.Controller
             {
                 var guild = Client.Guilds.FirstOrDefault(m => m.Id == 758745761566818314);
                 if(guild == null) return;
-                var channelSchanzenAuszug = (SocketVoiceChannel) guild.GetChannel(905795752360558643);
                 var channelGericht = (SocketVoiceChannel) guild.GetChannel(927609106603335823);
-
-                var timeLeftAuszug = AuszugCountDownTime - DateTime.Now;
                 var timeLeftGericht = GerichtTerminCountDownTime - DateTime.Now;
 
-                await channelSchanzenAuszug.ModifyAsync(props =>
-                {
-                    props.Name = $"🏠🔜Auszug?: {timeLeftAuszug.Days} Days {timeLeftAuszug.Hours}h";
-                });
                 await channelGericht.ModifyAsync(props =>
                 {
                     props.Name = $"👩‍⚖️Gericht: {timeLeftGericht.Days} Days {timeLeftGericht.Hours}h";
