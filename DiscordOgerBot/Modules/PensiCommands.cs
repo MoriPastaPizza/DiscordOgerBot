@@ -17,18 +17,25 @@ namespace DiscordOgerBot.Modules
             var pensiArray = Directory.GetFiles(_pensiPath);
             string pensiString = null;
 
-            if (uint.TryParse(args, out var setIndex))
-            {
-                if (setIndex <= pensiArray.Length)
-                {
-                    pensiString = Path.GetFileName(pensiArray[setIndex]);
-                }
-            }
-            else
+            if (args == null)
             {
                 var rand = new Random();
                 var index = rand.Next(pensiArray.Length);
                 pensiString = Path.GetFileName(pensiArray[index - 1]);
+                await Context.Channel.SendFileAsync($"{_pensiPath}/{pensiString}", embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: true, text: "Provided by Pensi Providerin Sörbi 🤘");
+                return;
+            }
+
+            if (uint.TryParse(args, out var setIndex))
+            {
+                if (setIndex <= pensiArray.Length)
+                {
+                    pensiString = Path.GetFileName(pensiArray[setIndex - 1]);
+                }
+            }
+            else
+            {
+                return;
             }
 
             if (pensiString == null)
