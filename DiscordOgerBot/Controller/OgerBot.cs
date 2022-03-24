@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -34,6 +35,8 @@ namespace DiscordOgerBot.Controller
         private static Dictionary<ulong, ulong> _oragleMessegesId;
         private static Dictionary<string, List<string>> _translateDictionary;
         private static CancellationTokenSource _cancellationTokenCheckUsers;
+        private static readonly string _gitHubBaseUrl = "https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Videos/";
+
 
         public static async Task StartBot()
         {
@@ -544,10 +547,10 @@ namespace DiscordOgerBot.Controller
                 if (DateTime.Now.Hour == FrauchenTime.Hour && !FrauchenFlag)
                 {
                     FrauchenFlag = true;
-                    var videoPath = Path.GetFullPath(
-                        Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
                     var channel = (ISocketMessageChannel)Client.GetChannel(759039858319687700);
-                    await channel.SendFileAsync(videoPath + "/frauchen.mp4", embed: GetStandardSoundEmbed(), text: "Hier die tägliche Frauchen-Dosis <:Kopfhrer:773464326920077343>");
+                    using var client = new WebClient();
+                    await using var stream = new MemoryStream(client.DownloadData(_gitHubBaseUrl + "frauchen.mp4"));
+                    await channel.SendFileAsync(stream, "frauchen.mp4", embed: GetStandardSoundEmbed(), text: "Hier die tägliche Frauchen-Dosis <:Kopfhrer:773464326920077343>");
                 }
             }
             catch (Exception ex)
@@ -563,10 +566,10 @@ namespace DiscordOgerBot.Controller
                 if (DateTime.Now.Hour == Time1510.Hour && DateTime.Now.Minute == Time1510.Minute && !TimeFlag1510)
                 {
                     TimeFlag1510 = true;
-                    var videoPath = Path.GetFullPath(
-                        Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Videos"));
                     var channel = (ISocketMessageChannel)Client.GetChannel(759039858319687700);
-                    await channel.SendFileAsync(videoPath + "/1510.mp4", embed: GetStandardSoundEmbed(), text: "15:10 Uhr <:bier:764052806160089138>");
+                    using var client = new WebClient();
+                    await using var stream = new MemoryStream(client.DownloadData(_gitHubBaseUrl + "1510.mp4"));
+                    await channel.SendFileAsync(stream, "1510.mp4", embed: GetStandardSoundEmbed(), text: "15:10 Uhr <:bier:764052806160089138>");
                 }
             }
             catch (Exception ex)

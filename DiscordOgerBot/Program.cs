@@ -13,7 +13,11 @@ namespace DiscordOgerBot
                 .MinimumLevel.Information()
                 .WriteTo.Console()
                 .WriteTo.Discord(956603932157812776,Environment.GetEnvironmentVariable("WEBHOOK_TOKEN"))
+                .Enrich.FromLogContext()
                 .CreateLogger();
+
+            Log.Information("Logger Created!");
+            Log.Information(Environment.GetEnvironmentVariable("WEBHOOK_TOKEN"));
 
             LoadDatabaseConfig();
             DataBase.StartupDataBase();
