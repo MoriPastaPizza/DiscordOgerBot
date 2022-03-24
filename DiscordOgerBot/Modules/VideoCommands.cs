@@ -1088,5 +1088,25 @@ namespace DiscordOgerBot.Modules
         {
             await SendVideo("bass.mp4");
         }
+
+        [Command("solmegge")]
+        public async Task SendSolmegge()
+        {
+            await SendVideo("solmegge.mp4");
+        }
+
+        [Command("rudi")]
+        [Alias("nadsisau", "nazisau")]
+        public async Task SendRudi()
+        {
+            await SendVideo("rudi.mp4");
+        }
+
+        [Command("vorgeführt")]
+        [Alias("sonderschüler")]
+        public async Task SendVorgefuehrt()
+        {
+            await SendVideo("vorgeführt.mp4");
+        }
     }
 }
