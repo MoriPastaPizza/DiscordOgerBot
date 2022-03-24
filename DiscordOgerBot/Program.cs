@@ -1,6 +1,7 @@
 using System;
 using DiscordOgerBot.Controller;
 using Serilog;
+using Serilog.Sinks.Discord;
 
 namespace DiscordOgerBot
 {
@@ -11,6 +12,7 @@ namespace DiscordOgerBot
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .WriteTo.Console()
+                .WriteTo.Discord(956603932157812776,Environment.GetEnvironmentVariable("WEBHOOK_TOKEN"))
                 .CreateLogger();
 
             LoadDatabaseConfig();
