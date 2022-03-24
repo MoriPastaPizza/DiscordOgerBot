@@ -79,6 +79,7 @@ namespace DiscordOgerBot.Modules
             await user.AddRoleAsync(EdiTimeoutRole);
             DataBase.AddTimetoSeason1(user.Id, totalTime);
             DataBase.SetEdiTimeTillUnlock(user.Id, endTimeUnix);
+            DataBase.IncreaseEdiUsed(user.Id);
             await ReplyAsync(embed: embed);
             await user.AddRoleAsync(EdiPlayerRoleId);
         }
@@ -96,14 +97,14 @@ namespace DiscordOgerBot.Modules
 
             var allUsers = DataBase.GetAllUsers();
             var currentUser = allUsers.FirstOrDefault(m => m.Id == Context.User.Id.ToString());
-            if (currentUser == null || currentUser.EdiTimeOutTotal > TimeSpan.Zero)
+            if (currentUser == null || currentUser.EdiTimeOutTotal == TimeSpan.Zero)
             {
                 await Context.Message.ReplyAsync("Du hast noch keine Edi-Punkte!");
                 return;
             }
 
             allUsers = allUsers
-                .Where(m => m.EdiUsed > 0)
+                .Where(m => m.EdiTimeOutTotal > TimeSpan.Zero)
                 .OrderByDescending(m => m.EdiTimeOutTotal)
                 .ToList();
 
