@@ -565,33 +565,5 @@ namespace DiscordOgerBot.Controller
                 Log.Error(ex, nameof(SetPersistentData));
             }
         }
-
-        internal static void PurgeMori()
-        {
-            try
-            {
-                lock (Context)
-                {
-                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == "386989432148066306");
-                    if (userDataBase == null)
-                    {
-                        return;
-                    }
-
-                    userDataBase.EdiTimeOutTotalSeason1 = new TimeSpan();
-
-
-                    Context.DiscordUsers.Update(userDataBase);
-                    Context.SaveChanges();
-
-                    Log.Information($"Purged mori");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, nameof(PurgeMori));
-            }
-        }
-
     }
 }

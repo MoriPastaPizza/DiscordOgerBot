@@ -28,9 +28,6 @@ namespace DiscordOgerBot.Controller
         private static DateTime Time1510 { get; } = new(2008, 4, 1, 13, 10, 0);
         private static bool TimeFlag1510 { get; set; }
 
-        private static DateTime AuszugCountDownTime { get; } = new (2022, 1, 5, 0, 0, 0);
-        private static DateTime GerichtTerminCountDownTime { get; } = new(2022, 3, 23, 7, 30, 0);
-
         private static List<string> _oragleList;
         private static IServiceProvider _services;
         private static Dictionary<ulong, ulong> _repliedMessagesId;
@@ -509,7 +506,6 @@ namespace DiscordOgerBot.Controller
             Log.Information("Starting long running tasks....");
             _cancellationTokenCheckUsers = new CancellationTokenSource();
             new Task(OneMinuteTask, _cancellationTokenCheckUsers.Token, TaskCreationOptions.LongRunning).Start();
-            new Task(TwentyMinuteTask, _cancellationTokenCheckUsers.Token, TaskCreationOptions.LongRunning).Start();
 
             Log.Information("Getting Build-version....");
             var version = Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION");
@@ -538,35 +534,6 @@ namespace DiscordOgerBot.Controller
                 await CheckForTime1510();
                 await CheckUsers();
                 _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(1));
-            }
-        }
-
-        private static async void TwentyMinuteTask()
-        {
-            while (!_cancellationTokenCheckUsers.Token.IsCancellationRequested)
-            {
-                await SetCountDowns();
-                _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(20));
-            }
-        }
-
-        private static async Task SetCountDowns()
-        {
-            try
-            {
-                var guild = Client.Guilds.FirstOrDefault(m => m.Id == 758745761566818314);
-                if(guild == null) return;
-                var channelGericht = (SocketVoiceChannel) guild.GetChannel(927609106603335823);
-                var timeLeftGericht = GerichtTerminCountDownTime - DateTime.Now;
-
-                await channelGericht.ModifyAsync(props =>
-                {
-                    props.Name = $"👩‍⚖️Gericht: {timeLeftGericht.Days} Days {timeLeftGericht.Hours}h";
-                });
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, nameof(SetCountDowns));
             }
         }
 

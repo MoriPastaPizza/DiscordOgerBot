@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -87,7 +86,7 @@ namespace DiscordOgerBot.Modules
         [Command("edi rank")]
         public async Task GetEdiScore()
         {
-            if (!(Context.User is SocketGuildUser user)) return;
+            if (!(Context.User is SocketGuildUser)) return;
 
             if (Context.Channel.Id != NecoChannelId)
             {
@@ -263,12 +262,12 @@ namespace DiscordOgerBot.Modules
             {
                 var edis = EdiController.EdisWithProbs;
 
-                var common = edis.FirstOrDefault(m => m.Item.Type == EdiType.Common);
-                var uncommon = edis.FirstOrDefault(m => m.Item.Type == EdiType.Uncommon);
-                var rare = edis.FirstOrDefault(m => m.Item.Type == EdiType.Rare);
-                var epic = edis.FirstOrDefault(m => m.Item.Type == EdiType.Epic);
-                var legendary = edis.FirstOrDefault(m => m.Item.Type == EdiType.Legendary);
-                var mythic = edis.FirstOrDefault(m => m.Item.Type == EdiType.Mythic);
+                var common = edis.First(m => m.Item.Type == EdiType.Common);
+                var uncommon = edis.First(m => m.Item.Type == EdiType.Uncommon);
+                var rare = edis.First(m => m.Item.Type == EdiType.Rare);
+                var epic = edis.First(m => m.Item.Type == EdiType.Epic);
+                var legendary = edis.First(m => m.Item.Type == EdiType.Legendary);
+                var mythic = edis.First(m => m.Item.Type == EdiType.Mythic);
 
                 var embedBuilder = new EmbedBuilder();
 
