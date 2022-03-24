@@ -95,15 +95,9 @@ namespace DiscordOgerBot.Modules
                 return;
             }
 
-            if (user.GuildPermissions.KickMembers)
-            {
-                await ReplyAsync("Mods dürfen nicht mit spielen <:loser:888861000303018054>");
-                return;
-            }
-
             var allUsers = DataBase.GetAllUsers();
             var currentUser = allUsers.FirstOrDefault(m => m.Id == Context.User.Id.ToString());
-            if (currentUser == null || currentUser.EdiUsed < 1)
+            if (currentUser == null || currentUser.EdiTimeOutTotal > TimeSpan.Zero)
             {
                 await Context.Message.ReplyAsync("Du hast noch keine Edi-Punkte!");
                 return;
@@ -140,15 +134,15 @@ namespace DiscordOgerBot.Modules
         {
             try
             {
-                //if (Context.Channel.Id != NecoChannelId)
-                //{
-                //    await ReplyAsync($"Edi nur noch in: <#{NecoChannelId}>");
-                //    return;
-                //}
+                if (Context.Channel.Id != NecoChannelId)
+                {
+                    await ReplyAsync($"Edi nur noch in: <#{NecoChannelId}>");
+                    return;
+                }
 
                 var allUsers = DataBase.GetAllUsers();
                 allUsers = allUsers
-                    .Where(m => m.EdiUsed > 0)
+                    .Where(m => m.EdiTimeOutTotal > TimeSpan.Zero)
                     .OrderByDescending(m => m.EdiTimeOutTotal)
                     .ToList();
 
@@ -182,11 +176,11 @@ namespace DiscordOgerBot.Modules
         {
             try
             {
-                //if (Context.Channel.Id != NecoChannelId)
-                //{
-                //    await ReplyAsync($"Edi nur noch in: <#{NecoChannelId}>");
-                //    return;
-                //}
+                if (Context.Channel.Id != NecoChannelId)
+                {
+                    await ReplyAsync($"Edi nur noch in: <#{NecoChannelId}>");
+                    return;
+                }
 
                 var allUsers = DataBase.GetAllUsers();
                 allUsers = allUsers
@@ -224,11 +218,11 @@ namespace DiscordOgerBot.Modules
         {
             try
             {
-                //if (Context.Channel.Id != NecoChannelId)
-                //{
-                //    await ReplyAsync($"Edi nur noch in: <#{NecoChannelId}>");
-                //    return;
-                //}
+                if (Context.Channel.Id != NecoChannelId)
+                {
+                    await ReplyAsync($"Edi nur noch in: <#{NecoChannelId}>");
+                    return;
+                }
 
                 var allUsers = DataBase.GetAllUsers();
                 allUsers = allUsers
