@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Discord.Commands;
+using DiscordOgerBot.Controller;
+
 // ReSharper disable UnusedMember.Global
 
 namespace DiscordOgerBot.Modules
@@ -15,7 +18,23 @@ namespace DiscordOgerBot.Modules
         {
             using var client = new WebClient();
             await using var stream = new MemoryStream(client.DownloadData(_gitHubBaseUrl + fileName));
-            await Context.Channel.SendFileAsync(stream, fileName, embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: isSpoiler);
+            await Context.Channel.SendFileAsync(stream, fileName, embed: OgerBot.GetStandardSoundEmbed(), isSpoiler: isSpoiler);
+        }
+
+        [Command("rnd")]
+        [Alias("random", "zufall")]
+        public async Task SendZufall()
+        {
+            var videos = await GitHub.GetAllVideoFiles();
+            var rand = new Random();
+
+            var video = videos[rand.Next(videos.Count)];
+            using var client = new WebClient();
+            await using var stream = new MemoryStream(client.DownloadData(video));
+
+            var videoName = video[(video.LastIndexOf('/') + 1)..];
+
+            await Context.Channel.SendFileAsync(stream, videoName, embed: OgerBot.GetStandardSoundEmbed());
         }
 
         [Command("gamera")]

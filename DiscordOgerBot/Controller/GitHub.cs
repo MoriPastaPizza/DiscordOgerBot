@@ -42,5 +42,25 @@ namespace DiscordOgerBot.Controller
                 return null;
             }
         }
+
+        internal static async Task<List<string>> GetAllVideoFiles()
+        {
+            try
+            {
+                var client = new GitHubClient(new ProductHeaderValue("discord-oger-bot"));
+
+                var tokenAuth = new Credentials(Environment.GetEnvironmentVariable("GITHUB_TOKEN"));
+                client.Credentials = tokenAuth;
+
+                var files = await client.Repository.Content.GetAllContents("MoriPastaPizza", "DiscordOgerBot", "DiscordOgerBot/Videos");
+
+                return files.Select(file => file.DownloadUrl).ToList();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, nameof(GetAllVideoFiles));
+                return new List<string>();
+            }
+        }
     }
 }
