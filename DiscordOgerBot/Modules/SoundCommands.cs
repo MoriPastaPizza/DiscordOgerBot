@@ -10,13 +10,6 @@ namespace DiscordOgerBot.Modules
         private readonly string _soundPath = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Sounds"));
 
-        [Command("gamera")]
-        [Alias("Kamera")]
-        public async Task SendGamera()
-        {
-            await Context.Channel.SendFileAsync(_soundPath + "/gamera.mp3", embed: Controller.OgerBot.GetStandardSoundEmbed());
-        }
-
         [Command("schmusemaus")]
         public async Task SendSchmuseMaus()
         {
