@@ -56,7 +56,8 @@ namespace DiscordOgerBot.Controller
                                      GatewayIntents.GuildMembers |
                                      GatewayIntents.GuildMessageReactions |
                                      GatewayIntents.GuildMessages |
-                                     GatewayIntents.GuildVoiceStates
+                                     GatewayIntents.GuildVoiceStates |
+                                     GatewayIntents.MessageContent
                 });
                 CommandService = new CommandService();
 
