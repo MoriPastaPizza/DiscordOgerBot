@@ -38,7 +38,7 @@ namespace DiscordOgerBot.Controller
                 OgerBot.Client.ReactionRemoved += ReactionRemovedRunning;
 
                 PrepMessage = await CurrentQuiz.CurrentQuizChannel.SendMessageAsync(
-                    $"<@&827310534352175135> **Macht euch bereit ein Quiz beginnt bald!** {Environment.NewLine} Wenn ihr mitspielen wollt reagiert auf diese Nachricht mit <:RainerSchlau:759174717155311627>");
+                    $"<@&827310534352175135> **Macht euch bereit ein Quiz beginnt bald!** {Environment.NewLine} Wenn ihr mitspielen wollt reagiert auf diese Nachricht mit 🤓");
 
                 CurrentQuiz.QuizState = QuizState.PrepPhase;
                 await OgerBot.Client.SetGameAsync("wer beim Quiz dabei ist", type: ActivityType.Watching);
@@ -204,10 +204,12 @@ namespace DiscordOgerBot.Controller
                 if(CurrentQuiz.QuizState != QuizState.PrepPhase) return;
                 if (channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
                 if (message.Id != PrepMessage.Id) return;
-                if (reaction.Emote.Name != "RainerSchlau") return;
+                if (reaction.Emote.Name != "🤓") return;
 
                 var channelDownload = await channel.GetOrDownloadAsync();
                 var user = await channelDownload.GetUserAsync(reaction.UserId);
+
+                if (CurrentQuiz.CurrentQuizUsers.Any(m => m.Id == user.Id.ToString())) return;
 
                 var pointsTotal = DataBase.GetQuizPointsTotal(user.Id);
                 var winsTotal = DataBase.GetTimesQuizWonTotal(user.Id);
@@ -237,7 +239,7 @@ namespace DiscordOgerBot.Controller
                 if (CurrentQuiz.QuizState != QuizState.PrepPhase) return;
                 if (channel.Id != CurrentQuiz.CurrentQuizChannel.Id) return;
                 if (message.Id != PrepMessage.Id) return;
-                if (reaction.Emote.Name != "RainerSchlau") return;
+                if (reaction.Emote.Name != "🤓") return;
 
                 var channelDownload = await channel.GetOrDownloadAsync();
                 var user = await channelDownload.GetUserAsync(reaction.UserId);

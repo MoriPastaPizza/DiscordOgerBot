@@ -17,7 +17,7 @@ namespace DiscordOgerBot.Modules
         {
             if (!(Context.User is SocketGuildUser user)) return;
 
-            if (user.Roles.All(m => m.Id != 826886898114363432))
+            if (user.Roles.All(m => m.Id != 826886898114363432 && m.Id != 1030523506263326800))
             {
                 await Context.Message.ReplyAsync("Du bist nicht der Gwiss Masder du Spaggn!");
                 return;
@@ -38,7 +38,7 @@ namespace DiscordOgerBot.Modules
         {
             if (!(Context.User is SocketGuildUser user)) return;
 
-            if (user.Roles.All(m => m.Id != 826886898114363432))
+            if (user.Roles.All(m => m.Id != 826886898114363432 && m.Id != 1030523506263326800))
             {
                 await Context.Message.ReplyAsync("Du bist nicht der Gwiss Masder du Spaggn!");
                 return;
@@ -58,7 +58,7 @@ namespace DiscordOgerBot.Modules
         {
             if (!(Context.User is SocketGuildUser user)) return;
 
-            if (user.Roles.All(m => m.Id != 826886898114363432))
+            if (user.Roles.All(m => m.Id != 826886898114363432 && m.Id != 1030523506263326800))
             {
                 await Context.Message.ReplyAsync("Du bist nicht der Gwiss Masder du Spaggn!");
                 return;
@@ -126,7 +126,7 @@ namespace DiscordOgerBot.Modules
         {
             if (!(Context.User is SocketGuildUser user)) return;
 
-            if (user.Roles.All(m => m.Id != 826886898114363432))
+            if (user.Roles.All(m => m.Id != 826886898114363432 && m.Id != 1030523506263326800))
             {
                 await Context.Message.ReplyAsync("Du bist nicht der Gwiss Masder du Spaggn!");
                 return;
