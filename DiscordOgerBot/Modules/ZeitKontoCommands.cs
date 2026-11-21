@@ -25,11 +25,31 @@ namespace DiscordOgerBot.Modules
 
         [Command("zeit")]
         [Alias("Zeitkonto")]
-        public async Task GetTimeWorking()
+        public Task GetTimeWorking([Remainder] string args = null)
+        {
+            if(string.IsNullOrEmpty(args))
+                return GetTimeWorking(Context.User,  Context.Guild.Id);
+                
+            if (ulong.TryParse(args, out var userId))
+            {
+                var userToLookupId = Context.Client.GetUser(userId);
+                if (Context.Client == null)
+                    return Context.Message.ReplyAsync("User leider nicht gefundneee...");
+                
+                return GetTimeWorking(userToLookupId, Context.Guild.Id);
+            }
+            
+            var userToLookupString = Context.Client.GetUser(args);
+            if (Context.Client == null)
+                return Context.Message.ReplyAsync("User leider nicht gefundneee...");
+            
+            return GetTimeWorking(userToLookupString, Context.Guild.Id);
+        }
+
+        private async Task GetTimeWorking(IUser user, ulong guildId)
         {
             var rand = new Random();
-            var commandContext = new SocketCommandContext(Context.Client, Context.Message);
-            var timeSpendWorking = Controller.DataBase.GetTimeSpendWorking(Context.User, commandContext.Guild.Id);
+            var timeSpendWorking = Controller.DataBase.GetTimeSpendWorking(user, guildId);
             var (currentRole, nextRole, timeTillRole) = Controller.OgerBot.GetRoleForTimeSpendWorking(timeSpendWorking);
             var currentRoleLogoString = Globals.WorkingRanks.TimeForRanks
                 .FirstOrDefault(m => m.RankId == currentRole.Id).ImageUrl;
