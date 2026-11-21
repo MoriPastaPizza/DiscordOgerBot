@@ -33,14 +33,14 @@ namespace DiscordOgerBot.Modules
             if (ulong.TryParse(args, out var userId))
             {
                 var userToLookupId = Context.Client.GetUser(userId);
-                if (Context.Client == null)
+                if (userToLookupId == null)
                     return Context.Message.ReplyAsync("User leider nicht gefundneee...");
                 
                 return GetTimeWorking(userToLookupId, Context.Guild.Id);
             }
             
             var userToLookupString = Context.Client.GetUser(args);
-            if (Context.Client == null)
+            if (userToLookupString == null)
                 return Context.Message.ReplyAsync("User leider nicht gefundneee...");
             
             return GetTimeWorking(userToLookupString, Context.Guild.Id);
