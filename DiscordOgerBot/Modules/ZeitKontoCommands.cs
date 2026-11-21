@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using DiscordOgerBot.Models;
 
 namespace DiscordOgerBot.Modules
 {
@@ -28,24 +29,20 @@ namespace DiscordOgerBot.Modules
         public Task GetTimeWorking([Remainder] string args = null)
         {
             if(string.IsNullOrEmpty(args))
-                return GetTimeWorking(Context.User.Id,  Context.Guild.Id);
+                return GetTimeWorking(Controller.DataBase.GetUser(Context.User.Id));
                 
             if (ulong.TryParse(args, out var userId))
             {
-                return GetTimeWorking(userId, Context.Guild.Id);
+                return GetTimeWorking(Controller.DataBase.GetUser(userId));
             }
             
-            var userToLookupString = Context.Client.GetUser(args);
-            if (userToLookupString == null)
-                return Context.Message.ReplyAsync("User leider nicht gefundneee...");
-            
-            return GetTimeWorking(userToLookupString.Id, Context.Guild.Id);
+            return GetTimeWorking(Controller.DataBase.GetUser(args));
         }
 
-        private async Task GetTimeWorking(ulong userId, ulong guildId)
+        private async Task GetTimeWorking(DiscordUser user)
         {
             var rand = new Random();
-            var timeSpendWorking = Controller.DataBase.GetTimeSpendWorking(userId, guildId);
+            var timeSpendWorking = user?.TimeSpendWorking ?? TimeSpan.Zero;
 
             if (timeSpendWorking == TimeSpan.Zero)
             {

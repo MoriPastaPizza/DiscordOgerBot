@@ -25,6 +25,41 @@ namespace DiscordOgerBot.Controller
             }
         }
 
+        public static DiscordUser GetUser(ulong userId)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var user = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    return user;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Could not Get User!");
+                return null;
+            }
+        }
+        
+        
+        public static DiscordUser GetUser(string userName)
+        {
+            try
+            {
+                lock (Context)
+                {
+                    var user = Context.DiscordUsers.FirstOrDefault(m => m.Name == userName);
+                    return user;
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "Could not Get User!");
+                return null;
+            }
+        }
+
 
         public static void IncreaseInteractionCount(IUser user, ulong guildId)
         {
@@ -85,27 +120,6 @@ namespace DiscordOgerBot.Controller
                                  $"User: {user.Username} {Environment.NewLine}" +
                                  $"Guild: {guildId}");
                 return 0;
-            }
-        }
-        
-        public static TimeSpan GetTimeSpendWorking(ulong userId, ulong guildId)
-        {
-            try
-            {
-                lock (Context)
-                {
-                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
-                    if (userDataBase != null) 
-                        return userDataBase.TimeSpendWorking;
-                    return TimeSpan.Zero;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, $"Could not get the Working Time {Environment.NewLine}" +
-                              $"UserId: {userId} {Environment.NewLine}" +
-                              $"Guild: {guildId}");
-                throw;
             }
         }
 
