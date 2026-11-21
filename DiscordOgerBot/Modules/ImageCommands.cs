@@ -6,6 +6,11 @@ namespace DiscordOgerBot.Modules
     {
         private const string ImagePath = "./Images";
 
+        [Command("edi")]
+        public async Task SendEdi()
+        {
+            await Context.Channel.SendFileAsync(ImagePath + "/edi.webp", text: "Zu Edis Ehren!" ,embed: Controller.OgerBot.GetStandardSoundEmbed());
+        }
 
         [Command("mund")]
         public async Task SendMund()
