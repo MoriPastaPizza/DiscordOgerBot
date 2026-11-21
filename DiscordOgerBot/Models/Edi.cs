@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DiscordOgerBot.Models
+﻿namespace DiscordOgerBot.Models
 {
     internal class Edi
     {

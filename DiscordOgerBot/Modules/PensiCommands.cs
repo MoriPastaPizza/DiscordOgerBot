@@ -1,20 +1,16 @@
 ﻿using Discord.Commands;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace DiscordOgerBot.Modules
 {
     public class PensiCommands : ModuleBase<SocketCommandContext>
     {
-        private readonly string _pensiPath = Path.GetFullPath(
-           Path.Combine(AppContext.BaseDirectory, "../DiscordOgerBot/Pensi"));
+        private const string PensiPath = "./Pensi";
 
         [Command("pensi")]
         [Alias("penis","speer")]
         public async Task SendPensi([Remainder] string args = null)
         {
-            var pensiArray = Directory.GetFiles(_pensiPath);
+            var pensiArray = Directory.GetFiles(PensiPath);
             string pensiString = null;
 
             if (args == null)
@@ -22,7 +18,7 @@ namespace DiscordOgerBot.Modules
                 var rand = new Random();
                 var index = rand.Next(pensiArray.Length);
                 pensiString = Path.GetFileName(pensiArray[index - 1]);
-                await Context.Channel.SendFileAsync($"{_pensiPath}/{pensiString}", embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: true, text: "Provided by Pensi Providerin Sörbi 🤘");
+                await Context.Channel.SendFileAsync($"{PensiPath}/{pensiString}", embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: true, text: "Provided by Pensi Providerin Sörbi 🤘");
                 return;
             }
 
@@ -45,7 +41,7 @@ namespace DiscordOgerBot.Modules
                 return;
             }
 
-            await Context.Channel.SendFileAsync($"{_pensiPath}/{pensiString}", embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: true, text: "Provided by Pensi Providerin Sörbi 🤘");
+            await Context.Channel.SendFileAsync($"{PensiPath}/{pensiString}", embed: Controller.OgerBot.GetStandardSoundEmbed(), isSpoiler: true, text: "Provided by Pensi Providerin Sörbi 🤘");
         }
     }
 }

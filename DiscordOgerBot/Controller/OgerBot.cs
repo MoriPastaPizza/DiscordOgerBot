@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.Rest;
@@ -35,21 +28,15 @@ namespace DiscordOgerBot.Controller
         private static Dictionary<ulong, ulong> _oragleMessegesId;
         private static Dictionary<string, List<string>> _translateDictionary;
         private static CancellationTokenSource _cancellationTokenCheckUsers;
-        private static readonly string _gitHubBaseUrl = "https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Videos/";
 
 
         public static async Task StartBot()
         {
             try
             {
-                FooterDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                    "../DiscordOgerBot/Dict/dictionary_footer.json")))["footer"];
-
-                _oragleList = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                    "../DiscordOgerBot/Dict/dictionary_Oragle.json")))["oragle"];
-
-                _translateDictionary = ReadDictionaryFromFile(Path.GetFullPath(Path.Combine(AppContext.BaseDirectory,
-                    "../DiscordOgerBot/Dict/dictionary_default.json")));
+                FooterDictionary = ReadDictionaryFromFile("./Dict/dictionary_footer.json")["footer"];
+                _oragleList = ReadDictionaryFromFile("./Dict/dictionary_Oragle.json")["oragle"];
+                _translateDictionary = ReadDictionaryFromFile("./Dict/dictionary_default.json");
 
                 Client = new DiscordSocketClient(new DiscordSocketConfig {MessageCacheSize = 1000, 
                     GatewayIntents = GatewayIntents.Guilds |
@@ -75,11 +62,9 @@ namespace DiscordOgerBot.Controller
                 Client.MessageUpdated += MessageUpdated;
                 Client.Ready += ClientReady;
 
-                await Client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("BOTTOKEN"));
+                await Client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("botToken"));
                 await Client.StartAsync();
                 await CommandService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-                
-                await Task.Delay(-1);
 
             }
             catch (Exception ex)
@@ -95,7 +80,7 @@ namespace DiscordOgerBot.Controller
             {
                 var user = Client.GetUser(userId);
                 if (user != null) return user;
-                using var restClient = new DiscordRestClient();
+                await using var restClient = new DiscordRestClient();
                 return await restClient.GetUserAsync(userId);
 
             }
@@ -534,84 +519,9 @@ namespace DiscordOgerBot.Controller
         {
             while (!_cancellationTokenCheckUsers.Token.IsCancellationRequested)
             {
-                await CheckForFrauchenTime();
-                await CheckForTime1510();
                 await CheckUsers();
                 _cancellationTokenCheckUsers.Token.WaitHandle.WaitOne(TimeSpan.FromMinutes(1));
             }
-        }
-
-        private static async Task CheckForFrauchenTime()
-        {
-            try
-            {
-                if (DateTime.Now.Hour == FrauchenTime.Hour && !FrauchenFlag)
-                {
-                    FrauchenFlag = true;
-                    var channel = (ISocketMessageChannel)Client.GetChannel(759039858319687700);
-                    using var client = new WebClient();
-                    await using var stream = new MemoryStream(client.DownloadData(_gitHubBaseUrl + "frauchen.mp4"));
-                    await channel.SendFileAsync(stream, "frauchen.mp4", embed: GetStandardSoundEmbed(), text: "Hier die tägliche Frauchen-Dosis <:Kopfhrer:773464326920077343>");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, nameof(CheckForFrauchenTime));
-            }
-        }
-
-        private static async Task CheckForTime1510()
-        {
-            try
-            {
-                if (DateTime.Now.Hour == Time1510.Hour && DateTime.Now.Minute == Time1510.Minute && !TimeFlag1510)
-                {
-                    TimeFlag1510 = true;
-                    var channel = (ISocketMessageChannel)Client.GetChannel(759039858319687700);
-                    using var client = new WebClient();
-                    await using var stream = new MemoryStream(client.DownloadData(_gitHubBaseUrl + "1510.mp4"));
-                    await channel.SendFileAsync(stream, "1510.mp4", embed: GetStandardSoundEmbed(), text: "15:10 Uhr <:bier:764052806160089138>");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, nameof(CheckForTime1510));
-            }
-        }
-
-        private static async Task CheckForNewReleaseNotes()
-        {
-            var commits = await GitHub.GetCommitMessagesSinceLastUpdate();
-            if(commits == null || commits.Count == 0) return;
-
-            var random = new Random();
-            var embed = new EmbedBuilder
-            {
-                Title = $"Release Notes {Environment.GetEnvironmentVariable("HEROKU_RELEASE_VERSION")} :metal:",
-            };
-
-            foreach (var commit in commits)
-            {
-                embed.AddField("------------------------------", $"{commit.Commit.Message} | [Link]({commit.HtmlUrl})");
-            }
-
-            var buildEmbed = embed
-
-                .AddField("Links",
-                    "[Github](https://github.com/MoriPastaPizza/DiscordOgerBotWeb) | " +
-                    "[Lade den Bot auf deinen Server ein!](https://discord.com/api/oauth2/authorize?client_id=761895612291350538&permissions=383040&scope=bot) | " +
-                    "[DrachenlordKoreaDiscord](https://discord.gg/jNkTrsZvW3)")
-
-                .WithAuthor(Client.CurrentUser)
-                .WithFooter(footer =>
-                    footer.Text =
-                        FooterDictionary[random.Next(FooterDictionary.Count)])
-                .WithColor(Color.Gold)
-                .WithCurrentTimestamp()
-                .Build();
-            var channel = (SocketTextChannel) Client.GetChannel(776846121653370921);
-            await channel.SendMessageAsync("<@&905881043909886032>");
-            await channel.SendMessageAsync(embed: buildEmbed);
         }
 
         private static Dictionary<string, List<string>> ReadDictionaryFromFile(string path)

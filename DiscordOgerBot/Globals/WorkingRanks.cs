@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DiscordOgerBot.Globals
+﻿namespace DiscordOgerBot.Globals
 {
     public static class WorkingRanks
     {

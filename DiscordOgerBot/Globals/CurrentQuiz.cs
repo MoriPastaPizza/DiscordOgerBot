@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Discord.WebSocket;
+﻿using Discord.WebSocket;
 using DiscordOgerBot.Models;
 
 namespace DiscordOgerBot.Globals

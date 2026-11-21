@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Discord.Commands;
+﻿using Discord.Commands;
 using DiscordOgerBot.Controller;
 
 // ReSharper disable UnusedMember.Global
@@ -12,29 +7,22 @@ namespace DiscordOgerBot.Modules
 {
     public class VideoCommands : ModuleBase<SocketCommandContext>
     {
-        private readonly string _gitHubBaseUrl = "https://raw.githubusercontent.com/MoriPastaPizza/DiscordOgerBot/master/DiscordOgerBot/Videos/";
 
+        private const string BaseDir = "./Videos/";
+        
         private async Task SendVideo(string fileName, bool isSpoiler = false)
         {
-            using var client = new WebClient();
-            await using var stream = new MemoryStream(client.DownloadData(_gitHubBaseUrl + fileName));
-            await Context.Channel.SendFileAsync(stream, fileName, embed: OgerBot.GetStandardSoundEmbed(), isSpoiler: isSpoiler);
+            await Context.Channel.SendFileAsync(BaseDir + fileName, embed: OgerBot.GetStandardSoundEmbed(), isSpoiler: isSpoiler);
         }
 
         [Command("rnd")]
         [Alias("random", "zufall")]
         public async Task SendZufall()
         {
-            var videos = await GitHub.GetAllVideoFiles();
-            var rand = new Random();
-
-            var video = videos[rand.Next(videos.Count)];
-            using var client = new WebClient();
-            await using var stream = new MemoryStream(client.DownloadData(video));
-
-            var videoName = video[(video.LastIndexOf('/') + 1)..];
-
-            await Context.Channel.SendFileAsync(stream, videoName, embed: OgerBot.GetStandardSoundEmbed());
+            var videos = Directory.GetFiles(BaseDir);
+            var index = Random.Shared.Next(0, videos.Length);
+            var fileName = Path.GetFileName(videos[index]);
+            await SendVideo(fileName);
         }
 
         [Command("gamera")]
