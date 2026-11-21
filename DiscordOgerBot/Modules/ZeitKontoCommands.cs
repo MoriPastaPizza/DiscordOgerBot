@@ -27,12 +27,6 @@ namespace DiscordOgerBot.Modules
         [Alias("Zeitkonto")]
         public async Task GetTimeWorking()
         {
-            if (Context.Channel.Id != 802167112268775454)
-            {
-                await ReplyAsync("Zeit bitte nur noch bei der <#802167112268775454>");
-                return;
-            }
-
             var rand = new Random();
             var commandContext = new SocketCommandContext(Context.Client, Context.Message);
             var timeSpendWorking = Controller.DataBase.GetTimeSpendWorking(Context.User, commandContext.Guild.Id);
