@@ -28,28 +28,31 @@ namespace DiscordOgerBot.Modules
         public Task GetTimeWorking([Remainder] string args = null)
         {
             if(string.IsNullOrEmpty(args))
-                return GetTimeWorking(Context.User,  Context.Guild.Id);
+                return GetTimeWorking(Context.User.Id,  Context.Guild.Id);
                 
             if (ulong.TryParse(args, out var userId))
             {
-                var userToLookupId = Context.Client.GetUser(userId);
-                if (userToLookupId == null)
-                    return Context.Message.ReplyAsync("User leider nicht gefundneee...");
-                
-                return GetTimeWorking(userToLookupId, Context.Guild.Id);
+                return GetTimeWorking(userId, Context.Guild.Id);
             }
             
             var userToLookupString = Context.Client.GetUser(args);
             if (userToLookupString == null)
                 return Context.Message.ReplyAsync("User leider nicht gefundneee...");
             
-            return GetTimeWorking(userToLookupString, Context.Guild.Id);
+            return GetTimeWorking(userToLookupString.Id, Context.Guild.Id);
         }
 
-        private async Task GetTimeWorking(IUser user, ulong guildId)
+        private async Task GetTimeWorking(ulong userId, ulong guildId)
         {
             var rand = new Random();
-            var timeSpendWorking = Controller.DataBase.GetTimeSpendWorking(user, guildId);
+            var timeSpendWorking = Controller.DataBase.GetTimeSpendWorking(userId, guildId);
+
+            if (timeSpendWorking == TimeSpan.Zero)
+            {
+                await Context.Message.ReplyAsync("User leider nicht gefundneee oder noch keine Zeit gebucht...");
+                return;
+            }
+            
             var (currentRole, nextRole, timeTillRole) = Controller.OgerBot.GetRoleForTimeSpendWorking(timeSpendWorking);
             var currentRoleLogoString = Globals.WorkingRanks.TimeForRanks
                 .FirstOrDefault(m => m.RankId == currentRole.Id).ImageUrl;

@@ -87,26 +87,24 @@ namespace DiscordOgerBot.Controller
                 return 0;
             }
         }
-
-        public static TimeSpan GetTimeSpendWorking(IUser user, ulong guildId)
+        
+        public static TimeSpan GetTimeSpendWorking(ulong userId, ulong guildId)
         {
             try
             {
                 lock (Context)
                 {
-                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
-                    if (userDataBase != null) return userDataBase.TimeSpendWorking;
-                    CreateUser(user);
-                    userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == user.Id.ToString());
-
-                    return userDataBase?.TimeSpendWorking ?? new TimeSpan();
+                    var userDataBase = Context.DiscordUsers.FirstOrDefault(m => m.Id == userId.ToString());
+                    if (userDataBase != null) 
+                        return userDataBase.TimeSpendWorking;
+                    return TimeSpan.Zero;
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, $"Could not get the Working Time {Environment.NewLine}" +
-                                 $"User: {user.Username} {Environment.NewLine}" +
-                                 $"Guild: {guildId}");
+                              $"UserId: {userId} {Environment.NewLine}" +
+                              $"Guild: {guildId}");
                 throw;
             }
         }

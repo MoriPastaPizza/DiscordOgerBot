@@ -425,7 +425,7 @@ namespace DiscordOgerBot.Controller
                 var roles = server.Roles;
                 var ranks = Globals.WorkingRanks.TimeForRanks;
 
-                var timeFromDb = DataBase.GetTimeSpendWorking(user, server.Id);
+                var timeFromDb = DataBase.GetTimeSpendWorking(user.Id, server.Id);
                 if (timeFromDb == new TimeSpan()) return;
                 var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
                 var roleUserShouldHave = roles.FirstOrDefault(m => m.Id == rankUserShouldHave.RankId);
@@ -461,7 +461,7 @@ namespace DiscordOgerBot.Controller
                 {
                     if (user == null) continue;
                     if (user.Id is 218373955658973195 or 722485168723722313) continue;
-                    var timeFromDb = DataBase.GetTimeSpendWorking(user, server.Id);
+                    var timeFromDb = DataBase.GetTimeSpendWorking(user.Id, server.Id);
                     if (timeFromDb == new TimeSpan()) continue;
                     var rankUserShouldHave = ranks.FirstOrDefault(rank => timeFromDb >= rank.Time);
                     var roleUserShouldHave = roles.FirstOrDefault(m => m.Id == rankUserShouldHave.RankId);
