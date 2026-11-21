@@ -26,7 +26,7 @@ namespace DiscordOgerBot
 
         private static void LoadDatabaseConfig()
         {
-            Globals.DataBaseConnection.Host = "127.0.0.1:5432";
+            Globals.DataBaseConnection.Host = "postgres";
             Globals.DataBaseConnection.Name = "appdb";
             Globals.DataBaseConnection.UserName = "appuser";
             Globals.DataBaseConnection.Password = Environment.GetEnvironmentVariable("dbPassword");
